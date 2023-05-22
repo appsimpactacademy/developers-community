@@ -1,0 +1,33 @@
+<div class="col-lg-10 mx-auto mt-5">
+
+  <div class="card mt-4 mb-4">
+    <div class="card-body">
+      <h3 class="text-center mb-3">Search professionals accross the world!</h3>
+      <%= search_form_for @q, url: root_path do |form| %>
+        <div class="input-group mb-3">
+          <%= form.search_field :city_or_country_cont, class: "form-control", placeholder: "Search by country or city", area: { label: "Search by country or city", describedby: "button-addon2" } %>
+          <%= form.submit "Search", class: "btn btn-primary", id: "button-addon2" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row mt-4 mb-4">
+    <% @users.each do |user| %>
+      <div class="col-lg-3 mb-3 mt-3">
+        <div class="card text-center shadow" style="min-height: 400px;">
+          <div class="card-body">
+            <%= image_tag "dmu1.jpeg", style: "width: 150px; border-radius: 50%; border: 2px solid #0d6efd;", class: 'mb-3' %>
+            <div class="user-info">
+              <h5><%= user.name %></h5>
+              <p class="lead"><%= user.profile_title %></p>
+              <small class="text-primary"><%= user.country %></small><br>
+
+              <%= link_to "View Profile", member_path(user), class: "btn btn-primary mt-3" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

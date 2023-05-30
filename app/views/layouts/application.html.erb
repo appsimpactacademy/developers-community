@@ -17,6 +17,7 @@
           <%= render 'shared/header' %>
         </div>
         <%= yield %>
+        <%= turbo_frame_tag 'remote_modal' %>
         <div class="col-lg-10 mx-auto">
           <%= render 'shared/footer' %>
         </div>

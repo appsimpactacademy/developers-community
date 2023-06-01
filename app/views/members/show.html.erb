@@ -22,13 +22,15 @@
             <h3>About</h3>
           </div>
         </div>
-        <div class="col-lg-6">
-          <div class="d-flex justify-content-end">
-            <%= link_to edit_member_description_path(@user), data: { controller: "edit-user-description" } do %>
-              <i class="bi bi-pencil-fill"></i>
-            <% end %>
+        <% if user_signed_in? && @user == current_user %>
+          <div class="col-lg-6">
+            <div class="d-flex justify-content-end">
+              <%= link_to edit_member_description_path, data: { controller: "edit-user-description" } do %>
+                <i class="bi bi-pencil-fill"></i>
+              <% end %>
+            </div>
           </div>
-        </div>
+        <% end %>
       </div>
 
       <%= render 'member_description', user: @user %>

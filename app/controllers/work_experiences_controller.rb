@@ -8,7 +8,16 @@ class WorkExperiencesController < ApplicationController
 
   def edit; end
 
-  def create; end
+  def create
+    @work_experience = current_user.work_experiences.new(work_experience_params)
+    respond_to do |format|
+      if @work_experience.save
+        format.turbo_stream { render turbo_stream: turbo_stream.append('work_experience_items', partial: 'work_experiences/work_experience', locals: { work_experience: @work_experience }) }
+      else
+        format.turbo_stream { render turbo_stream: turbo_stream.replace('remote_modal', partial: 'shared/turbo_modal', locals: { form_partial: 'work_experiences/form', modal_title: 'Add new work experience' }) }
+      end
+    end
+  end
 
   def update; end
 

@@ -35,4 +35,34 @@ class WorkExperience < ApplicationRecord
       errors.add(:end_date, ' must be greater than start_date')
     end
   end
+
+  def company_with_employment_type
+    "#{company} (#{employment_type})".strip
+  end
+
+  def job_location
+    "#{location} (#{location_type})"
+  end
+
+  def job_duration
+    months = if end_date.present?
+               fetch_months(end_date)
+             else
+               fetch_months(Date.today)
+             end
+
+    result = months.divmod(12)
+
+    duration = "#{result.first} #{result.first > 1 ? 'years' : 'year'} #{result.last} #{result.last > 1 ? 'months' : 'month' }"
+
+    if currently_working_here
+      "#{start_date.strftime("%b %Y")} - Present (#{duration})"
+    else
+      "#{start_date.strftime("%b %Y")} - #{end_date.strftime("%b %Y")} (#{duration})"
+    end
+  end
+
+  def fetch_months(last_date)
+    ((last_date.year - start_date.year) * 12 + last_date.month - start_date.month - (last_date.day >= start_date.day ? 0 : 1)).round
+  end
 end

@@ -54,6 +54,12 @@
         </div>
 
         <div class="form-group row">
+          <div class="col-lg-12 mt-3">
+            <div class="form-check form-switch">
+              <%= form.check_box :currently_working_here, class: "form-check-input", role: "switch", data: { controller: "disable-end-date" } %>
+              <label class="form-check-label" for="work_experience_currently_working_here">I am currently working here</label>
+            </div>
+          </div>
           <div class="col-lg-6">
             <label class="mb-2 mt-3">
               Start Date
@@ -67,12 +73,6 @@
               <span class="text-danger">*</span>
             </label>
             <%= form.date_field :end_date, class: "form-control" %>
-          </div>
-          <div class="col-lg-6 mt-3">
-            <div class="form-check form-switch">
-              <%= form.check_box :currently_working_here, class: "form-check-input", role: "switch" %>
-              <label class="form-check-label" for="currently_working_here">I am currently working here</label>
-            </div>
           </div>
         </div>
 

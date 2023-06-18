@@ -23,6 +23,13 @@
         </div>
         <p class="lead"><%= user.profile_title %></p>
         <p class="lead text-primary"><%= user.address %></p>
+
+        <div id="user-connection-status">
+          <% if user_signed_in? && current_user.check_if_already_connected?(current_user, user) %>
+            <%= link_to "Connect", connections_path, class: "btn btn-primary" %>
+          <% end %>
+        </div>
+
       </div>
     </div>
   </div>

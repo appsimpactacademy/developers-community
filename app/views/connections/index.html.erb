@@ -1,0 +1,58 @@
+<div class="col-lg-10 mx-auto mt-5">
+  <% if @requested_connections.present? %>
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Requested Connections</h3>
+      </div>
+      <div class="card-body text-center">
+        <div class="row">
+          <% @requested_connections.each do |connection| %>
+            <div class="col-lg-3">
+              <div class="card">
+                <div class="card-body">
+                  <%= image_tag 'dmu1.jpg', class: "img-fluid mb-1" %>
+                  <p class="lead fw-bold"><%= get_the_receiver(connection.connected_user_id ).name %></p>
+                  <small class="text-muted"><%= get_the_receiver(connection.connected_user_id ).profile_title %></small><br>
+                  <div class="d-grid">
+                    <%= link_to connection.status.titleize, "javascript:void(0)", class: "btn btn-primary mt-2" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @received_connections.present? %>
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Received Connections</h3>
+      </div>
+      <div class="card-body text-center">
+        <div class="row">
+          <% @received_connections.each do |connection| %>
+            <div class="col-lg-3">
+              <div class="card">
+                <div class="card-body">
+                  <%= image_tag 'dmu1.jpg', class: "img-fluid mb-1" %>
+                  <p class="lead fw-bold"><%= get_the_requester(connection.user_id).name %></p>
+                  <small class="text-muted"><%= get_the_requester(connection.user_id).profile_title %></small><br>
+                  <% if connection.status == "accepted" %>
+                    <div class="d-grid">
+                      <%= link_to connection.status.titleize, "javascript:void(0)", class: "btn btn-primary mt-2" %>
+                    </div>
+                  <% else %>
+                    <%= link_to "Accept", "javascript:void(0)", class: "btn btn-success mt-2" %>
+                    <%= link_to "Reject", "javascript:void(0)", class: "btn btn-danger mt-2" %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

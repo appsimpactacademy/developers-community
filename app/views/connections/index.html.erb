@@ -11,8 +11,8 @@
               <div class="card">
                 <div class="card-body">
                   <%= image_tag 'dmu1.jpg', class: "img-fluid mb-1" %>
-                  <p class="lead fw-bold"><%= get_the_receiver(connection.connected_user_id ).name %></p>
-                  <small class="text-muted"><%= get_the_receiver(connection.connected_user_id ).profile_title %></small><br>
+                  <p class="lead fw-bold"><%= connection.requested.name %></p>
+                  <small class="text-muted"><%= connection.requested.profile_title %></small><br>
                   <div class="d-grid">
                     <%= link_to connection.status.titleize, "javascript:void(0)", class: "btn btn-primary mt-2" %>
                   </div>
@@ -37,8 +37,8 @@
               <div class="card">
                 <div class="card-body">
                   <%= image_tag 'dmu1.jpg', class: "img-fluid mb-1" %>
-                  <p class="lead fw-bold"><%= get_the_requester(connection.user_id).name %></p>
-                  <small class="text-muted"><%= get_the_requester(connection.user_id).profile_title %></small><br>
+                  <p class="lead fw-bold"><%= connection.received.name %></p>
+                  <small class="text-muted"><%= connection.received.profile_title %></small><br>
                   <% if connection.status == "accepted" %>
                     <div class="d-grid">
                       <%= link_to connection.status.titleize, "javascript:void(0)", class: "btn btn-primary mt-2" %>

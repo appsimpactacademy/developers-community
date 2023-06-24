@@ -18,7 +18,7 @@
                     <small class="text-muted"><%= connection.requested.profile_title %></small><br>
                   </div>
                   <div class="d-grid">
-                    <%= link_to connection.status.titleize, "javascript:void(0)", class: "btn btn-primary mt-2" %>
+                    <%= link_to connection.status.titleize, "javascript:void(0)", class: "#{connection.status_btn} mt-2" %>
                   </div>
                 </div>
               </div>
@@ -50,7 +50,7 @@
                   <div id="connection-status-<%= connection.id %>">
                     <% if ["accepted", "rejected"].include?(connection.status) %>
                       <div class="d-grid">
-                        <%= link_to connection.status.titleize, "javascript:void(0)", class: "btn btn-primary mt-2" %>
+                        <%= link_to connection.status.titleize, "javascript:void(0)", class: "#{connection.status_btn} mt-2" %>
                       </div>
                     <% else %>
                       <%= link_to "Accept", connection_path(connection), class: "btn btn-success mt-2", data: { controller: "update-connection-status", turbo_method: :patch } %>

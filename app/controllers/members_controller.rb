@@ -3,6 +3,7 @@ class MembersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @connections = Connection.where('user_id = ? OR connected_user_id = ?', params[:id], params[:id]).where(status: 'accepted')
   end
 
   def edit_description; end

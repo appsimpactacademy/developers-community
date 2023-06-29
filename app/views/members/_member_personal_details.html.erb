@@ -43,6 +43,12 @@
             <%= link_to pluralize(@connections.count, 'connection'), member_connections_path(user) %>
           </div>
         <% end %>
+
+        <% if current_user != @user %>
+          <div id="mutual-connection-count">
+            <%= link_to pluralize(@mutual_connections.count, 'mutual connection'), "javascript:void(0)" %>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>

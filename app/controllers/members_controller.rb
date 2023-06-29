@@ -4,6 +4,7 @@ class MembersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @connections = Connection.where('user_id = ? OR connected_user_id = ?', params[:id], params[:id]).where(status: 'accepted')
+    @mutual_connections = current_user.connected_user_ids.intersection(@user.connected_user_ids)
   end
 
   def edit_description; end

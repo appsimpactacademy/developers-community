@@ -28,9 +28,9 @@ class MembersController < ApplicationController
   end
 
   def connections
-    @requested_connections = Connection.includes(:requested).where(user_id: params[:id], status: 'accepted')
-    @received_connections = Connection.includes(:received).where(connected_user_id: params[:id], status: 'accepted')
-    @total_connections = @requested_connections.count + @received_connections.count
+    @user = User.find(params[:id])
+    @connected_users = User.where(id: @user.connected_user_ids)
+    @total_connections = @connected_users.count
   end
 
   private

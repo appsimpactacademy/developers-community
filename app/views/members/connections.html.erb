@@ -15,9 +15,9 @@
                     <h4 style="margin-bottom: -2px;"><%= user.name %></h4>
                   <% end %>
 
-                  <% mutual_connection_count = current_user.connected_user_ids.intersection(user.connected_user_ids).count %>
+                  <% mutual_connection_count = current_user.mutually_connected_ids(user).count %>
                   <% if mutual_connection_count > 0 %>
-                    <%= link_to "javascript:void(0)", style: 'text-decoration:none;', target: "_blank" do %>
+                    <%= link_to member_connections_path(user, mutual_connections: true), style: 'text-decoration:none;', target: "_blank" do %>
                       <small class="text-primary"><%= pluralize(mutual_connection_count, 'mutual connection') %></small><br>
                     <% end %>
                   <% end %>

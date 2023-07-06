@@ -1,5 +1,4 @@
 class ConnectionsController < ApplicationController
-  before_action :authenticate_user!
 
   def index
     @requested_connections = Connection.includes(:requested).where(user_id: current_user.id)

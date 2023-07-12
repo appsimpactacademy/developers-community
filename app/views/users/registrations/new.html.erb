@@ -1,0 +1,59 @@
+<div class="col-lg-8 mx-auto mt-5 mb-5">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="text-center card-title">Sign up</h2>
+    </div>
+    <div class="card-body">
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { data: {turbo: false} }) do |f| %>
+        <%= render "users/shared/error_messages", resource: resource %>
+
+        <div class="form-group row">
+          <div class="col-lg-6">
+            <%= f.label :first_name, class: "mb-2" %>
+            <%= f.text_field :first_name, class: "form-control" %>
+          </div>
+          <div class="col-lg-6">
+            <%= f.label :last_name, class: "mb-2" %>
+            <%= f.text_field :last_name, class: "form-control" %>
+          </div>
+          <div class="col-lg-6">
+            <%= f.label :profile_title, class: "mb-2" %>
+            <%= f.text_field :profile_title, class: "form-control" %>
+          </div>
+        </div>
+
+
+        <div class="form-group row">
+          <div class="col-lg-6">
+            <%= f.label :email, class: "mb-2" %>
+            <%= f.email_field :email, class: "form-control" %>
+          </div>
+          <div class="col-lg-6">
+            <%= f.label :username, class: "mb-2" %>
+            <%= f.text_field :username, class: "form-control" %>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-lg-6">
+            <%= f.label :password, class: "mb-2" %>
+            <% if @minimum_password_length %>
+            <em>(<%= @minimum_password_length %> characters minimum)</em>
+            <% end %>
+            <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+          </div>
+          <div class="col-lg-6">
+            <%= f.label :password_confirmation, class: "mb-2" %>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
+          </div>
+        </div>
+
+        <div class="actions mt-4">
+          <%= f.submit "Sign up", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+
+      <%= render "users/shared/links" %>
+    </div>
+  </div>
+</div>

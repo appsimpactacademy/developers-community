@@ -14,7 +14,7 @@
           <% if user == current_user %>
             <div class="col-lg-2">
               <div class="d-flex justify-content-end">
-                <%= link_to edit_member_personal_details_path, data: { controller: "bs-modal-form" } do %>
+                <%= link_to edit_member_personal_details_path, class: "edit-profile", data: { controller: "bs-modal-form" } do %>
                   <i class="bi bi-pencil-fill"></i>
                 <% end %>
               </div>

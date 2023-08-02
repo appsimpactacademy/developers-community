@@ -1,24 +1,43 @@
-# README
+# Developers Community
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Requirements
+- ruby "3.2.2"
+- rails 7.0
+- postgres
+- node >= 14.x
 
-Things you may want to cover:
+## Installation
+```
+git clone https://github.com/appsimpactacademy/developers-community.git
+cd developers-community
+bundle install
+```
+## Database setup
+```
+## Development Env.
+rails db:create
+rails db:migrate
+rails db:seed
 
-* Ruby version
+## Test Env.
+RAILS_ENV=test rails db:create
+RAILS_ENV=test rails db:migrate
+```
 
-* System dependencies
+## Assets installation
+```
+yarn install
+yarn build:css
+```
 
-* Configuration
+## Run the project
+```
+rails server
+```
+And then visit the http://localhost:3000
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Executing features specs:
+```
+bundle exec rspec spec/features/
+```
+* You need to install the chromedriver first to stimulate the feature specs.

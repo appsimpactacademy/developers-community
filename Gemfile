@@ -79,3 +79,5 @@ gem 'ransack'
 gem 'devise'
 gem 'kaminari'
 gem 'cssbundling-rails'
+
+gem "stimulus_reflex", "= 3.5.0.pre8"

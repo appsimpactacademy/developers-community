@@ -5,7 +5,9 @@
     "@popperjs/core": "^2.11.7",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.5",
-    "sass": "^1.62.1"
+    "lodash": "^4.17.21",
+    "sass": "^1.62.1",
+    "stimulus_reflex": "3.5.0-pre8"
   },
   "scripts": {
     "build:css": "sass ./app/assets/stylesheets/application.bootstrap.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules"

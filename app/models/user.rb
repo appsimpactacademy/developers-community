@@ -6,6 +6,9 @@ class User < ApplicationRecord
 
   has_many :work_experiences, dependent: :destroy 
   has_many :connections, dependent: :destroy
+  has_many :messages
+  has_many :user1_chatrooms, class_name: 'Chatroom', foreign_key: 'user1_id', dependent: :destroy
+  has_many :user2_chatrooms, class_name: 'Chatroom', foreign_key: 'user2_id', dependent: :destroy
 
   validates :first_name, :last_name, :profile_title, presence: true
   validates :username, presence: true, uniqueness: true

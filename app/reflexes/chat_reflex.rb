@@ -18,9 +18,7 @@ class ChatReflex < StimulusReflex::Reflex
 
       # Broadcast that everyone on this channel should get messages
       ActionCable.server.broadcast("chat_#{chatroom.id}", message.message)
-
-
-      update_messages(other_user)
+      
     end
   end
 

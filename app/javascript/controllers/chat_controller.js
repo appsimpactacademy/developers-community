@@ -7,12 +7,10 @@ import consumer from '../channels/consumer';
 
 // Connects to data-controller="chat"
 export default class extends Controller {
-  static targets = ['message'];
+
   connect() {
-
     StimulusReflex.register(this)
-    this.debounceTimer = null; 
-
+    this.debounceTimer = null;
   }
 
   initialize() {
@@ -24,8 +22,11 @@ export default class extends Controller {
     });
   }
 
-
-
+  open_chat(event) {
+    event.preventDefault();
+    const userId = event.target.getAttribute("data-user-id");
+    this.stimulate("ChatReflex#open_chat", userId);
+  }
 
   create_message(event) {
     event.preventDefault();
@@ -35,8 +36,6 @@ export default class extends Controller {
     if (this.isActionCableConnectionOpen()) {
       this.stimulate('Chat#create_message', event.target, otherUserId);
       this.stimulate('Chat#update_messages', otherUserId);
-      // Clear the input field value
-      this.messageTarget.value = '';
     } else {
       console.log('ActionCable connection is not open yet. Waiting...');
     }
@@ -48,17 +47,12 @@ export default class extends Controller {
 
     // Set a new debounce timer
     this.debounceTimer = setTimeout(() => {
-      console.log("Debounce timer fired");
-      const element = document.querySelector('[data-reflex="click->chat#update_messages"]');
-
-      const otherUserId = element.dataset.other_user_id;
-      console.log("Selected element:", element);
-      if (element) {
+      const otherUserId = this.element.dataset.otherUserId;
+      if (this.element) {
         this.stimulate('Chat#update_messages', otherUserId);
       } else {
         console.log("Element not found");
       }
     }, 200); // Adjust the debounce delay as needed
   }
-
 }

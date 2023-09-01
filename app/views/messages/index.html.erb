@@ -1,0 +1,60 @@
+<div class="container" data-controller="chat">
+  <div class="row">
+    <div class="col-lg-10 mx-auto mt-5">
+      <div class="row">
+        <div class="col-md-4 pr-0 px-0">
+          <div class="connected-users-list">
+            <ul class="list-group user-list chat-window-trigger">
+              <% @requested_connections.each_with_index do |connection, index| %>
+                <%= link_to 'javascript:void(0);', data: { action: "click->chat#open_chat"}, class: 'chat-window-trigger', id: "user-#{index}" do %>
+                  <li class="list-group-item" data-user-id="<%= connection.requested.id %>">
+                    <%= image_tag 'dmu1.jpg', class: 'connection-avatar rounded-circle' %>
+                    <%= connection.requested.name %>    
+                  </li>
+                <% end %>
+              <% end %>
+              <% @received_connections.each do |connection| %>
+                <%= link_to 'javascript:void(0);', data: { action: "click->chat#open_chat"} do %>
+                  <li class="list-group-item" data-user-id="<%= connection.received.id %>">
+                    <%= image_tag 'dmu1.jpg', class: 'connection-avatar rounded-circle' %>
+                    <%= connection.received.name %>    
+                  </li>
+                <% end %>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-8 px-0" id="chat-window-container">
+          <%= render partial: 'chat_window', locals: {messages: @messages, chatroom: @chatroom, other_user: @user} %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .connection-avatar {
+    border: 1px solid;
+    height: 40px;
+    width: 40px;
+    line-height: 40px;
+    font-size: 18px;
+  }
+  .user-list {
+    height: 600px;
+    overflow: auto;
+  }
+
+</style>
+<script>
+ document.addEventListener("DOMContentLoaded", () => {
+  const element = document.querySelector("#user-0"); // Select the specific element you want to click
+  if (element) {
+    const clickEvent = new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true,
+      view: window
+    });
+    element.dispatchEvent(clickEvent);
+  }
+});
+</script>

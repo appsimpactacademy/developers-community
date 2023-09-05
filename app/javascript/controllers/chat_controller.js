@@ -3,6 +3,7 @@ import StimulusReflex from 'stimulus_reflex';
 import consumer from '../channels/consumer';
 // import debounce from 'lodash/debounce';
 
+let currentActiveLink = null; // Global variable to store the currently active link
 
 
 // Connects to data-controller="chat"
@@ -25,6 +26,17 @@ export default class extends Controller {
   open_chat(event) {
     event.preventDefault();
     const userId = event.target.getAttribute("data-user-id");
+
+    // Remove the "active" class from the previous active link
+    if (currentActiveLink) {
+      currentActiveLink.classList.remove("active");
+    }
+
+    // Add the "active" class to the clicked chat list item
+    event.target.nextElementSibling.classList.add('active');
+
+    currentActiveLink = event.target.nextElementSibling; // Update the currently active link
+
     this.stimulate("ChatReflex#open_chat", userId);
   }
 

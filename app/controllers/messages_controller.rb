@@ -3,30 +3,34 @@ class MessagesController < ApplicationController
     @received_connections = Connection.includes(:received).where(connected_user_id: current_user.id, status: 'accepted')
     @requested_connections = Connection.includes(:requested).where(user_id: current_user.id, status: 'accepted')
 
-    # Find chatrooms where the current user is involved
-    user1_chatrooms = current_user.user1_chatrooms
-    user2_chatrooms = current_user.user2_chatrooms
+    most_recent_chatroom_query = <<~SQL
+      SELECT
+        chatrooms.*,
+        MAX(messages.created_at) AS most_recent_message_time
+      FROM
+        chatrooms
+      LEFT JOIN
+        messages ON chatrooms.id = messages.chatroom_id
+      WHERE
+        chatrooms.user1_id = :user_id OR chatrooms.user2_id = :user_id
+      GROUP BY
+        chatrooms.id
+      ORDER BY
+        most_recent_message_time DESC
+      LIMIT
+        1
+    SQL
 
-    # Combine and flatten the chatrooms
-    all_chatrooms = (user1_chatrooms + user2_chatrooms).uniq
-    @chatroom = nil
-    most_recent_message_time = nil
+    result = ActiveRecord::Base.connection.execute(
+      ActiveRecord::Base.send(:sanitize_sql_array, [most_recent_chatroom_query, user_id: current_user.id])
+    ).first
 
-    all_chatrooms.each do |chatroom|
-      recent_message_time = chatroom.messages.maximum(:created_at)
-      
-      if recent_message_time && (most_recent_message_time.nil? || recent_message_time > most_recent_message_time)
-        most_recent_message_time = recent_message_time
-        @chatroom = chatroom
-      else
-        @chatroom = chatroom
-      end
-    end
-
-    if @chatroom
+    if result
+      @chatroom = Chatroom.find(result['id'])
       @messages = @chatroom.messages.includes(:user).order(created_at: :asc)
       @user = @chatroom.user1_id == current_user.id ? @chatroom.user2 : @chatroom.user1
     else
+      @chatroom = nil
       @messages = []
       @user = nil
     end

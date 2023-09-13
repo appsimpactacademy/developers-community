@@ -12,6 +12,10 @@ export default class extends Controller {
   connect() {
     StimulusReflex.register(this)
     this.debounceTimer = null;
+     
+    const fileInput = this.element.querySelector("#message_image");
+ 
+    fileInput.addEventListener('change', this.handleFileSelection.bind(this));
   }
 
   initialize() {
@@ -27,26 +31,42 @@ export default class extends Controller {
     event.preventDefault();
     const userId = event.target.getAttribute("data-user-id");
 
-    // Remove the "active" class from the previous active link
-    if (currentActiveLink) {
-      currentActiveLink.classList.remove("active");
+    this.stimulate("Chat#open_chat", userId);
+  }
+
+  handleFileSelection(event) {
+    const file = event.target.files[0];
+    const otherUserId = event.target.nextElementSibling.dataset.otherUserId;
+    if (file) {
+      const upload = new ActiveStorage.DirectUpload(file, '/rails/active_storage/direct_uploads');
+
+      upload.create((error, blob) => {
+        if (error) {
+          // Handle error
+        } else {
+          // Construct the URL using the key
+          const uploadedFileUrl = `/rails/active_storage/blobs/${blob.key}`;
+
+          // Include the file object and uploadedFileUrl in the event data
+          const eventData = {
+            file: file,
+            uploadedFileUrl: uploadedFileUrl,
+          };
+          document.getElementById('cover_image_key').value = uploadedFileUrl;
+        }
+      });
     }
-
-    // Add the "active" class to the clicked chat list item
-    event.target.nextElementSibling.classList.add('active');
-
-    currentActiveLink = event.target.nextElementSibling; // Update the currently active link
-
-    this.stimulate("ChatReflex#open_chat", userId);
   }
 
   create_message(event) {
     event.preventDefault();
-
     const otherUserId = event.target.dataset.otherUserId;
-
+    let image_key = null;
+    if(event.target.previousElementSibling.value != null){
+      image_key = event.target.previousElementSibling.value.split('/')[4];
+    }
     if (this.isActionCableConnectionOpen()) {
-      this.stimulate('Chat#create_message', event.target, otherUserId);
+      this.stimulate('Chat#create_message', event.target, {image_key, otherUserId});
       this.stimulate('Chat#update_messages', otherUserId);
     } else {
       console.log('ActionCable connection is not open yet. Waiting...');

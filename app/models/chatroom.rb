@@ -6,4 +6,6 @@ class Chatroom < ApplicationRecord
   scope :between_users, ->(user1, user2) {
     where('(user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)', user1.id, user2, user2, user1.id)
   }
+
+  
 end

@@ -1,69 +1,79 @@
 <!-- char-area -->
-<div class="col-md-10  mx-auto mt-5">
-  <section class="message-area" data-controller='chat'>
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="chat-area">
-            <!-- chatlist -->
-            <div class="chatlist">
-              <div class="modal-dialog-scrollable">
-                <div class="modal-content">
-                  <div class="chat-header">
-                    <div class="msg-search">
-                      <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search" aria-label="search">
-                      <a class="add" href="#"><img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/add.svg" alt="add"></a>
+<% if @requested_connections.present? || @received_connections.present? %>
+  <div class="col-md-10  mx-auto mt-5">
+    <section class="message-area" data-controller='chat'>
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="chat-area">
+              <!-- chatlist -->
+              <div class="chatlist">
+                <div class="modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="chat-header">
+                      <div class="msg-search">
+                        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search" aria-label="search">
+                        <a class="add" href="#"><img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/add.svg" alt="add"></a>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="modal-body">
-                    <!-- chat-list -->
-                    <div class="chat-lists">
+                    <div class="modal-body">
                       <!-- chat-list -->
-                      <div class="chat-list">
-                        <% @requested_connections.each_with_index do |connection, index| %>
-                          <%= link_to 'javascript:void(0);', data: { action: "click->chat#open_chat"}, class: 'chat-window-trigger d-flex mt-4', id: "user-#{index}" do %>
-                            <div class="flex-shrink-0">
-                              <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                              <h3 class="mt-2" data-user-id="<%= connection.requested.id %>"><%= connection.requested.name %></h3>
+                      <div class="chat-lists">
+                        <!-- chat-list -->
+                        <div class="chat-list">
+                          <% @requested_connections.each_with_index do |connection, index| %>
+                            <%= link_to 'javascript:void(0);', data: { action: "click->chat#open_chat"}, class: 'chat-window-trigger d-flex mt-4', id: "user-#{index}" do %>
+                              <div class="flex-shrink-0">
+                                <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
+                              </div>
+                              <div class="flex-grow-1 ms-3">
+                                <h3 class="mt-2" data-user-id="<%= connection.requested.id %>"><%= connection.requested.name %></h3>
 
-                              <span class="active-user"></span>
-                            </div>
-                          <% end %>  
-                        <% end %>
-                        <% @received_connections.each_with_index do |connection, index| %>
-                          <%= link_to 'javascript:void(0);', data: { action: "click->chat#open_chat"}, class: 'chat-window-trigger d-flex mt-4', id: "user-#{index}" do %>
-                            <div class="flex-shrink-0">
-                              <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
-                              <span class="active"></span>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                              <h3 class="mt-2" data-user-id="<%= connection.received.id %>"><%= connection.received.name %></h3>
-                            </div>
-                          <% end %>  
-                        <% end %>
+                                <span class="active-user"></span>
+                              </div>
+                            <% end %>  
+                          <% end %>
+                          <% @received_connections.each_with_index do |connection, index| %>
+                            <%= link_to 'javascript:void(0);', data: { action: "click->chat#open_chat"}, class: 'chat-window-trigger d-flex mt-4', id: "user-#{index}" do %>
+                              <div class="flex-shrink-0">
+                                <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
+                                <span class="active"></span>
+                              </div>
+                              <div class="flex-grow-1 ms-3">
+                                <h3 class="mt-2" data-user-id="<%= connection.received.id %>"><%= connection.received.name %></h3>
+                              </div>
+                            <% end %>  
+                          <% end %>
+                        </div>
+                        <!-- chat-list -->
                       </div>
                       <!-- chat-list -->
                     </div>
-                    <!-- chat-list -->
                   </div>
                 </div>
               </div>
+              <!-- chatlist -->
+              <!-- chatbox -->
+              <div class="chatbox showbox" id="chat-window-container">
+                <%= render partial: 'chat_window', locals: {messages: @messages, chatroom: @chatroom, other_user: @user} %>
+              </div>
             </div>
-            <!-- chatlist -->
             <!-- chatbox -->
-            <div class="chatbox showbox" id="chat-window-container">
-              <%= render partial: 'chat_window', locals: {messages: @messages, chatroom: @chatroom, other_user: @user} %>
-            </div>
           </div>
-          <!-- chatbox -->
         </div>
       </div>
+    </section>
+  </div>
+<% else %>
+  <div class="col-md-10  mx-auto mt-5">
+    <div class="card">
+       <div class="card-body">
+          <h6> There is no connected users found. Please send connection request and then start chat!!!</h6>
+       </div>
     </div>
-  </section>
-</div>
+  </div>   
+<% end %>  
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     // Add a click event listener to elements with class "chat-list"

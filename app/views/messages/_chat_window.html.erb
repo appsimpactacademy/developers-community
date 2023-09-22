@@ -1,76 +1,82 @@
-<div class="modal-dialog-scrollable chat-window" data-controller='chat' data-chatroom-id="<%= chatroom.id %>" data-other-user-id= <%= other_user.id %>>
-  <div class="modal-content">
-    <div class="msg-head">
-      <div class="row">
-        <div class="col-8">
-          <div class="d-flex align-items-center">
-            <span class="chat-icon"><img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/arroleftt.svg" alt="image title"></span>
-            <div class="flex-shrink-0">
-              <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
-            </div>
-            <div class="flex-grow-1 ms-3">
-              <h3><%= other_user.name %></h3>
+<% if chatroom.present? %>  
+  <div class="modal-dialog-scrollable chat-window" data-controller='chat' data-chatroom-id="<%= chatroom.id %>" data-other-user-id= <%= other_user.id %>>
+    <div class="modal-content">
+      <div class="msg-head">
+        <div class="row">
+          <div class="col-8">
+            <div class="d-flex align-items-center">
+              <span class="chat-icon"><img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/arroleftt.svg" alt="image title"></span>
+              <div class="flex-shrink-0">
+                <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h3><%= other_user.name %></h3>
+              </div>
             </div>
           </div>
+          <div class="col-4">
+            <ul class="moreoption">
+              <li class="navbar nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="col-4">
-          <ul class="moreoption">
-            <li class="navbar nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li>
-                  <hr class="dropdown-divider">
+      </div>
+
+      <div class="modal-body">
+        <div class="msg-body">
+          <div data-reflex="click->chat#update_messages" data-other_user_id="<%= other_user.id %>">
+          </div>
+          <ul>
+            <% if messages.present? %>
+              <% messages.each do |message| %>
+                <li class="message <%= message.sent_by?(current_user) ? 'sender' : 'repaly' %>">
+                  <div>
+                    <% if message.cover_image.attached? %>
+                      <%= image_tag message.cover_image, class: 'chat-img' %>
+                    <% end %>
+                  </div>
+                  <% if message.message.present? %>
+                    <p><%= message.message %></p>
+                  <% end %>
                 </li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
-            </li>
+              <% end %>
+            <% else %>
+              <p class="empty-chat">There is no messages found between both users. Start chat here.</p>
+            <% end %>    
           </ul>
         </div>
       </div>
-    </div>
 
-    <div class="modal-body">
-      <div class="msg-body">
-        <div data-reflex="click->chat#update_messages" data-other_user_id="<%= other_user.id %>">
-        </div>
-        <ul>
-          <% messages.each do |message| %>
-            <li class="message <%= message.sent_by?(current_user) ? 'sender' : 'repaly' %>">
-              <div>
-                <% if message.cover_image.attached? %>
-                  <%= image_tag message.cover_image, class: 'chat-img' %>
-                <% end %>
+      <div class="send-box">
+        <%= form_with model: Message.new do |form| %>
+          <div class="input-group">
+            <%= form.text_area :message, class: "form-control form-control-lg", placeholder: 'Write message…' %>
+            <div class="input-group-append">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="message_image" name="cover_image" style="display: none;">
+                <label class="custom-file-label" for="message_image">
+                  <i class="fas fa-paperclip"></i>
+                </label>
               </div>
-              <% if message.message.present? %>
-                <p><%= message.message %></p>
-              <% end %>
-            </li>
-          <% end %>
-        </ul>
-      </div>
-    </div>
-
-    <div class="send-box">
-      <%= form_with model: Message.new do |form| %>
-        <div class="input-group">
-          <%= form.text_area :message, class: "form-control form-control-lg", placeholder: 'Write message…' %>
-          <div class="input-group-append">
-            <div class="custom-file">
-              <input type="file" class="custom-file-input" id="message_image" name="cover_image" style="display: none;">
-              <label class="custom-file-label" for="message_image">
-                <i class="fas fa-paperclip"></i>
-              </label>
             </div>
           </div>
-        </div>
 
-        <%= hidden_field_tag :cover_image_key %>
-        <%= button_tag type: "submit", class: "btn btn-primary",  data: { action: "click->chat#create_message", other_user_id: other_user.id } do %>
-          Send
+          <%= hidden_field_tag :cover_image_key %>
+          <%= button_tag type: "submit", class: "btn btn-primary",  data: { action: "click->chat#create_message", other_user_id: other_user.id } do %>
+            Send
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
     </div>
   </div>
-</div>
+<% end %>  

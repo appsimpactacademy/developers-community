@@ -1,21 +1,46 @@
 import { Controller } from "@hotwired/stimulus"
 import StimulusReflex from 'stimulus_reflex';
 import consumer from '../channels/consumer';
-// import debounce from 'lodash/debounce';
-
-let currentActiveLink = null; // Global variable to store the currently active link
+import {EmojiButton} from '@joeattardi/emoji-button'
 
 
 // Connects to data-controller="chat"
 export default class extends Controller {
+  static targets = ['textarea'];
 
   connect() {
     StimulusReflex.register(this)
     this.debounceTimer = null;
-     
+    this.setupFileInput();
+    this.setupEmojiPicker();
+  }
+
+  setupFileInput() {
     const fileInput = this.element.querySelector("#message_image");
- 
     fileInput.addEventListener('change', this.handleFileSelection.bind(this));
+  }
+
+  setupEmojiPicker() {
+    this.picker = new EmojiButton();
+
+    this.picker.on('emoji', (selection) => {
+      this.insertEmoji(selection.emoji);
+    });
+  }
+
+  insertEmoji(emoji) {
+    const textarea = this.element.querySelector("#message_message");
+    const { selectionStart, selectionEnd } = textarea;
+    const textBeforeCursor = textarea.value.substring(0, selectionStart);
+    const textAfterCursor = textarea.value.substring(selectionEnd);
+    textarea.value = textBeforeCursor + emoji + ' ' + textAfterCursor;
+    this.picker.togglePicker(this.element);
+    textarea.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+  }
+
+  showPicker(event) {
+    event.preventDefault()
+    this.picker.togglePicker(event.target)
   }
 
   initialize() {
@@ -88,3 +113,4 @@ export default class extends Controller {
     }, 200); // Adjust the debounce delay as needed
   }
 }
+

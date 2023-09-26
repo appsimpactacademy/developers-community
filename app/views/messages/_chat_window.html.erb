@@ -39,7 +39,7 @@
           <ul>
             <% if messages.present? %>
               <% messages.each do |message| %>
-                <li class="message <%= message.sent_by?(current_user) ? 'sender' : 'repaly' %>">
+                <li class="message <%= message.sent_by?(current_user) ? 'repaly' : 'sender' %>">
                   <div>
                     <% if message.cover_image.attached? %>
                       <%= image_tag message.cover_image, class: 'chat-img' %>
@@ -60,17 +60,17 @@
       <div class="send-box">
         <%= form_with model: Message.new do |form| %>
           <div class="input-group">
-            <%= form.text_area :message, class: "form-control form-control-lg", placeholder: 'Write message…' %>
+            <%= form.text_area :message, class: "form-control form-control-lg", placeholder: 'Write message…'%>
             <div class="input-group-append">
               <div class="custom-file">
                 <input type="file" class="custom-file-input" id="message_image" name="cover_image" style="display: none;">
                 <label class="custom-file-label" for="message_image">
-                  <i class="fas fa-paperclip"></i>
+                  <i class="fas fa-paperclip custom-pointer"></i>
                 </label>
+                <span data-action="click->chat#showPicker" class="custom-pointer"><i class="fas fa-smile" aria-hidden="true"></i></span>
               </div>
             </div>
           </div>
-
           <%= hidden_field_tag :cover_image_key %>
           <%= button_tag type: "submit", class: "btn btn-primary",  data: { action: "click->chat#create_message", other_user_id: other_user.id } do %>
             Send
@@ -79,4 +79,4 @@
       </div>
     </div>
   </div>
-<% end %>  
+<% end %>

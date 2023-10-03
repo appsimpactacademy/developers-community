@@ -56,6 +56,9 @@ Rails.application.configure do
   # config.i18n.raise_on_missing_translations = true
 
   # Annotate rendered view with file names.
+  config.hosts << "127.0.0.1"
+  config.action_controller.perform_caching = true
+  config.cache_store = :memory_store
   # config.action_view.annotate_rendered_view_with_filenames = true
   Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 end

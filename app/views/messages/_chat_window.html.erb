@@ -10,7 +10,7 @@
                 <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
               </div>
               <div class="flex-grow-1 ms-3">
-                <h3><%= other_user.name %></h3>
+                <h3 id="chat-window-user"><%= other_user.name %></h3>
               </div>
             </div>
           </div>
@@ -46,7 +46,7 @@
                     <% end %>
                   </div>
                   <% if message.message.present? %>
-                    <p><%= message.message %></p>
+                    <p id="user-message"><%= message.message %></p>
                   <% end %>
                 </li>
               <% end %>

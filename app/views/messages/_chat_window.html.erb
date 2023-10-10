@@ -33,26 +33,63 @@
       </div>
 
       <div class="modal-body">
-        <div class="msg-body">
+        <div class="msg-body chatroom-messages">
+          <% current_date = nil %> <!-- Initialize current_date variable -->
           <div data-reflex="click->chat#update_messages" data-other_user_id="<%= other_user.id %>">
           </div>
           <ul>
             <% if messages.present? %>
               <% messages.each do |message| %>
-                <li class="message <%= message.sent_by?(current_user) ? 'repaly' : 'sender' %>">
-                  <div>
-                    <% if message.cover_image.attached? %>
-                      <%= image_tag message.cover_image, class: 'chat-img' %>
+                <!-- Get the date of the message -->
+                 <% message_date_time = message.created_at %>
+                <% message_date = message_date_time.to_date %>
+                <% message_time = message_date_time.strftime('%I:%M %p') %>
+
+                <!-- Check if the message date is within the past week -->
+                <% if current_date != message_date %>
+                  <!-- Display the day of the week or the actual date -->
+                  <li class="message-date text-uppercase">
+                    <% if (Date.today - message_date).to_i <= 6 %>
+                      <%= message_date == Date.today ? 'Today' : message_date.strftime('%A') %>
+                    <% else %>
+                      <%= message_date.strftime('%b %d') %> <!-- Display actual date -->
                     <% end %>
+                  </li>
+                  <% current_date = message_date %> <!-- Update current_date -->
+                <% end %>
+                <li class="message" data-other-user-id= <%= other_user.id %>>
+                  <div class="message-user d-flex">
+                    <div class="message-avatar">
+                      <img class="user-avatar" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
+                    </div>
+                    <div class="message-details">
+                      <% if message.sent_by?(current_user) %>
+                        <span class="message-sender">
+                          <%= current_user.name %> <!-- Sender's name -->
+                        </span>
+                      <% else %>
+                        <span class="message-receiver">
+                          <%= other_user.name %> <!-- Receiver's name -->
+                        </span>
+                      <% end %>
+                      <span class="message-time">
+                        <%= message_time %> <!-- Time when the message is sent -->
+                      </span>
+                      <div>
+                        <% if message.cover_image.attached? %>
+                          <%= image_tag message.cover_image, class: 'chat-img' %>
+                        <% end %>
+                      </div>
+                      <% if message.message.present? %>
+                        <p id="user-message"><%= message.message %></p>
+                      <% end %>
+                    </div>
                   </div>
-                  <% if message.message.present? %>
-                    <p id="user-message"><%= message.message %></p>
-                  <% end %>
                 </li>
               <% end %>
             <% else %>
               <p class="empty-chat">There is no messages found between both users. Start chat here.</p>
-            <% end %>    
+            <% end %>
           </ul>
         </div>
       </div>

@@ -17,6 +17,16 @@ class ChatReflex < StimulusReflex::Reflex
       message = create_message_in_chatroom(chatroom, image_key)
       broadcast_message(message, chatroom)
       open_chat(data['otherUserId'])
+      morph ".last-msg-#{data['otherUserId']}","<small class='text-muted user-last-message'>
+        <div class='message-content'>
+          <p data-user-id='#{data['otherUserId']}' class='#{message.sent_by?(message.user) ? 'you-message' : 'other-message'} message-text-truncated'>
+            #{message.sent_by?(current_user) ? 'You: ' : "#{current_user.first_name}: " }#{message.message == '' && message.cover_image.attached? ? 'You sent an attachment' : message.message}
+          </p>
+        </div>
+      </small>
+      <p class='timestamp mt-0 mx-3' data-user-id='#{data['otherUserId']}'>
+        #{message.created_at.strftime('%I:%M %p')}
+      </p>"
     end
   end
 

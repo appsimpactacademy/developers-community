@@ -1,6 +1,5 @@
-<!-- char-area -->
 <% if @requested_connections.present? || @received_connections.present? %>
-  <div class="col-md-10  mx-auto mt-5">
+  <div class="col-md-10 mx-auto mt-5">
     <section class="message-area" data-controller='chat'>
       <div class="container">
         <div class="row">
@@ -12,7 +11,7 @@
                   <div class="modal-content">
                     <div class="chat-header">
                       <div class="msg-search">
-                        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search" aria-label="search">
+                        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search" aria-label="search" data-chat-target="searchInput"  data-action="input->chat#setupSearchInput">
                         <a class="add" href="#"><img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/add.svg" alt="add"></a>
                       </div>
                     </div>
@@ -20,33 +19,66 @@
                     <div class="modal-body">
                       <!-- chat-list -->
                       <div class="chat-lists">
-                        <!-- chat-list -->
-                        <div class="chat-list">
-                          <% @requested_connections.each_with_index do |connection, index| %>
-                            <%= link_to 'javascript:void(0);', data: { action: "click->chat#open_chat"}, class: 'chat-window-trigger d-flex mt-4', id: "user-#{index}" do %>
-                              <div class="flex-shrink-0">
-                                <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
-                              </div>
-                              <div class="flex-grow-1 ms-3">
-                                <h3 class="mt-2" data-user-id="<%= connection.requested.id %>"><%= connection.requested.name %></h3>
+                        <!-- chat-list for requested connections -->
+                        <% @requested_connections.each_with_index do |connection, index| %>
+                          <% user = connection.requested %>
+                          <% chatrooms = user.user1_chatrooms.or(user.user2_chatrooms) %>
+                          <% latest_messages = chatrooms.map { |chatroom| chatroom.messages.order(created_at: :desc).first } %>
+                          <% connected_user_id = user.id == connection.requested.id ? connection.connected_user_id : connection.requested_id %>
+                          <% connected_user = User.find(connected_user_id) %>
+                          <a href="javascript:void(0);" data-action="click->chat#open_chat" data-user-id="<%= connection.requested.id %>" class="chat-window-trigger d-flex mt-4 text-decoration-none" id="user-<%= index %>" data-chat-target="user">
+                            <div class="flex-shrink-0">
+                              <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img" data-user-id="<%= connection.requested.id %>">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                              <h3 class="mt-2 user-name mb-0" data-user-id="<%= connection.requested.id %>"><%= connection.requested.name %></h3>
+                              <!-- Display last message and time for the chatroom -->
 
-                                <span class="active-user"></span>
+                              <div class="last-message d-flex last-msg-<%= connection.requested.id %>">
+                                <% if latest_messages.any? %>
+                                  <% last_message = latest_messages.compact.max_by(&:created_at) %>
+                                    <small class="text-muted user-last-message">
+                                      <p class="<%= last_message.sent_by?(current_user) ? 'you-message' : 'other-message' %>" data-user-id="<%= connection.requested.id %>">
+                                          <%= last_message.sent_by?(current_user) ? 'You: ' : "#{connection.requested.first_name}: " %><%= truncate(last_message.message == '' && last_message.cover_image.attached? ? 'sent an attachment' : last_message.message, length: 12)%>
+                                      </p>
+                                    </small>
+                                    <p class="timestamp mt-0 mx-3" data-user-id="<%= connection.requested.id %>">
+                                      <%= last_message.created_at.strftime('%I:%M %p') %>
+                                    </p>
+                                <% end %> 
+                              </div>   
+                            </div>
+                          </a>
+                        <% end %>
+
+                        <!-- chat-list for received connections -->
+                        <% @received_connections.each_with_index do |connection, index| %>
+                          <% user = connection.received %>
+                          <% chatrooms = user.user1_chatrooms.or(user.user2_chatrooms) %>
+                          <% latest_messages = chatrooms.map { |chatroom| chatroom.messages.order(created_at: :desc).first } %>
+                          <% connected_user_id = user.id == connection.received.id ? connection.connected_user_id : connection.received.id %>
+                          <% connected_user = User.find(connected_user_id) %>
+                          <a href="javascript:void(0);" data-action="click->chat#open_chat" data-user-id="<%= connection.received.id %>" class="chat-window-trigger d-flex mt-4 text-decoration-none" id="user-<%= index %>">
+                            <div class="flex-shrink-0">
+                              <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                              <h3 class="mt-2 user-name mb-0"><%= connection.received.name %></h3>
+                              <!-- Display last message and time for the chatroom -->
+                              <div class="last-message">
+                                <small class="text-muted user-last-message">
+                                  <p class="<%= last_message.sent_by?(current_user) ? 'you-message' : 'other-message' %>">
+                                    <%= last_message.sent_by?(current_user) ? 'You: ' : "#{connection.received.first_name}: " %>
+                                    <%= truncate(last_message.message == '' && last_message.cover_image.attached? ? 'You sent an attachment' : last_message.message, length: 14)%>
+                                  </p>
+                                </small>
                               </div>
-                            <% end %>  
-                          <% end %>
-                          <% @received_connections.each_with_index do |connection, index| %>
-                            <%= link_to 'javascript:void(0);', data: { action: "click->chat#open_chat"}, class: 'chat-window-trigger d-flex mt-4', id: "user-#{index}" do %>
-                              <div class="flex-shrink-0">
-                                <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
-                                <span class="active"></span>
-                              </div>
-                              <div class="flex-grow-1 ms-3">
-                                <h3 class="mt-2" data-user-id="<%= connection.received.id %>"><%= connection.received.name %></h3>
-                              </div>
-                            <% end %>  
-                          <% end %>
-                        </div>
-                        <!-- chat-list -->
+                            </div>
+                            <p class="timestamp">
+                              <%= last_message.created_at.strftime('%I:%M %p') %>
+                            </p>
+                          </a>
+                        <% end %>
                       </div>
                       <!-- chat-list -->
                     </div>
@@ -56,7 +88,7 @@
               <!-- chatlist -->
               <!-- chatbox -->
               <div class="chatbox showbox" id="chat-window-container">
-                <%= render partial: 'chat_window', locals: {messages: @messages, chatroom: @chatroom, other_user: @user} %>
+                <%= render partial: 'chat_window', locals: { messages: @messages, chatroom: @chatroom, other_user: @user } %>
               </div>
             </div>
             <!-- chatbox -->
@@ -66,10 +98,10 @@
     </section>
   </div>
 <% else %>
-  <div class="col-md-10  mx-auto mt-5">
+  <div class="col-md-10 mx-auto mt-5">
     <div class="card">
        <div class="card-body">
-          <h6> There is no connected users found which is accept your connection request. Please send connection request and then start chat!!!</h6>
+          <h6> There are no connected users who have accepted your connection request. Please send connection requests and then start chatting!</h6>
        </div>
     </div>
   </div>   
@@ -90,3 +122,4 @@
     });
   });
 </script>
+

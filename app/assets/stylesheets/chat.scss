@@ -196,7 +196,7 @@ a.add img {
 
 .msg-head {
   padding: 15px;
-  border-bottom: 1px solid #ccc;
+  box-shadow: 1px 1px 1px #cbc9c9d6;
 }
 
 .moreoption {
@@ -578,4 +578,73 @@ button:focus {
 }
 .custom-pointer {
   cursor: pointer;
+}
+.user-name {
+  font-size: 15px;
+  color: #000;
+}
+.timestamp{
+  margin-top: 6px;
+  font-size: 13px;
+  color: #000;
+}
+.message-date {
+    font-size: 12px;
+    text-align: center;
+    color: gray;
+    position: relative;
+        color: #212529;
+  }
+  .message-date::before,
+.message-date::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background-color: #ccc;
+}
+
+.message-date::before {
+  left: 0;
+}
+
+.message-date::after {
+  right: 0;
+}
+
+/* Additional style for better visual separation */
+.message-date::before {
+  margin-left: -10px;
+}
+
+.message-date::after {
+  margin-right: -10px;
+}
+.user-avatar {
+  width: 32px; /* Adjust the width as needed */
+  height: 32px; /* Adjust the height as needed */
+  border-radius: 50%; /* Make the avatar circular */
+  margin-right: 10px; /* Add spacing between the avatar and user details */
+}
+.message-receiver {
+  color: #0073b1; /* LinkedIn blue color for receiver's name */
+  font-weight: bold;
+  margin-right: 5px; /* Add spacing between receiver's name and time */
+}
+
+/* Style for message time */
+.message-time {
+  color: #666; /* A darker color for message time */
+  font-size: 11px;
+}
+.message-time:before{
+  content: "•";
+  text-transform: lowercase;
+}
+.message-text-truncated {
+  max-width: 118px; /* Adjust the maximum width as needed */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

@@ -67,18 +67,21 @@
                             <div class="flex-grow-1 ms-3">
                               <h3 class="mt-2 user-name mb-0"><%= connection.received.name %></h3>
                               <!-- Display last message and time for the chatroom -->
-                              <div class="last-message">
-                                <small class="text-muted user-last-message">
-                                  <p class="<%= last_message.sent_by?(current_user) ? 'you-message' : 'other-message' %>">
-                                    <%= last_message.sent_by?(current_user) ? 'You: ' : "#{connection.received.first_name}: " %>
-                                    <%= truncate(last_message.message == '' && last_message.cover_image.attached? ? 'You sent an attachment' : last_message.message, length: 14)%>
+                              <div class="last-message d-flex last-msg-<%= connection.received.id %>">
+                                <% if latest_messages.any? %>
+                                  <% last_message = latest_messages.compact.max_by(&:created_at) %>
+                                  <small class="text-muted user-last-message">
+                                    <p class="<%= last_message.sent_by?(current_user) ? 'you-message' : 'other-message' %>">
+                                      <%= last_message.sent_by?(current_user) ? 'You: ' : "#{connection.received.first_name}: " %>
+                                      <%= truncate(last_message.message == '' && last_message.cover_image.attached? ? 'You sent an attachment' : last_message.message, length: 14)%>
+                                    </p>
+                                  </small>
+                                  <p class="timestamp">
+                                    <%= last_message.created_at.strftime('%I:%M %p') %>
                                   </p>
-                                </small>
+                                <% end %>    
                               </div>
                             </div>
-                            <p class="timestamp">
-                              <%= last_message.created_at.strftime('%I:%M %p') %>
-                            </p>
                           </a>
                         <% end %>
                       </div>

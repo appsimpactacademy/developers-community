@@ -22,11 +22,13 @@
                         <!-- chat-list for requested connections -->
                         <% @requested_connections.each_with_index do |connection, index| %>
                           <% user = connection.requested %>
+
+                          <% chatroom = Chatroom.between_users(current_user, user).first %>
                           <% chatrooms = user.user1_chatrooms.or(user.user2_chatrooms) %>
                           <% latest_messages = chatrooms.map { |chatroom| chatroom.messages.order(created_at: :desc).first } %>
                           <% connected_user_id = user.id == connection.requested.id ? connection.connected_user_id : connection.requested_id %>
                           <% connected_user = User.find(connected_user_id) %>
-                          <a href="javascript:void(0);" data-action="click->chat#open_chat" data-user-id="<%= connection.requested.id %>" class="chat-window-trigger d-flex mt-4 text-decoration-none" id="user-<%= index %>" data-chat-target="user">
+                          <a href="javascript:void(0);" data-action="click->chat#open_chat" data-user-id="<%= connection.requested.id %>" class="chat-window-trigger d-flex mt-4 text-decoration-none" id="user-<%= index %>" data-chat-target="user" data-chatroom-id="<%= chatroom.id %>">
                             <div class="flex-shrink-0">
                               <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img" data-user-id="<%= connection.requested.id %>">
                             </div>

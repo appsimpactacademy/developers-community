@@ -34,4 +34,12 @@ class MessagesController < ApplicationController
       @user = nil
     end
   end
+
+  def all_messages
+    # Fetch all messages from your database
+    all_messages = Message.all
+
+    # Convert messages to JSON and send as the response
+    render json: all_messages, status: :ok
+  end
 end

@@ -29,7 +29,22 @@ export default class extends Controller {
     event.preventDefault();
     const userId = event.target.getAttribute("data-user-id");
 
+    // Remove the "active" class from all chat windows
+    this.userTargets.forEach((user) => {
+      user.classList.remove("active");
+    });
+
+    // Add the "active" class to the chat window (target) corresponding to the clicked link
+    const chatWindow = this.findUserTarget(userId);
+    chatWindow.classList.add("active");
+
     this.stimulate("Chat#open_chat", userId);
+  }
+
+  findUserTarget(userId) {
+    return this.userTargets.find((user) =>
+      user.getAttribute("data-user-id") === userId
+    );
   }
 
   setupFileInput() {

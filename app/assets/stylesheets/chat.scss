@@ -25,7 +25,6 @@ message-area
   overflow: hidden;
   width: 300px;
   float: left;
-  padding: 15px;
 }
 
 .chat-area .modal-content {
@@ -56,6 +55,7 @@ message-area
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 15px;
 }
 
 .chat-area .form-control {
@@ -584,9 +584,12 @@ button:focus {
   color: #000;
 }
 .timestamp{
-  margin-top: 6px;
   font-size: 13px;
   color: #000;
+  position: absolute;
+  right: 11px;
+  top: auto;
+  margin-top: -17px;
 }
 .message-date {
     font-size: 12px;
@@ -647,4 +650,11 @@ button:focus {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+.chat-window-trigger {
+  padding: 15px;
+}
+.chat-window-trigger.active{
+  background-color: #edf3f8;
+  border-left: 4px solid green;
 }

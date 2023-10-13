@@ -1,0 +1,43 @@
+<% connections.each_with_index do |connection, index| %>
+  <% user = connection_type == 'requested' ? connection.requested : connection.received %>
+  <% chatroom = Chatroom.between_users(current_user, user).first %>
+  <% latest_messages = chatroom.messages.order(created_at: :desc) %>
+  <% connected_user_id = user.id == (connection_type == 'requested' ? connection.requested.id : connection.received.id) ? connection.connected_user_id : (connection_type == 'requested' ? connection.requested_id : connection.received_id )%>
+
+  <% connected_user = User.where(id: connected_user_id) %>
+
+  <% user_id = connection_type == 'requested' ? connection.requested.id : connection.received.id %>
+  <% user_name = connection_type == 'requested' ? connection.requested.name : connection.received.name %>
+  <% user_first_name = connection_type == 'requested' ? connection.requested.first_name : connection.received.first_name %>
+
+  <a href="javascript:void(0);" data-action="click->chat#open_chat" data-user-id="<%= user_id %>" class="chat-window-trigger d-flex text-decoration-none text-truncate <%= active_user.present? && active_user.id == user.id ? 'active' : '' %>" id="user-<%= index %>" data-chat-target="user" data-chatroom-id="<%= chatroom.id %>">
+    <div class="flex-shrink-0">
+      <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img" data-user-id="<%= user_id %>">
+    </div>
+    <div class="flex-grow-1 ms-3">
+      <h3 class="mt-2 user-name mb-0" data-user-id="<%= user_id %>"><%= user_name %></h3>
+      <!-- Display last message and time for the chatroom -->
+
+      <div class="last-message d-flex last-msg-<%= user_id %>">
+        <% if latest_messages.any? %>
+          <% last_date = nil %>
+          <% last_message = latest_messages.compact.max_by(&:created_at) %>
+          <small class="text-muted user-last-message">
+            <p class="<%= last_message.sent_by?(current_user) ? 'you-message' : 'other-message' %>" data-user-id="<%= user_id %>">
+                <%= last_message.sent_by?(current_user) ? 'You: ' : "#{user_first_name}: " %><%= truncate(last_message.message == '' && last_message.cover_image.attached? ? 'sent an attachment' : last_message.message, length: 12) %>
+            </p>
+          </small>
+          <p class="timestamp" data-user-id="<%= user_id %>">
+            <% if last_message.created_at.today? %>
+              <%= last_message.created_at.strftime('%I:%M %p') %>
+            <% else %>
+              <% if last_date.nil? || last_date != last_message.created_at.strftime('%d%b') %>
+                <%= last_message.created_at.strftime('%d %b') %>
+              <% end %>
+            <% end %>
+          </p>
+        <% end %> 
+      </div>   
+    </div>
+  </a>
+<% end %>

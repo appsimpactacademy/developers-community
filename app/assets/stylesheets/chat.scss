@@ -178,12 +178,6 @@ a.add img {
   line-height: 1.5;
   margin-bottom: 0;
 }
-.custom-file {
-  position: absolute;
-  right: 5px;
-  top: 26%;
-  z-index: 999;
-}
 
 .msg-head p {
   color: #343434;
@@ -368,9 +362,6 @@ li.repaly .time {
 }
 
 .send-box form {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin-bottom: 15px;
 }
 

@@ -48,8 +48,11 @@ export default class extends Controller {
   }
 
   setupFileInput() {
-    const fileInput = this.element.querySelector("#message_image");
-    fileInput.addEventListener('change', this.handleFileSelection.bind(this));
+    const fileInputImage = this.element.querySelector("#message_image")
+    const fileInputAttachment = this.element.querySelector("#message_attachment")
+
+    fileInputImage.addEventListener('change', this.handleFileSelection.bind(this));
+    fileInputAttachment.addEventListener('change', this.handleFileSelection.bind(this));
   }
 
   setupEmojiPicker() {
@@ -170,8 +173,8 @@ export default class extends Controller {
     event.preventDefault();
     const otherUserId = event.target.dataset.otherUserId;
     let image_key = null;
-    if(event.target.previousElementSibling.value != null){
-      image_key = event.target.previousElementSibling.value.split('/')[4];
+    if(event.target.parentElement.previousElementSibling.value != null){
+      image_key = event.target.parentElement.previousElementSibling.value.split('/')[4];
     }
     if (this.isActionCableConnectionOpen()) {
       this.stimulate('Chat#create_message', event.target, {image_key, otherUserId});

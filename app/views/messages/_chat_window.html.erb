@@ -77,7 +77,11 @@
                       </span>
                       <div>
                         <% if message.cover_image.attached? %>
-                          <%= image_tag message.cover_image, class: 'chat-img' %>
+                          <% if message.cover_image.attachment.blob.content_type == 'image/png' %>
+                            <%= image_tag message.cover_image, class: 'chat-img' %>
+                          <% else %>
+                            <p class="attachment-link custom-pointer shadow mt-2"><%= link_to "#{message.cover_image.attachment.blob.filename}", message.cover_image, download: true, class: 'text-dark text-decoration-none' %> <i class="fas fa-download text-primary text-dark"></i></p>
+                          <% end %>  
                         <% end %>
                       </div>
                       <% if message.message.present? %>
@@ -96,24 +100,50 @@
 
       <div class="send-box">
         <%= form_with model: Message.new do |form| %>
-          <div class="input-group">
-            <%= form.text_area :message, class: "form-control form-control-lg", placeholder: 'Write message…'%>
-            <div class="input-group-append">
-              <div class="custom-file">
-                <input type="file" class="custom-file-input" id="message_image" name="cover_image" style="display: none;">
-                <label class="custom-file-label" for="message_image">
-                  <i class="fas fa-paperclip custom-pointer"></i>
-                </label>
-                <span data-action="click->chat#showPicker" class="custom-pointer"><i class="fas fa-smile" aria-hidden="true"></i></span>
+          <div>
+            <%= form.text_area :message, class: "form-control form-control-lg w-100", placeholder: 'Write message…'%>
+          </div>
+          <hr>
+          <div class="row mt-2">
+            <div class="col-md-6">
+              <div class="custom-file d-flex">
+                <div class="select-image">
+                  <input type="file" class="custom-file-input" id="message_image" name="cover_image" style="display: none;" accept="image/*">
+                  <label class="custom-file-label" for="message_image">
+                    <i class="fas fa-image custom-pointer" title="Attach an image to your conversation"></i>
+                  </label>
+                </div>
+                <div class="select-attachment mx-4">
+                  <input type="file" class="custom-file-input" id="message_attachment" name="cover_image" style="display: none;" accept="image/*,.ai,.psd,.pdf,.doc,.docx,.csv,.zip,.rar,.ppt,.pptx,.pps,.ppsx,.odt,.rtf,.xls,.xlsx,.txt,.pub,.html,.7z,.eml,.mov,.mp4">
+                  <label class="custom-file-label" for="message_attachment">
+                    <i class="fas fa-paperclip custom-pointer"  title="Attach a file to your conversation"></i>
+                  </label>
+                </div>
+                <div>
+                  <span data-action="click->chat#showPicker" class="custom-pointer"><i class="fas fa-smile" aria-hidden="true" title="Open Emoji Keyboard"></i></span>
+                </div>
               </div>
             </div>
-          </div>
-          <%= hidden_field_tag :cover_image_key %>
-          <%= button_tag type: "submit", class: "btn btn-primary",  data: { action: "click->chat#create_message", other_user_id: other_user.id } do %>
-            Send
-          <% end %>
+            <%= hidden_field_tag :cover_image_key %>
+
+            <div class="col-md-6 text-end">
+              <%= button_tag type: "submit", class: "btn btn-primary",  data: { action: "click->chat#create_message", other_user_id: other_user.id } do %>
+                Send
+              <% end %>
+            </div>
+          </div>  
         <% end %>
       </div>
     </div>
   </div>
 <% end %>
+<style>
+  .attachment-link {
+    background-color: #f4f4f4;
+    min-height: 45px;
+    padding: 4px 10px 4px 10px;
+    line-height: 35px;
+    width: fit-content;
+    border: 1px solid lightgray;
+  }
+</style>

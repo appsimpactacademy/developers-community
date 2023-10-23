@@ -1,9 +1,17 @@
 Rails.application.routes.draw do
+  root 'home#index'
+
   devise_for :users, controllers: {
     registrations: 'users/registrations',
-    sessions: 'users/sessions'
+    sessions: 'users/sessions',
+    omniauth_callbacks: 'users/omniauth_callbacks'
   }
-  root 'home#index'
+
+  devise_scope :user do
+    get '/generate_otp', to: 'users/sessions#generate_otp', as: :generate_otp
+    get '/session_id/:id', to: 'users/sessions#session_id', as: :session_id
+    post '/verify_otp', to: 'users/sessions#verify_otp', as: :verify_otp
+  end
 
   get 'member/:id', to: 'members#show', as: 'member'
   get 'edit_description', to: 'members#edit_description', as: 'edit_member_description'

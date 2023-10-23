@@ -1,0 +1,9 @@
+<%= form_with(url: verify_otp_path(id: @user.id), method: :post) do |f| %>
+  <div class="form-outline mb-2">
+    <%= f.label :otp, class: "form-label" %>
+    <%= f.text_field :otp, class: "form-control", placeholder: "Enter OTP" %>
+  </div>
+  <div class="text-center text-lg-start mt-2 pt-2">
+    <%= f.submit "Verify OTP", class: "btn btn-primary", style: "padding-left: 2.5rem; padding-right: 2.5rem;" %>
+  </div>
+<% end %>

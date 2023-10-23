@@ -1,59 +1,78 @@
-<div class="col-lg-8 mx-auto mt-5 mb-5">
-  <div class="card">
-    <div class="card-header">
-      <h2 class="text-center card-title">Sign up</h2>
+<section class="vh-100">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+     <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+     <div class="col-md-9 col-lg-6 col-xl-5">
+      <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+      class="img-fluid" alt="Sample image">
     </div>
-    <div class="card-body">
-      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { data: {turbo: false} }) do |f| %>
-        <%= render "users/shared/error_messages", resource: resource %>
+    <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+     <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { data: { turbo: false } } ) do |f| %>
+     <%= render "users/shared/error_messages", resource: resource %>
 
-        <div class="form-group row">
-          <div class="col-lg-6">
-            <%= f.label :first_name, class: "mb-2" %>
-            <%= f.text_field :first_name, class: "form-control" %>
-          </div>
-          <div class="col-lg-6">
-            <%= f.label :last_name, class: "mb-2" %>
-            <%= f.text_field :last_name, class: "form-control" %>
-          </div>
-          <div class="col-lg-6">
-            <%= f.label :profile_title, class: "mb-2" %>
-            <%= f.text_field :profile_title, class: "form-control" %>
-          </div>
+     <div class="form-group row">
+      <div class="col-lg-6">
+        <div class="form-outline mb-2">
+          <%= f.label :first_name, class:"form-label"%>
+          <%= f.text_field :first_name, class: "form-control", placeholder:"Enter first name" %>
         </div>
-
-
-        <div class="form-group row">
-          <div class="col-lg-6">
-            <%= f.label :email, class: "mb-2" %>
-            <%= f.email_field :email, class: "form-control" %>
-          </div>
-          <div class="col-lg-6">
-            <%= f.label :username, class: "mb-2" %>
-            <%= f.text_field :username, class: "form-control" %>
-          </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="form-outline mb-2">
+          <%= f.label :last_name, class:"form-label"%>
+          <%= f.text_field :last_name, class: "form-control", placeholder:"Enter last name" %>
         </div>
-
-        <div class="form-group row">
-          <div class="col-lg-6">
-            <%= f.label :password, class: "mb-2" %>
-            <% if @minimum_password_length %>
-            <em>(<%= @minimum_password_length %> characters minimum)</em>
-            <% end %>
-            <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
-          </div>
-          <div class="col-lg-6">
-            <%= f.label :password_confirmation, class: "mb-2" %>
-            <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
-          </div>
-        </div>
-
-        <div class="actions mt-4">
-          <%= f.submit "Sign up", class: "btn btn-primary" %>
-        </div>
-      <% end %>
-
-      <%= render "users/shared/links" %>
+      </div>
     </div>
+
+    <div class="form-group row">
+      <div class="col-lg-6">
+        <div class="form-outline mb-2">
+          <%= f.label :username, class:"form-label" %>
+          <%= f.text_field :username, class: "form-control", placeholder:"Enter username" %>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="form-outline mb-2">
+          <%= f.label :profile_title, class:"form-label" %>
+          <%= f.text_field :profile_title, class: "form-control", placeholder:"Enter profile title" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Email input -->
+    <div class="form-outline mb-2">
+      <%= f.label :email, class:"form-label" %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", placeholder:"Enter a valid email address"%>
+    </div>
+
+    <!-- Password input -->
+    <div class="form-outline mb-2">
+      <%= f.label :password, class:"form-label" %>
+      <% if @minimum_password_length %>
+      <em>(<%= @minimum_password_length %> characters minimum)</em>
+      <% end %><br />
+      <%= f.password_field :password, autocomplete: "new-password", class: "form-control",
+      placeholder:"Enter password" %>
+    </div>
+
+    <div class="form-outline mb-2">
+      <%= f.label :password_confirmation, class:"form-label"  %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control",
+      placeholder:"Re-enter password" %>
+    </div>
+
+    <div class="form-outline mb-2">
+      <%= f.label :image, class: "form-label" %>
+      <%= f.file_field :image, class: "form-control" %>
+    </div>
+
+    <div class="text-center text-lg-start mt-2 pt-2">
+      <%= f.submit "Sign up", class: "btn btn-primary", style:"padding-left: 2.5rem; padding-right: 2.5rem;" %>
+      <%= link_to "Log in", new_session_path(resource_name), class: "btn btn-primary", style:"padding-left: 2.5rem; padding-right: 2.5rem;" %>
+    </div>
+    <% end %>
   </div>
 </div>
+</div>
+</section>

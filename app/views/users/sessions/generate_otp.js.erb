@@ -1,0 +1,6 @@
+<% if flash[:alert].present? %>
+  $('.flash-otp').removeClass('d-none');
+  $('.flash-otp').html("<%= flash[:alert] %>")
+<% else %>
+  $("#pills-otp").html('<%= escape_javascript render('session_id') %>');
+<% end %>

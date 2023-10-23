@@ -1,33 +1,54 @@
-<div class="col-lg-6 mx-auto mt-5 mb-5">
-  <div class="card">
-    <div class="card-header">
-      <h2 class="text-center card-title">Login</h2>
-    </div>
-    <div class="card-body">
-      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { data: {turbo: false} }) do |f| %>
-        <div class="form-group">
-          <%= f.label :email_or_username, class: "mb-2 mt-2" %>
-          <%= f.text_field :login, class: "form-control" %>
-        </div>
+<section class="vh-100 col-lg-10 mx-auto">
+  <div class="flash-otp alert alert-danger d-none">
+  </div>
+    <div class="container-fluid h-custom">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+       <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Log in</p>
+       <div class="col-md-9 col-lg-6 col-xl-5">
+        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+        class="img-fluid" alt="Sample image">
+      </div>
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        <div class="text-center text-lg-start mt-2 pt-2">
+          <!-- Tabs for different authentication options -->
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="pills-email-password-tab" data-bs-toggle="pill" data-bs-target="#pills-email-password" type="button" role="tab" aria-controls="pills-email-password" aria-selected="true">Email/Password</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="pills-otp-tab" data-bs-toggle="pill" data-bs-target="#pills-otp" type="button" role="tab" aria-controls="pills-otp" aria-selected="false">OTP</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="pills-google-tab" data-bs-toggle="pill" data-bs-target="#pills-google" type="button" role="tab" aria-controls="pills-google" aria-selected="false">Google</button>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-email-password" role="tabpanel" aria-labelledby="pills-email-password-tab">
+              <%= render 'email_password_form' %>
+            </div>
+            <div class="tab-pane fade" id="pills-otp" role="tabpanel" aria-labelledby="pills-otp-tab">
+              <%= label_tag :email %>
+              <%= email_field_tag :email, nil, class: "form-control mt-2 mb-2", placeholder: "Enter your email address" %>
 
-        <div class="field">
-          <%= f.label :password, class: "mb-2 mt-2" %>
-          <%= f.password_field :password, autocomplete: "current-password", class: "form-control" %>
-        </div>
-
-        <% if devise_mapping.rememberable? %>
-          <div class="field">
-            <%= f.check_box :remember_me %>
-            <%= f.label :remember_me %>
+              <%= link_to 'Send OTP', "javascript:void(0);", onclick: "sendOtp(this)", class:'btn btn-primary mt-2' %>
+            </div>
+            <div class="tab-pane fade" id="pills-google" role="tabpanel" aria-labelledby="pills-google-tab">
+              <%= button_to 'Sign with Google', user_google_oauth2_omniauth_authorize_path, method: :post, data: { turbo: 'false' }, class: 'btn btn-outline-danger' %>
+            </div>
           </div>
-        <% end %>
-
-        <div class="actions mt-3">
-          <%= f.submit "Log in", class: "btn btn-primary" %>
         </div>
-      <% end %>
-
-      <%= render "users/shared/links" %>
+      </div>
     </div>
   </div>
-</div>
+</section>
+<script>
+  function sendOtp(data){
+    var userEmail = data.previousElementSibling.value;
+    $.ajax({
+      type: "GET",
+      url: "/generate_otp",
+      data: {email: userEmail},
+      dataType: "script",
+    });
+  }
+</script>

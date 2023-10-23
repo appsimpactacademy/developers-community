@@ -17,4 +17,6 @@ Rails.application.routes.draw do
   resources :connections
   resources :messages, only: [:index]
   get '/all_messages', to: 'messages#all_messages'
+
+  resources :skills
 end

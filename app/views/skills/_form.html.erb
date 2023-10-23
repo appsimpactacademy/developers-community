@@ -1,0 +1,29 @@
+<%= form_with model: @skill do |form| %>
+  <div class="modal-body">
+    <div class="row">
+      <% if @skill.errors.any? %>
+        <div class="error-area" style="color: red;">
+          <h3><%= pluralize(@skill.errors.count, 'error') %> prohibited your skills form being saved. </h3>
+          <ul>
+            <% @skill.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+        <% end %>
+
+        <div class="col-lg-12">
+          <div class="form-group">
+            <label class="mb-2 mt-3">
+              Skills: <span class="text-danger">*</span>
+            </label>
+            <%= form.text_field :title, class: 'form-control' %>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+  <%= form.submit 'Submit', class: 'btn btn-primary' , data: { action: 'click->bs_modal#submitEnd' } %>
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>
+<% end %>

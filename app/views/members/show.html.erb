@@ -61,4 +61,45 @@
       <% end %>
     </div>
   </div>
+
+  <div class="card mb-5">
+    <div class="card-body">
+      <% if @user == current_user %>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="d-flex justify-content-start">
+              <h3>Skills</h3>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="d-flex justify-content-end">
+              <%= link_to new_skill_path, data: { controller: 'bs-modal-form' } do %>
+                <i class="fa-solid fa-plus"></i>
+                Add Skills
+              <% end %>
+            </div>
+          </div>
+            <% if @user.skills.present? %>
+            <div class="col-lg-4">
+              <div class="d-flex justify-content-end">
+                <%= link_to "javascript:void(0)" do %>
+                  <i class="fa-solid fa-pencil"></i>
+                  Edit Skills
+                <% end %>
+              </div>
+            </div>
+            <% end %>
+        </div>
+      <% end %>
+
+      <% if @user.skills.present? %>
+        <ul class="list-group" id="skill_items">
+          <% @user.skills.each do |skill| %>
+            <%= render 'skills/skill', skill: skill %>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+
 </div>

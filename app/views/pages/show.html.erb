@@ -1,0 +1,77 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="card shadow">
+        <div class="card-body">
+          <% if @page.image.attached? %>
+            <%= image_tag @page.image, style: 'width: 100px;', class: 'rounded-circle'%>
+          <% end %>
+          <div class="mt-2">
+            <h5><%= @page.title %></h5>
+            <small><%= @page.content %></small><br>
+            <small class="text-muted"><%= @page.industry %></small><br>
+            <small class="text-muted"><%= @page.organization_size %></small><br>
+            <small class="text-primary">Followers: <%=@page.follows.count %></small>
+          </div>
+          <div class="mt-2">
+            <% if current_user.following?(@page) %>
+              <%= link_to "Unfollow", unfollow_page_path(@page), method: :delete, class: 'btn btn-danger btn-sm mt-2' %>
+            <% else %>
+              <%= link_to "Follow", follow_page_path(@page), method: :post, class: 'btn btn-primary btn-sm mt-2' %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="card shadow mt-2 mb-2">
+        <div class="card-body">
+          <h3>About</h3>
+          <div data-controller="show-more">
+            <div data-show-more-target="description">
+              <p><%= simple_format(@page.about) %></p>
+            </div>
+            <div class="row mb-3">
+              <button 
+                data-action="click->show-more#toggleVisibility" 
+                data-show-more-target="toggleButton" 
+                class="btn btn-light fw-bold w-100 btn-sm mt-3">
+                Show More
+              </button>
+            </div>
+          </div>
+          <b class="text-primary">Website :</b>
+          <p class="mt-1"><%= @page.website %></p>
+
+          <b class="text-primary">Industry :</b>
+          <p class="mt-1"><%= @page.industry %></p>        
+
+          <b class="text-primary">Company Size :</b>
+          <p class="mt-1"><%= @page.organization_size %></p>
+
+          <b class="text-primary">Company Type :</b>
+          <p class="mt-1"><%= @page.organization_type %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="card mb-2 shadow">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-1 col-12 mb-2 d-grid">
+              <% if @page.image.attached? %>
+                <%= image_tag @page.image, style: "width: 50px;", class: "mt-2 rounded-circle" %>
+              <% else %> 
+                <%= image_tag 'company.avif', style: "width: 50px;", class: "mt-2 rounded-circle" %>
+              <% end %>
+            </div>
+            <div class="col-md-11 col-12 mt-1 mb-3 d-grid">
+              <%= link_to new_post_path(page_id: @page.id), class: "d-flex btn btn-outline-light text-dark border py-2 rounded-pill mr-1 pr-5 mt-2", data: { controller: "bs-modal-form" } do %>
+              Start a Post
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%= render 'pages/pages_post' %>
+    </div>
+  </div>
+</div>

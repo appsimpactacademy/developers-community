@@ -1,69 +1,77 @@
 <div class="col-lg-10 mx-auto mt-5">
-  <% if @requested_connections.present? %>
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">Requested Connections</h3>
-      </div>
-      <div class="card-body text-center">
-        <div class="row">
-          <% @requested_connections.each do |connection| %>
-            <div class="col-lg-3">
-              <div class="card mt-3">
-                <div class="card-body">
-                  <%= image_tag 'dmu1.jpg', class: "img-fluid mb-1" %>
-                  <div style="min-height:100px;">
-                    <%= link_to member_path(connection.requested), style: "text-decoration:none;", class: "text-primary", target: "_blank" do %>
-                      <p class="lead fw-bold"><%= connection.requested.name %></p>
-                    <% end %>
-                    <small class="text-muted"><%= connection.requested.profile_title %></small><br>
+  <% if @requested_connections.present? ||  @received_connections.present?%>
+    <% if @requested_connections.present? %>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Requested Connections</h3>
+        </div>
+        <div class="card-body text-center">
+          <div class="row">
+            <% @requested_connections.each do |connection| %>
+              <div class="col-lg-3">
+                <div class="card mt-3">
+                  <div class="card-body">
+                    <%= image_tag 'dmu1.jpg', class: "img-fluid mb-1" %>
+                    <div style="min-height:100px;">
+                      <%= link_to member_path(connection.requested), style: "text-decoration:none;", class: "text-primary", target: "_blank" do %>
+                        <p class="lead fw-bold"><%= connection.requested.name %></p>
+                      <% end %>
+                      <small class="text-muted"><%= connection.requested.profile_title %></small><br>
+                    </div>
+                    <div class="d-grid">
+                      <%= link_to connection.status.titleize, "javascript:void(0)", class: "#{connection.status_btn} mt-2" %>
+                    </div>  
                   </div>
-                  <div class="d-grid">
-                    <%= link_to connection.status.titleize, "javascript:void(0)", class: "#{connection.status_btn} mt-2" %>
-                  </div>  
                 </div>
               </div>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
         </div>
       </div>
-    </div>
-  <% end %>
+    <% end %>
 
-  <% if @received_connections.present? %>
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">Received Connections</h3>
-      </div>
-      <div class="card-body text-center">
-        <div class="row">
-          <% @received_connections.each do |connection| %>
-            <div class="col-lg-3">
-              <div class="card">
-                <div class="card-body">
-                  <%= image_tag 'dmu1.jpg', class: "img-fluid mb-1" %>
-                  <div style="min-height: 100px;">
-                    <%= link_to member_path(connection.received), style: "text-decoration:none;", class: "text-primary", target: "_blank" do %>
-                      <p class="lead fw-bold"><%= connection.received.name %></p>
-                    <% end %>
-                    <small class="text-muted"><%= connection.received.profile_title %></small><br>
-                  </div>
-                  <div id="connection-status-<%= connection.id %>">
-                    <% if ["accepted", "rejected"].include?(connection.status) %>
-                      <div class="d-grid">
-                        <%= link_to connection.status.titleize, "javascript:void(0)", class: "#{connection.status_btn} mt-2" %>
-                      </div>
-                    <% else %>
-                      <%= link_to "Accept", connection_path(connection), class: "btn btn-success mt-2", data: { controller: "update-connection-status", turbo_method: :patch } %>
-                      <%= link_to "Reject", connection_path(connection), class: "btn btn-danger mt-2", data: { controller: "update-connection-status", turbo_method: :patch } %>
-                      
-                    <% end %> 
+    <% if @received_connections.present? %>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Received Connections</h3>
+        </div>
+        <div class="card-body text-center">
+          <div class="row">
+            <% @received_connections.each do |connection| %>
+              <div class="col-lg-3">
+                <div class="card">
+                  <div class="card-body">
+                    <%= image_tag 'dmu1.jpg', class: "img-fluid mb-1" %>
+                    <div style="min-height: 100px;">
+                      <%= link_to member_path(connection.received), style: "text-decoration:none;", class: "text-primary", target: "_blank" do %>
+                        <p class="lead fw-bold"><%= connection.received.name %></p>
+                      <% end %>
+                      <small class="text-muted"><%= connection.received.profile_title %></small><br>
+                    </div>
+                    <div id="connection-status-<%= connection.id %>">
+                      <% if ["accepted", "rejected"].include?(connection.status) %>
+                        <div class="d-grid">
+                          <%= link_to connection.status.titleize, "javascript:void(0)", class: "#{connection.status_btn} mt-2" %>
+                        </div>
+                      <% else %>
+                        <%= link_to "Accept", connection_path(connection), class: "btn btn-success mt-2", data: { controller: "update-connection-status", turbo_method: :patch } %>
+                        <%= link_to "Reject", connection_path(connection), class: "btn btn-danger mt-2", data: { controller: "update-connection-status", turbo_method: :patch } %>
+                        
+                      <% end %> 
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
         </div>
       </div>
-    </div>
+    <% end %>
+  <% else %>
+    <div class="card">
+      <div class="card-body">
+        <h6>There is no network available right now. Please send a connection request to establish a network connection.</h6>
+      </div>
+    </div>  
   <% end %>
 </div>

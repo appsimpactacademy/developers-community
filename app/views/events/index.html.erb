@@ -1,0 +1,30 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <div class="row">
+    <% if @events.present? %>
+      <h1>Events</h1>
+        <% @events.each do |event| %>
+          <div class="col-lg-4 mb-2">
+            <div class="card shadow" style="min-height: 430px;">
+              <div class="card-body">
+                <small class="text-primary">Event ID : <%= event.id %></small>
+                <p><b>Event Name :</b> <%= event.event_name %></p>
+                <p><b>Event Type :</b> <%= event.event_type %></p> 
+                <p><b>Start Date :</b> <%= event.start_date %></p> 
+                <p><b>Start Time :</b> <%= event.start_time %></p>
+                <p><b>End Date :</b> <%= event.end_date %></p> 
+                <p><b>End Time :</b> <%= event.end_time %></p>
+                <p><b>Description :</b> <%= truncate(event.description, length: 30) %></p>  
+                <%= link_to "View", event_path(event), class: "btn btn-primary mt-3 mb-3" %>
+              </div>
+            </div>
+          </div>    
+        <% end %>
+      <% else %>
+        <div class="card">
+          <div class="card-body">
+            <h6>No event is present</h6>
+          </div>
+        </div>
+    <% end %>
+  </div>
+</div>

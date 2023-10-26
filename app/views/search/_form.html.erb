@@ -1,0 +1,19 @@
+<%= form_with(url: search_path, method: :post, class: "w-60", data: {
+    controller: "search",
+    action: "keyup->search#suggestions",
+    suggestions_url: search_suggestions_path,
+}) do |form| %>
+  <div class="relative">
+    <%= form.text_field :query, data: {
+            search_target: "input",
+            action: "blur->search#hideSuggestions",
+        },
+        class: "form-control",
+        placeholder: "Search...",
+        autocomplete: "off" %>
+    <div id="suggestions" class="absolute"
+        data-search-target="suggestions" data-action="mousedown->search#childClicked">
+      <%= render partial: "search/suggestions", locals: { results: results } %>
+    </div>
+  </div>
+<% end %>

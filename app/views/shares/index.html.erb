@@ -1,0 +1,44 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <div class="row">
+    <% if @shared_posts.present?  %>
+      <% @shared_posts.each do |post| %>
+        <% unless post.visited_by?(current_user) %>
+          <div class="col-lg-4 mt-3 mb-3">
+            <div class="card text-center shadow rounded-0" style="min-height: 350px;">
+              <div class="card-body">
+                <% if post.images.attached? %>
+                  <%= image_tag post.images, class: 'post_images mb-3' %>
+                <% end %>
+                <div class="user-info" data-controller="user-name" >
+                  <h5 data-user-name-target='name' data-action="click->user-name#getUserName" >Posted by : <%= post.user.name %></h5>
+                  <h5><%= link_to post.title, post, style: "text-decoration: none;" %></h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% else %>
+      <div class="card">
+        <div class="card-body">
+          <h6> There are no shared posts.</h6>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+<style>
+  .post_images {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .post_images img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>

@@ -1,0 +1,8 @@
+<div class="container mb-3">
+ <%= form_with(model: [comment.commentable, comment]) do |f| %>
+ <div class="form-control">
+  <%= f.text_area :title, class: 'form-control mt-2 mb-2', placeholder: "Add Comment" %>
+  <%= f.submit submit_label, class: "btn btn-primary mt-1" %>
+</div>
+<% end %>
+</div>

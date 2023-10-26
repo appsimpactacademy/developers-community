@@ -1,0 +1,4 @@
+// Update the button text and data attributes after a successful unfollow
+$('.follow-button[data-page-id="<%= @page.id %>"]').attr('data-following', false);
+$('.follow-button[data-page-id="<%= @page.id %>"]').html(`<%= link_to 'Follow', follow_page_path(@page), method: :post, remote: true,  class: 'btn btn-primary btn-sm mt-2' %>`);
+$('.follower_count').html(`Followers: <%= @page.followers_count %>`);

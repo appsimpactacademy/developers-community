@@ -1,0 +1,25 @@
+<%= form_with model: @post do |form| %>
+  <div class="modal-body">
+    <div class="form-group">
+      <%= form.label :title %>
+      <%= form.text_field :title, class: "form-control mt-2 mb-2" %>
+    </div>
+    <div class="form-group">
+      <%= form.label :description %>
+      <%= form.text_area :description, class: "form-control mt-2 mb-2" %>
+    </div>
+    <div>
+      <%= form.hidden_field :user_id, value:current_user.id %>
+      <%= form.hidden_field :page_id, value: params[:page_id].present? ? params[:page_id] : nil %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :images_or_video %>
+      <%= form.file_field :images, multiple: true, class: "form-control mt-2 mb-2" %>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <%= form.submit 'Save Changes', class: 'btn btn-primary' , data: { action: 'click->bs_modal#submitEnd' } %>
+  </div>
+<% end %>

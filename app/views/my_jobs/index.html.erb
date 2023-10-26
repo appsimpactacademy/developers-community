@@ -1,0 +1,39 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <%= link_to 'Create Job', new_job_path, class: 'btn btn-primary mb-3', data: { controller: "bs-modal-form" } %>
+  <% if @jobs.present? %>
+    <% @jobs.each do |job| %>
+      <div class="card shadow mb-2">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-10">
+              <strong>Job Title : </strong> <%= job.title %><br>
+              <strong>Description : </strong> <%= truncate(job.description, length: 30) %><br>
+              <strong>Location : </strong> <%= job.location %><br>
+              <strong>Job Category : </strong> <%= job.job_category.name %><br>
+            </div>
+            <div class="col-lg-2">
+              <div class="dropdown float-end">
+                <button class="btn btn-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fa-solid fa-ellipsis-vertical fa-xl"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                   <% if current_user && current_user.id == job.user_id %>
+                  <li><%= link_to 'View Job', job, class:"dropdown-item" %></li>
+                  <li><%= link_to 'Edit', edit_job_path(job), class:"dropdown-item" %></li>
+                  <li><%= link_to 'Delete', job_path(job), class:"dropdown-item", data: { turbo_confirm: 'Are You Sure?', turbo_method: :delete } %></li>
+                  <% else %>
+                  <li>
+                    <%= link_to 'View Job', job, class:"dropdown-item" %>
+                  </li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end -%>
+  <% else %>
+    <p class="lead fs-4 fw-bold">No job is created by you! So create the job first.</p>
+  <% end %>
+</div>

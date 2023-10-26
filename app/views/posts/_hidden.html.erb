@@ -1,0 +1,9 @@
+<div>
+  <%= link_to post_path(post), style: 'text-decoration:none;' do %>
+    <h3 class="card-header"><%= post.title %></h3>
+  <% end %>
+  <p class="card-body"><%= post.description %></p>
+  <%= link_to undo_hide_post_path(post), method: :post, class:"undo-hide-post btn btn-warning mx-3 mb-3", data: { action: "click->hide-post#undoHidePost", hide_post_target: "undoButton" } do %>
+    <i class="fa-solid fa-rotate-left"></i> Undo
+  <% end %>
+</div>

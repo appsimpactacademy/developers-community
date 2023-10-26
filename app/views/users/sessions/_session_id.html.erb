@@ -1,4 +1,4 @@
-<%= form_with(url: verify_otp_path(id: @user.id), method: :post) do |f| %>
+<%= form_with(url: verify_otp_path(id: @user.id), method: :post, remote: true, format: :json) do |f| %>
   <div class="form-outline mb-2">
     <%= f.label :otp, class: "form-label" %>
     <%= f.text_field :otp, class: "form-control", placeholder: "Enter OTP" %>

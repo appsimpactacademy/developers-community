@@ -1,0 +1,14 @@
+<h2>Hello <%= @recipient_email %></h2>
+
+<p>
+  A new <b><%= @object.class.to_s %></b> has been shared. Below is the detail of the object shared :
+</p>
+
+<p><strong>ID : </strong> <%= @object.id %></p>
+<p><strong>Post ID : </strong> <%= @object.post_id %></p>
+<p><strong>Post Title : </strong> <%= @object.post.title %></p>
+<p><strong>Sender ID : </strong> <%= @object.sender_id %></p>
+<p><strong>Recipient ID : </strong> <%= @object.recipient_id %></p>
+<p><strong>Post URL : </strong> <%= link_to "View Post", post_url(@object.post) %></p>
+
+<h4>Thanks</h4>

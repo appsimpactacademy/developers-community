@@ -1,0 +1,70 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <div class="row">
+    <% if @posts.present? %>
+      <% @posts.each do |post| %>
+        <div class="col-lg-4 mt-3 mb-3">
+          <div class="card text-center shadow rounded-0" style="min-height: 500px;">
+            <!-- show the text that this post has been repost -->
+            <% if current_user.has_reposted?(post) %>
+              <span class="text-danger d-flex justify-content-end me-2 mt-1">Repost</span>
+            <% end %>
+            <div class="card-body">
+              <% if post.images.attached? %>
+                <% first_image = post.images.first %>
+                <% if first_image.content_type.include?("image") %>
+                  <%= image_tag first_image, class: 'post_images me-2 mb-3 mt-3', style: 'width: 300px; height: 200px;' %>
+                <% else %>
+                  <div class="bg-dark text-center">
+                    <%= video_tag rails_blob_path(first_image), autoplay: :autoplay, loop: :loop, muted: :muted, class: "home_video", controls: true, type: 'video/mp4', style: "max-width: 100%; height: 320px;" do %>
+                      Your browser does not support the video tag.
+                    <% end %>
+                  </div>
+                <% end %>
+              <% end %>
+              <div class="user-info mt-3" data-controller="user-name" >
+                <%= link_to post_path(post), style: 'text-decoration:none;' do %>
+                  <h5><%= post.title %> </h5>
+                  <p>Posted By : <%= post.user.name %></p>
+                <% end %>
+                <div data-controller="show-more">
+                  <div data-show-more-target="description">
+                    <p><%= simple_format(post.description) %></p>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-12 d-flex justify-content-end">
+                      <button 
+                        data-action="click->show-more#toggleVisibility" 
+                        data-show-more-target="toggleButton" 
+                        class="btn btn-outline-light text-primary btn-sm mb-3 mt-3">
+                        Show More
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="col-lg-12 mt-3">
+        <p class="h3">No posts available.</p>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+  .post_images {
+    width: 420px;
+    height: 200px;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+/*  .post_images img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }*/
+</style>

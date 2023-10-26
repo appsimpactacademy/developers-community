@@ -2,5 +2,7 @@
   $('.flash-otp').removeClass('d-none');
   $('.flash-otp').html("<%= flash[:alert] %>")
 <% else %>
+  $('.flash-otp').removeClass('d-none');
+  $('.flash-otp').html("<%= flash[:notice] %>")
   $("#pills-otp").html('<%= escape_javascript render('session_id') %>');
 <% end %>

@@ -1,0 +1,17 @@
+<% if @posts.present? %>
+  <div class="col-lg-12 mx-auto mb-2 d-flex justify-content-end">
+    <%= form_tag(home_sort_path, method: :get, class: "row g-2", data: { controller: 'post-sort' }) do |form| %>
+      <div class="col-auto">
+        <%= label_tag 'sort_by', 'Sort By : ', class: 'fw-bold mt-2' %>
+      </div>
+      <div class="col-auto">
+        <%= select_tag 'sort_by', options_for_select([
+          ['Newest', 'time_posted'],
+          ['Oldest', 'time_posted_reverse'],
+          ['A-Z', 'alphabetical'],
+          ['Z-A', 'alphabetical_reverse']
+        ], params[:sort_by]), class: "form-select", data: { action: 'post-sort#update', post_sort_target: 'select' } %>
+      </div>
+    <% end %>
+  </div>
+<% end %>  

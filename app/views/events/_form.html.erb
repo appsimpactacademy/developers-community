@@ -1,0 +1,90 @@
+<%= form_with model: @event do |form| %>
+<div class="modal-body">
+  <div class="row">
+    <% if @event.errors.any? %>
+      <div class="error-area" style="color: red;">
+        <h3><%= pluralize(@event.errors.count, 'error') %> prohibited your work experience form being saved. </h3>
+        <ul>
+          <% @event.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="col-lg-12">
+      <div class="form-group">
+
+        <%= form.hidden_field :user_id, value: current_user.id %>
+
+        <label class="mb-2 mt-3">
+          Event Name: <span class="text-danger">*</span>
+        </label>
+        <%= form.text_field :event_name, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <label class="mb-2 mt-3">
+          Event Type: <span class="text-danger">*</span>
+        </label>
+        <%= form.select :event_type, options_for_select(Event::EVENT_TYPE, selected: form.object.event_type ),{prompt: 'Select Event Type'},  {class: 'form-select'} %>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-lg-12 mt-4">
+          <div class="form-check form-switch">
+            <%= form.check_box :add_end_date_or_end_time, class: 'form-check-input', role: 'switch', data: { controller: "disable-end-date-for-event" } %>
+            <label class="form-check-label" for="event_end_date_or_end_time"> Don't want to Add End Date & Time
+            </label>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <label class="mb-2 mt-3">
+            Start Date: <span class="text-danger">*</span>
+          </label>
+          <%= form.date_field :start_date, class: 'form-control' %>
+        </div>
+
+        <div class="col-lg-6">
+          <label class="mb-2 mt-3">
+            Start time: <span class="text-danger">*</span>
+          </label>
+          <%= form.select :start_time, options_for_select(Event::START_TIME, selected: form.object.start_time ),{prompt: 'Select Start Time'},  {class: 'form-select'} %>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-lg-6">
+          <label class="mb-2 mt-3">
+            End Date: <span class="text-danger">*</span>
+          </label>
+          <%= form.date_field :end_date, class: 'form-control' %> 
+        </div>
+
+        <div class="col-lg-6">
+          <label class="mb-2 mt-3">
+            End Time: <span class="text-danger">*</span>
+          </label>
+          <%= form.select :end_time, options_for_select(Event::END_TIME, selected: form.object.end_time ),{prompt: 'Select End Time'},  {class: 'form-select'} %> 
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :description, class: 'mb-2 mt-3' %>
+        <%= form.text_area :description, class: 'form-control', rows: 5 %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :images_or_video %>
+        <%= form.file_field :images, multiple: true, class: "form-control mt-2 mb-2" %>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <%= form.submit 'Save Changes', class: 'btn btn-primary' , data: { action: 'click->bs_modal#submitEnd' } %>
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>
+
+<% end %>

@@ -1,0 +1,35 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <%= link_to 'New Page', new_page_path, class: 'btn btn-outline-primary mb-2' %>
+  <% @pages.each do |page| %>
+    <div class="card shadow mt-2" style="min-height:-100px;">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-1 mb-2">
+            <%= link_to page_path(page) do %>
+              <% if page.image.attached? %>
+                <%= image_tag page.image, style: 'width: 100px; max-width:100%;', class: 'rounded-circle'%>
+              <% end %>
+            <% end %>
+          </div>
+          <div class="col-lg-9">
+            <%= link_to page_path(page), style: 'text-decoration:none; color: black;' do %>
+              <h4><%= page.title %></h4>
+              <small><%= page.content %></small><br>
+              <small class="text-muted"><%= page.industry %> , </small>
+              <small class="text-muted"><%= page.organization_size %></small><br>
+              <small class="text-primary follower_count">Followers: <%= page.followers_count %></small>
+            <% end %>
+          </div>
+          
+          <div class="col-lg-2 justify-content-end follow-button" data-following="<%= current_user.following?(page) %>" data-page-id="<%= page.id %>">
+            <% if current_user.following?(page) %>
+              <%= link_to 'Unfollow', unfollow_page_path(page), method: :delete, remote: true, class: 'btn btn-danger btn-sm mt-2' %>
+            <% else %>
+              <%= link_to 'Follow', follow_page_path(page), method: :post, remote: true,  class: 'btn btn-primary btn-sm mt-2' %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -30,10 +30,10 @@ class Users::SessionsController < Devise::SessionsController
   def verify_otp
     if @user && @user.valid_otp?(params[:otp])
       sign_in(@user)
-      set_flash_message(:notice, "Signed in successfully.")
+      flash[:notice] = "Signed in successfully."
       redirect_to after_sign_in_path_for(@user)
     else
-      set_flash_message(:alert, "Invalid OTP. Please try again.")
+      flash[:alert] = "Invalid OTP. Please try again."
       redirect_to new_user_session_path
     end
   end

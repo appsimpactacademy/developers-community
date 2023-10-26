@@ -1,0 +1,22 @@
+<div class="col-lg-10 mx-auto mt-5 mb-4">
+  <div class="card">
+    <div class="card-header">
+      <h1 class="card-title text-center">Job Detail</h1>
+    </div>
+    <div class="card-body">
+      <p><strong>User ID : </strong> <%= @job.user_id %></p>
+      <p><strong>Title : </strong> <%= @job.title %></p>
+      <p><strong>Description : </strong> <%= @job.description %></p>
+      <p><strong>Salary </strong> <%= @job.salary %></p>
+      <p><strong>Location : </strong> <%= @job.location %></p>
+      <p><strong>Employee Type : </strong> <%= @job.employee_type %></p>
+      <p><strong>Qualification : </strong> <%= @job.qualification %></p>
+      <p><strong>Job Category : </strong> <%= @job.job_category.name %></p>
+      <p><strong>Status : </strong> <%= @job.status %></p>
+      <%= link_to 'Back to Jobs', jobs_path, class:"btn btn-primary" %>
+      <% if current_user && current_user.id == @job.user_id %>
+        <%= link_to 'Edit Job', edit_job_path(@job), class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
+</div>

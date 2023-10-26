@@ -1,5 +1,5 @@
-<% if @requested_connections.present? || @received_connections.present? %>
-  <div class="col-md-10 mx-auto mt-5">
+<div class="col-md-10 mx-auto mt-5">
+  <% if @requested_connections.present? || @received_connections.present? %>
     <section class="message-area" data-controller='chat'>
       <div class="container">
         <div class="row">
@@ -39,16 +39,14 @@
         </div>
       </div>
     </section>
-  </div>
-<% else %>
-  <div class="col-md-10 mx-auto mt-5">
+  <% else %>
     <div class="card">
        <div class="card-body">
           <h6> There are no connected users who have accepted your connection request. Please send connection requests and then start chatting!</h6>
        </div>
-    </div>
-  </div>   
-<% end %>
+    </div> 
+  <% end %>
+</div>    
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     // Add a click event listener to elements with class "chat-list"

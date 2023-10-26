@@ -1,0 +1,11 @@
+#results {
+    padding: 10px;
+  }
+
+  #results .btn-close {
+    color: #000;
+  }
+
+#results {
+  border: 1px solid #dcdcdc;
+}

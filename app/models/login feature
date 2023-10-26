@@ -1,0 +1,33 @@
+Hi, we've added many features to the developer community project. We've also created a wiki to explain all these features step by step. So, in this video lecture series, I'll be going through each feature one by one, and I hope you'll find it easy to understand.
+
+
+In the wiki, you can see that we've included an authentication feature with multiple steps. You'll notice that we've added three different methods for logging in. You can register in this project by providing your basic information and then use various ways to log in. I'll explain each of these methods individually.
+
+First, I'll explain the straightforward email and password login, which we've implemented using Devise.
+
+Now, let me walk you through the project setup. When you run the project, accessing the localhost will direct you to the user sign-in page. To get started, you can register by clicking on the "Sign Up" link and providing the following details:
+
+First Name
+Last Name
+Username
+Profile Title
+Email
+Password
+Profile Image
+
+Once you've completed the registration process, an email will be sent to your registered email address. To log in to our application, you'll need to confirm your email address first.
+
+Now you're ready to log in to our application. You have the freedom to choose any login option that suits you. If you prefer not to go through the registration process, you can simply log in using your Google account. for this choose the option google login.
+ 
+I'll now explain each login process in detail.
+
+When you visit the login page, you'll notice tabs, allowing you to choose your preferred login method. Let's begin with the email/password login. Here, you need to enter your email and password to log in. If you enter the wrong email or password, you'll receive an error message indicating "invalid email and password."
+
+The second option is OTP (One-Time Password) login. Click on the OTP tab, and you'll see an email field where you should enter your email address. After providing your email address, an OTP will be sent to the email address you provided. Copy the OTP and paste it into the input field, then click the "Verify OTP" button to log in.
+
+The third option is a simple Google login. Click on the Google tab, and you'll find the "Sign In with Google" button. Click it to use your Google account for login. When you log in with your Google account, it will automatically retrieve your username, first name, last name, and email address. Currently, we generate a random password when you log in with your Google account, but you can change your password after logging in.
+
+In this video, I've explained all the ways to log in to our application. I hope you now have a clear understanding. Thank you.
+
+In our next lecture, we will discuss the network connection feature.
+

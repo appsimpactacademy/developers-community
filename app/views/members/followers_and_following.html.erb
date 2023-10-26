@@ -1,0 +1,86 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Followers</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="pills-following-tab" data-bs-toggle="pill" data-bs-target="#pills-following" type="button" role="tab" aria-controls="pills-following" aria-selected="false">Following</button>
+    </li>
+  </ul>
+  <div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+      <!-- Followers List -->
+      <div class="col-lg-8">
+        <% if @followers.present? %>
+          <% @followers.each do |follower| %>
+            <div class="card mb-2 shadow">
+            <div class="row">
+              <div class="col-lg-2">
+                <% if follower.image.attached? %>
+                  <%= image_tag follower.image, class: "user-image", style: "width:120px; height: 90%; margin: 5px;" %>
+                <% else %>
+                  <%= image_tag 'human.avif', class: "user-image", style: "width:120px; height: 90%; margin: 5px;" %>
+                <% end %>
+              </div>
+              <div class="col-lg-8 mt-2">
+                <div class="card-body">
+                  <%= link_to member_path(follower), style: "text-decoration:none;", target: "_blank" do %>
+                    <h4 style="margin-bottom: -2px;"><%= follower.name %></h4>
+                  <% end %>
+                  <small class="text-muted"><%= follower.profile_title %></small><br>
+                  <small class="text-muted"><%= follower.email %></small>
+                </div>
+              </div>
+              <div class="col-lg-2 justify-content-end mt-5">
+                <% if follower.active_relationships&.find { |rel| rel.followed_id == current_user.id } %>
+                  <%= link_to 'unfollow', unfollow_member_path(follower), method: :delete, class: 'btn btn-danger btn-sm rounded-pill' %>
+                <% else %>
+                  <%= link_to 'follow', follow_member_path(follower), method: :post, class: "btn btn-primary btn-sm rounded-pill" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          <% end %>
+        <% else %>
+          <p class="lead fs-4 fw-bold">No followers are present.</p>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="pills-following" role="tabpanel" aria-labelledby="pills-following-tab">
+      <!-- Following List -->
+      <div class="col-lg-8">
+        <% if @following.present? %>
+          <% @following.each do |followed| %>
+             <div class="card mb-2 shadow">
+              <div class="row">
+                <div class="col-lg-2">
+                  <% if followed.image.attached? %>
+                    <%= image_tag followed.image, class: "user-image", style: "width:120px; height: 90%; margin: 5px;" %>
+                  <% else %>
+                    <%= image_tag 'human.avif', class: "user-image", style: "width:120px; height: 90%; margin: 5px;" %>
+                  <% end %>
+                </div>
+                <div class="col-lg-8 mt-3 mb-3 px-4">
+                  <h4 style="margin-bottom: -2px;"><%= followed.name %></h4>
+                  <small class="text-muted"><%= followed.profile_title %></small><br>
+                  <small class="text-muted"><%= followed.email %></small>
+                </div>
+                <div class="col-lg-2 justify-content-end mt-5">
+                  <% if current_user.following?(followed) %>
+                    <%= link_to 'unfollow', unfollow_member_path(followed), method: :delete, class: 'btn btn-danger btn-sm rounded-pill' %>
+                  <% else %>
+                    <%= link_to 'follow', follow_member_path(followed), method: :post, class: "btn btn-primary btn-sm rounded-pill" %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="lead fs-4 fw-bold">This user is not following anyone.</p>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+</div>

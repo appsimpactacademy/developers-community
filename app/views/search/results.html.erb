@@ -1,0 +1,248 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="card shadow mb-2 mt-2 rounded-0">
+        <div class="card-body">
+          <small class="text-muted">on this page</small>
+          <% if @people_i_follow_count.present? && @people_i_follow_count > 0 %>
+            <div id="people-i-follow-count">
+              <%= link_to "People I Follow (#{@people_i_follow_count})", followers_and_following_member_path(@user), style: "text-decoration:none;" %>
+            </div>
+          <% end %>          
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="card shadow mb-2 mt-2 rounded-0">
+        <div class="row">
+          <div class="col-lg-2">
+            <% if @user.image.attached? %>
+              <%= image_tag @user.image, style: "width: 200px; max-width:100%; max-height:100%; height:auto", class: 'border border-3 rounded-circle mt-2 mx-3' %>
+            <% else %>
+              <%= image_tag 'human.avif', style: "width: 200px; max-width:100%; max-height:100%; height:auto", class: 'border border-2 rounded-circle mt-2 mx-3' %>
+            <% end %>
+          </div>
+          <div class="col-lg-10">
+            <div class="card-body">
+              <h3><%= @user.name %></h3>
+                <small class="text-muted"><%= @user.profile_title %></small><br>
+                <small>
+                  <% if @mutual_connections.present? && @mutual_connections.count > 0 %>
+                    <%= link_to pluralize(@mutual_connections.count, 'mutual connection'), member_connections_path(@user, mutual_connection: true), style: "text-decoration:none;" %>
+                  <% end %>
+                </small>
+                <br>
+                <%= link_to 'View Profile', member_path(@user), class: 'btn btn-outline-primary btn-sm mt-2 rounded-pill' %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-controller="show-more-posts" data-show-more-posts-hidden-class="hidden" data-show-more-posts-target="post">
+        <% if @posts.present? %>
+          <% @posts.each_with_index do |post, index| %>
+            <div class="post <%= "hidden" if index >= 3 %>" data-show-more-posts-target="post">
+              <div class="card shadow mt-2 mb-2 rounded-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-1 col-12 mb-2 d-grid">
+                      <%= link_to member_path(post.user), style: "text-decoration:none;" do %>
+                        <% if post.user.image.attached? %>
+                          <%= image_tag post.user.image, class: "border border-2 rounded-circle user-image" %>
+                        <% else %> 
+                          <%= image_tag 'human.avif', class: "border border-2 rounded-circle user-image" %>
+                        <% end %>  
+                      <% end %>
+                    </div>
+                    <div class="col-md-10 col-12 mt-2 mb-3 d-grid">
+                      <%= link_to member_path(post.user), style: "text-decoration:none;" do %>
+                        <h5 class="text-dark mx-md-5 mx-2"><%= post.user.name %></h5>
+                        <small class="text-muted mx-md-5 mx-2"><%= truncate(post.user.profile_title, length: 25) %></small>
+                        <br>
+                        <small class="text-muted mx-md-5 mx-2">Posted <%= time_ago_in_words(post.created_at) %> ago</small>
+                      <% end %>
+                    </div>
+                    <div class="col-md-1 col-12 mt-1 mb-3 d-grid justify-content-end">
+                      <div class="dropdown">
+                        <a href="#" class="text-decoration-none text-reset" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="fa-solid fa-ellipsis fa-xl mt-3"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                          <% if current_user == post.user %>
+                            <li>
+                              <%= link_to 'Delete', post_path(post), data: { turbo_method: :delete, turbo_confirm: "Are You Sure to delete ?" }, class: "dropdown-item" %>
+                            </li>
+                            <li>
+                              <%= link_to 'Edit', edit_post_path(post), data: { controller: 'bs-modal-form' }, class: "dropdown-item" %>
+                            </li>
+                          <% end %>
+                          <li>
+                            <%= link_to 'View', post_path(post), class: 'dropdown-item' %>
+                          </li>
+                          <li>
+                            <button
+                              data-controller="copy-url"
+                              data-copy-url-target="copyButton"
+                              data-copy-url-post-id="<%= post.id %>"
+                              data-action="click->copy-url#copyUrl"
+                              class="dropdown-item"
+                              >
+                                Copy URL
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="user-info mt-2" data-controller="user-name">
+                    <h5 data-user-name-target='name'><%= post.title %> </h5>
+                    <div data-controller= "show-more">
+                      <div data-show-more-target="description">
+                        <p><%= simple_format(post.description) %></p>
+                      </div>
+                      <div class="col-lg-12 d-flex justify-content-end">
+                        <button 
+                          data-action="click->show-more#toggleVisibility" 
+                          data-show-more-target="toggleButton" 
+                          class="btn btn-outline-light text-primary btn-sm mb-3 mt-3">
+                          Show More
+                        </button>
+                      </div>
+                      <div class="col-lg-12 mb-1 d-flex justify-content-end">
+                        <% if (@post_comment_counts[post.id] || 0) > 0 %>
+                          <%= link_to post_path(post), style: "text-decoration:none;" do %>
+                            <%= pluralize(@post_comment_counts[post.id], "Comment") %>
+                          <% end %>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <%= link_to post_path(post) do %>
+                      <% if post.images.attached? %>
+                        <% post.images.each do |image| %>
+                          <% if image.content_type.include?("image") %>
+                            <a href="<%= rails_blob_path(image) %>" class="post_images me-2 mb-3 mt-3" data-turbolinks="false" data-mfp-title="<%= post.title %>">
+                              <%= image_tag image, style: 'width: 300px; height: 250px;', class: 'mt-2 mb-2 border border-4' %>
+                            </a>
+                          <% else %>
+                            <div class="bg-dark text-center">
+                              <%= video_tag rails_blob_path(image), autoplay: :autoplay, loop: :loop, muted: :muted, class: "home_video", controls: true, type: 'video/mp4', style: "max-width: 100%; height: 320px;" do %>
+                                Your browser does not support the video tag.
+                              <% end %>
+                            </div>
+                          <% end %>
+                        <% end %>
+                      <% end %>
+                    <% end %>
+                  </div>
+                  <div class="row mt-3">
+                    <div class="col-lg-1 col-md-2 col-3">
+                      <% if user_signed_in? %>
+                        <% like = post.likes.find { |like| like.user_id == current_user.id } %>
+                        <% if like.nil? %>
+                          <%= button_to likes_path, params: { like: { post_id: post.id } }, method: :post, class: "btn btn-light position-absolute mt-2" do %>
+                            <i class="fa-solid fa-thumbs-up fa-xl" title="Like"></i>
+                          <% end -%>
+                        <% else %>
+                          <%= button_to like_path(like), params: { like: { post_id: post.id } }, method: :delete, class: "btn btn-light position-absolute mt-2" do %>
+                            <i class="fa-solid fa-thumbs-down fa-xl" title="Dislike"></i>
+                          <% end -%>
+                        <% end -%>
+                      <% end -%>
+                      <% if @post_likes_count[post.id].to_i > 0 %>
+                        <span class="position-relative top-0 translate-middle badge rounded-pill bg-danger"><%= @post_likes_count[post.id] %></span>
+                      <% end %>
+                    </div>
+                    <div class="col-lg-1 col-md-2 col-3">
+                      <%= link_to new_share_path(post_id: post.id), class: "btn btn-light mt-2", data: { controller: "bs-modal-form" } do %>
+                          <i class="fa-solid fa-paper-plane" title="Share"></i>
+                      <% end %>
+                    </div>
+                    <div class="col-lg-1 col-md-2 col-3">
+                      <div class="dropdown">
+                        <button class="btn btn-light mt-2" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="fa-solid fa-share-from-square" title="Share on Social Media"></i>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                          <li>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=<%= ENV['APP_URL']%><%= post_path(post)%>" target="_blank" class="dropdown-item">Share on Facebook</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="https://twitter.com/intent/tweet?url=<%= ENV['APP_URL']%><%= post_path(post)%>&text=<%= post.title %>" target="_blank">Share on Twitter</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="col-lg-1 col-md-2 col-3">
+                      <% if user_signed_in? %>
+                        <% if current_user.has_reposted?(post) %>
+                          <%= link_to [post, current_user.repost_for(post)], method: :delete, class: 'btn btn-light mt-2', title: "Remove Repost" do %>
+                            <i class="fa-solid fa-repeat"></i>
+                          <% end %>
+                        <% else %>
+                          <%= link_to post_reposts_path(post), method: :post, class: 'btn btn-light mt-2', title: "Repost" do %>
+                          <i class="fa-solid fa-repeat"></i>
+                          <% end %>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          <% if @posts.length > 2 %>  
+              <button data-action="click->show-more-posts#showMore" data-show-more-posts-target="showMore" class="btn btn-outline-dark w-100 mt-2 shadow">Show More Posts</button>
+              <button data-action="click->show-more-posts#showLess" data-show-more-posts-target="showLess" class="hidden btn btn-outline-dark w-100 mt-2 shadow">Show Less Posts</button>
+          <% end %>
+          <% else %>
+            <h4 class="mt-3">No post is available</h4>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .image-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  .image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .user-image{
+    width: 70px;
+    overflow: hidden;
+    margin-top: 15px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .show-more, .show-less {
+    cursor: pointer;
+    color: blue;
+  }
+</style>
+
+<script>
+  $(document).ready(function() {
+  $('.post_images').magnificPopup({
+    type: 'image',
+    gallery: {
+      enabled: true
+    },
+    mainClass: 'mfp-with-zoom',
+      zoom: {
+        enabled: true,
+        duration: 300,
+        easing: 'ease-in-out'
+      }
+  });
+});
+</script>

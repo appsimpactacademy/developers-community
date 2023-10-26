@@ -1,0 +1,53 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <% if @jobs.present? %>
+   <div class="col-lg-3">
+    <%= form_tag(jobs_path, method: 'get') do %>
+      <%= label_tag :job_category, 'Job Category:' %>
+      <%= select_tag :job_category, options_for_select(JobCategory.pluck(:name), params[:job_category]), prompt: 'Select Job Category', class: 'form-select mt-2 mb-2' %>
+      <%= submit_tag 'Submit', class: 'btn btn-primary mb-2' %>
+    <% end %>
+   </div>
+
+    <% @jobs.each do |job| %>
+      <div class="card shadow mb-2">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-10">
+            <%= link_to job, style: "text-decoration:none; color:black;" do %>
+              <strong>Job Title : </strong> <%= job.title %><br>
+              <strong>Description : </strong> <%= truncate(job.description, length: 30) %><br>
+              <strong>Location : </strong> <%= job.location %><br>
+              <strong>Job Category : </strong> <%= job.job_category.name %><br>
+            <% end %>
+            </div>
+            <div class="col-lg-2">
+              <div class="dropdown float-end">
+                <button class="btn btn-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fa-solid fa-ellipsis-vertical fa-xl"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                   <% if current_user && current_user.id == job.user_id %>
+                  <li><%= link_to 'View Job', job, class:"dropdown-item" %></li>
+                  <li><%= link_to 'Edit', edit_job_path(job), class:"dropdown-item", data: { controller: "bs-modal-form" } %></li>
+                  <li><%= link_to 'Delete', job_path(job), class:"dropdown-item", data: { turbo_confirm: 'Are You Sure?', turbo_method: :delete } %></li>
+                  <% else %>
+                  <li>
+                    <%= link_to 'View Job', job, class:"dropdown-item" %>
+                  </li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <%= paginate @jobs %>
+  <% else %>
+    <div class="card">
+      <div class="card-body">
+        <h6>There is no jobs available right now.</h6>
+      </div>
+    </div>
+  <% end %>  
+</div>

@@ -1,0 +1,12 @@
+<div class="col-lg-10 mx-auto mt-3" id="calendar"></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      events: '<%= calendar_events_events_path(format: :json) %>'
+    });
+    calendar.render();
+  });
+</script>

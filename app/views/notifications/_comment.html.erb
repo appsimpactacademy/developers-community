@@ -1,0 +1,11 @@
+<p class="text-dark">
+  <%= notification.item.user.name %> just <b>commented on : </b>
+  <% if notification.item.commentable && notification.item.commentable_type == "Post" %>
+    <%= link_to notification.item.commentable.title, post_path(notification.item.commentable), style: "text-decoration:none;" %>
+  <% elsif notification.item.commentable && notification.item.commentable_type == "SomeOtherModel" %>
+    <%= link_to notification.item.commentable.title, some_other_model_path(notification.item.commentable), style: "text-decoration:none;" %>
+  <% else %>
+    Commentable not found
+  <% end %>
+  <%= link_to "Mark as Read", notification, data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to mark this notification as read?" }, class: "btn btn-outline-danger btn-sm mx-4 fw-bold" %>
+</p>

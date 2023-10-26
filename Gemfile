@@ -79,8 +79,17 @@ gem 'ransack'
 gem 'devise'
 gem 'kaminari'
 gem 'cssbundling-rails'
+gem 'country_select', '~> 8.0'
+gem "noticed", "~> 1.6"
 
 gem "stimulus_reflex", "= 3.5.0.pre8"
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
+
+gem 'meta-tags'
+gem 'dotenv-rails', groups: [:development, :test]
+
+
+gem 'fullcalendar-rails'
+gem 'momentjs-rails'

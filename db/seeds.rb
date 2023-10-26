@@ -6,7 +6,7 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 ActiveRecord::Base.transaction do 
-  1000.times do |i|
+  10.times do |i|
     user = User.create(
       first_name: Faker::Name.first_name,
       last_name: Faker::Name.last_name,
@@ -26,4 +26,22 @@ ActiveRecord::Base.transaction do
 
     puts "User #{i+1} created successfully."
   end
+
+  100.times do |i|
+    user = User.create(
+      contact_number: Faker::PhoneNumber.phone_number_with_country_code
+      )
+    puts "contact_number #{i+1} created successfully"
+  end
+
+
+  job = Job.create(
+    title: "Full Stack ROR Developer",
+    employee_type: "Full time",
+    location: "Indore",
+    salary: "10000",
+    description: "Full stack ROR developer",
+    qualification: "B.E",
+    job_category_id: '1'
+  )
 end

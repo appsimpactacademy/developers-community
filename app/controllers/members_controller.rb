@@ -43,6 +43,25 @@ class MembersController < ApplicationController
     @total_connections = total_users.count
   end
 
+  
+  def follow
+    @user = User.find(params[:id])
+    current_user.follow(@user)
+    redirect_to root_path
+  end
+
+  def unfollow
+    @user = User.find(params[:id])
+    current_user.unfollow(@user)
+    redirect_to root_path
+  end
+
+  def followers_and_following
+    @user = User.find(params[:id])
+    @followers = @user.followers.includes([image_attachment: :blob, active_relationships: :follower])
+    @following = @user.following.includes(image_attachment: :blob)
+  end
+
   private
 
   def user_personal_info_params

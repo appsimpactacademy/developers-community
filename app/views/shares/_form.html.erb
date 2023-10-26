@@ -1,0 +1,15 @@
+<%= form_with(model: Share.new, url: shares_path) do |form| %>
+<div class="modal-body">
+  <div class="form-group">
+    <%= form.hidden_field :post_id, value: params[:post_id] %>
+  </div>
+  <div class="form-group">
+    <%= form.label :recipient_id, "Recipient ID" %>
+    <%= form.collection_select(:recipient_id, User.all, :id, :name, { prompt: 'Select Recipient' }, class: 'form-select mt-2') %>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+  <%= form.submit 'Share', class: 'btn btn-primary' , data: { action: 'click->bs_modal#submitEnd' } %>
+</div>
+<% end %>

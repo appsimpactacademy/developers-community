@@ -1,33 +1,64 @@
-<div class="col-lg-10 mx-auto mt-5">
-
-  <div class="card mt-4 mb-4">
-    <div class="card-body">
-      <h3 class="text-center mb-3">Search professionals across the world!</h3>
-      <%= search_form_for @q, url: root_path do |form| %>
-        <div class="input-group mb-3">
-          <%= form.search_field :city_or_country_cont, class: "form-control", placeholder: "Search by country or city", area: { label: "Search by country or city", describedby: "button-addon2" } %>
-          <%= form.submit "Search", class: "btn btn-primary", id: "button-addon2" %>
+<div class="container col-lg-10 mx-auto mt-3 bg-light my-container">
+  <div class="row">
+    <div class="col-lg-3 col-md-4 col-sm-12 mt-3">
+      <div class="card text-center mb-3 shadow current_user_profile">
+        <div class="card-body">
+          <% if current_user.image.attached? %>
+            <%= image_tag current_user.image, style: "width: 130px; max-width:100%;", class: 'border border-3 rounded-circle mb-3 mt-3' %>
+          <% else %> 
+            <%= image_tag 'human.avif', class: "border border-3 rounded-circle mb-3 mt-3", style: "width: 130px; max-width:100%;" %>
+          <% end %>
+          <%= link_to member_path(current_user), style: "text-decoration:none;" do %>
+            <h5 class="text-dark"><%= current_user.name %></h5>
+          <% end %>
+          <small class=" text-muted"><%= current_user.profile_title %></small>
+          <hr>
+          <p><%= pluralize(current_user.connections.count, "Connection") %></p>
+          <hr>
+          <%= link_to 'My Job', user_my_jobs_path(current_user), style: 'text-decoration:none;'%> 
+          <hr>
+          <%= link_to 'My Post', user_posts_path(current_user), style: 'text-decoration:none;'%> 
+          <hr>
+          <%= link_to "Followers", followers_and_following_member_path(current_user), style: 'text-decoration:none;' %> 
+          <hr>
+          <%= link_to "Events", user_my_events_path(current_user), style: 'text-decoration:none;'  %>
+          <hr>
+          <%= link_to 'View Calendar', calendar_events_events_path, style: 'text-decoration:none;' %>
+          <hr>
+          <%#= link_to 'Create New Page', user_pages_path(current_user), style: 'text-decoration:none;' %>
         </div>
-      <% end %>
+      </div>
     </div>
-  </div>
-
-  <div class="row mt-4 mb-4">
-    <% @users.each do |user| %>
-      <div class="col-lg-3 mb-3 mt-3">
-        <div class="card text-center shadow" style="min-height: 400px;">
-          <div class="card-body">
-            <%= image_tag "dmu1.jpeg", style: "width: 150px; border-radius: 50%; border: 2px solid #0d6efd;", class: 'mb-3' %>
-            <div class="user-info" data-controller="user-name">
-              <h5 data-user-name-target='name' data-action="click->user-name#getUserName"><%= user.name %></h5>
-              <p class="lead"><%= user.profile_title %></p>
-              <small class="text-primary"><%= user.country %></small><br>
-
-              <%= link_to "View Profile", member_path(user), class: "btn btn-primary mt-3" %>
+    <div class="col-lg-9 col-md-8 col-sm-12 mt-2">
+      <div class="card mt-2 mb-2 shadow">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-1 col-12 mb-2 d-grid">
+              <% if current_user.image.attached? %>
+                <%= image_tag current_user.image, style: "width: 50px;", class: "mt-2 border border-3 rounded-circle" %>
+              <% else %> 
+                <%= image_tag 'human.avif', style: "width: 50px;", class: "mt-2 border border-3 rounded-circle" %>
+              <% end %>
+            </div>
+            <div class="col-md-11 col-12 mt-1 mb-3 d-grid">
+              <%= link_to new_post_path, class: "d-flex btn btn-outline-light text-dark border py-2 rounded-pill mr-1 pr-5 mt-2", data: { controller: "bs-modal-form" } do %>
+              Start a Post
+              <% end %>
+              <div class="mt-3">
+                <%= link_to new_event_path, data: { controller: 'bs-modal-form' }, style: "text-decoration:none;" do %>
+                  <i class="fa-regular fa-calendar-days me-1 text-dark"></i>
+                Add Event
+              <% end %>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    <% end %>
+      <%= render 'home/post_sort' %>        
+      <%= render 'home/posts' %>
+    </div>
   </div>
+</div>
+
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
 </div>

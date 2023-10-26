@@ -1,0 +1,39 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <p style="color: green;"><%#= notice %></p>
+  <div class="card shadow">
+    <div class="card-body">
+      <div class="mb-3">
+        <small class="text-primary">User ID : <%= @post.user_id %></small>
+        <p><strong>Post Uploaded by :</strong> <%= @user.name %></p>
+        <p> <strong>Title : </strong><%= @post.title  %> </p>
+        <p> <strong>Description : </strong><%= simple_format @post.description  %> </p>
+        <hr>
+        <% if @post.images.attached? %>
+          <% @post.images.each do |image| %>
+            <% if image.content_type.include?("image") %>
+              <%= image_tag image, class: 'post_images me-2 mb-3 mt-3', style: 'width: 300px; height: 200px;' %>
+            <% else %>
+              <div class="bg-dark text-center">
+                <%= video_tag rails_blob_path(image), autoplay: :autoplay, loop: :loop, muted: :muted, class: "home_video", controls: true, type: 'video/mp4', style: "max-width: 100%; height: 320px;" do %>
+                  Your browser does not support the video tag.
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %> 
+      </div>    
+      <div class="container mt-3">
+        <%= render partial: "comments/form", locals: { comment: Comment.new(commentable: @post), submit_label: "Create Comment" } %>
+        
+        <% @comments.each do |comment| %>
+        <%= render 'comments/comment', comment: comment %>
+        <% end %>
+      </div>
+    </div>
+  </div> 
+
+  <%= link_to 'Back', root_path, class: 'btn btn-warning mt-3 mb-3' %>
+  <% if @post.user == current_user %>
+  <%= link_to 'Edit Post', edit_post_path(@post),data: { controller: 'bs-modal-form' }, class: "btn btn-primary mt-3 mb-3" %>
+  <% end %>
+</div>

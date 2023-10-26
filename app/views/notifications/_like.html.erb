@@ -1,0 +1,5 @@
+<p class="text-dark">
+  <%= notification.item.user.name %> just <b>liked : </b>
+  <%= link_to notification.item.post.title, post_path(notification.item.post), style: "text-decoration:none;" %>
+  <%= link_to "Mark as Read", notification, data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to mark this notification as read?" }, class: "text-danger" %>
+</p>

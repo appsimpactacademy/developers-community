@@ -1,0 +1,60 @@
+<%= form_with model: @job do |form| %>
+<div class="modal-body">
+  <div class="form-group row">
+    <div class="col-lg-6">
+     <%= form.hidden_field :user_id, value:current_user.id %>
+   </div>
+  </div>
+
+   <div class="form-group row">
+    <div class="col-lg-6">
+      <%= form.label :title %>
+      <%= form.text_field :title, class: 'form-control mt-2 mb-2' %>
+    </div>
+    <div class="col-lg-6">
+      <%= form.label :description %>
+      <%= form.text_area :description, class: 'form-control mt-2 mb-2' %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-lg-6">
+      <%= form.label :employee_type %>
+      <%= form.select :employee_type, options_for_select(Job::EMPLOYEE_TYPE, selected: form.object.employee_type ),{prompt: 'Select Employee Type'},  {class: 'form-select mt-2 mb-2'} %>
+    </div>
+    <div class="col-lg-6">
+      <%= form.label :location %>
+      <%= form.text_field :location, class: 'form-control mt-2 mb-2' %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-lg-6">
+      <%= form.label :salary %>
+      <%= form.select :salary, options_for_select(Job::SALARY, selected: form.object.salary ),{prompt: 'Select Salary'},  {class: 'form-select mt-2 mb-2'} %>
+    </div>
+    <div class="col-lg-6">
+      <%= form.label :job_category_id, "Job Category" %>
+      <%= form.collection_select(:job_category_id, JobCategory.all, :id, :name, { prompt: 'Select Job Category' }, class: 'form-select mt-2') %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-lg-6">
+      <%= form.label :qualification %>
+      <%= form.select :qualification, options_for_select(Job::QUALIFICATION, selected: form.object.qualification ),{prompt: 'Select Qualification'},  {class: 'form-select mt-2 mb-2'} %>
+    </div>
+    <div class="col-lg-6">
+      <%= form.label :status %>
+      <%= form.select :status, options_for_select(Job::STATUS, selected: form.object.status ),{prompt: 'Select Status'},  {class: 'form-select mt-2 mb-2'} %>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <div class="col-lg-6">
+      <%= form.submit class: 'btn btn-primary' %>
+      <%= link_to 'Back', jobs_path, class: 'btn btn-warning' %>
+    </div>
+  </div>
+</div>
+<% end %>

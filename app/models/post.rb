@@ -28,6 +28,14 @@ class Post < ApplicationRecord
    # for visiting the post by current user
   has_many :post_visits, dependent: :destroy
 
+  include Notificable
+
+  # for notification
+  def user_ids
+    User.where(id: user.connected_user_ids).ids
+    #User.all.ids
+  end
+
   # for hide & unhide the post
   def hide
     update(hidden: true)

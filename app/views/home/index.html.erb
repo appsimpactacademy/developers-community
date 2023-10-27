@@ -8,24 +8,24 @@
           <% else %> 
             <%= image_tag 'human.avif', class: "border border-3 rounded-circle mb-3 mt-3", style: "width: 130px; max-width:100%;" %>
           <% end %>
-          <%= link_to member_path(current_user), style: "text-decoration:none;" do %>
+          <%= link_to member_path(current_user), class: 'text-decoration-none' do %>
             <h5 class="text-dark"><%= current_user.name %></h5>
           <% end %>
           <small class=" text-muted"><%= current_user.profile_title %></small>
           <hr>
           <p><%= pluralize(current_user.connections.count, "Connection") %></p>
           <hr>
-          <%= link_to 'My Job', user_my_jobs_path(current_user), style: 'text-decoration:none;'%> 
+          <%= link_to 'My Job', user_my_jobs_path(current_user), class: 'text-decoration-none'%> 
           <hr>
-          <%= link_to 'My Post', user_posts_path(current_user), style: 'text-decoration:none;'%> 
+          <%= link_to 'My Post', user_posts_path(current_user), class: 'text-decoration-none'%> 
           <hr>
-          <%= link_to "Followers", followers_and_following_member_path(current_user), style: 'text-decoration:none;' %> 
+          <%= link_to "Followers", followers_and_following_member_path(current_user), class: 'text-decoration-none' %> 
           <hr>
-          <%= link_to "Events", user_my_events_path(current_user), style: 'text-decoration:none;'  %>
+          <%= link_to "My Events", user_my_events_path(current_user), class: 'text-decoration-none'  %>
           <hr>
-          <%= link_to 'View Calendar', calendar_events_events_path, style: 'text-decoration:none;' %>
+          <%= link_to 'View Calendar', calendar_events_events_path, class: 'text-decoration-none', data: { turbolinks: false } %>
           <hr>
-          <%#= link_to 'Create New Page', user_pages_path(current_user), style: 'text-decoration:none;' %>
+          <%#= link_to 'Create New Page', user_pages_path(current_user), class: 'text-decoration-none' %>
         </div>
       </div>
     </div>
@@ -45,7 +45,7 @@
               Start a Post
               <% end %>
               <div class="mt-3">
-                <%= link_to new_event_path, data: { controller: 'bs-modal-form' }, style: "text-decoration:none;" do %>
+                <%= link_to new_event_path, data: { controller: 'bs-modal-form' }, class: 'text-decoration-none' do %>
                   <i class="fa-regular fa-calendar-days me-1 text-dark"></i>
                 Add Event
               <% end %>

@@ -44,4 +44,25 @@ ActiveRecord::Base.transaction do
     qualification: "B.E",
     job_category_id: '1'
   )
+
+  job_category = JobCategory.create([
+    {name: 'Information Technology (IT)'}, 
+    {name: 'Business and Management'},
+    {name: 'Sales and Marketing'},
+    {name: 'Healthcare'},
+    {name: 'Education'},
+    {name: 'Finance'},
+    {name: 'Engineering'},
+    {name: 'Customer Service and Support'},
+    {name: 'Government and Public Administration'},
+    {name: 'Consulting'},
+    {name: 'Entrepreneurship and Startups'},
+    {name: 'Retail and Consumer Goods'},
+    {name: 'Construction and Real Estate'},
+    {name: 'Legal'},
+    {name: 'Science and Research'},
+    {name: 'Healthcare and Medical'},
+    {name: 'Other'}
+  ])
 end
+

@@ -2,7 +2,7 @@ class PagesController < ApplicationController
   before_action :set_page, only: %i[edit update destroy]
 
   def index
-    @pages = Page.includes(:user, :follows, image_attachment: :blob ).order(created_at: :desc) 
+    @pages = Page.includes(:user, :follows, image_attachment: :blob ).order(created_at: :desc)
   end
 
   def new
@@ -23,9 +23,6 @@ class PagesController < ApplicationController
 
   def show
     @page = Page.includes(posts: [:user, { likes: :user }, { comments: :user }]).find(params[:id])
-
-    @follow_count = @page.follows.count
-    @is_following = current_user.following?(@page)
 
     # Load associated users for likes and comments
     @users_for_likes = User.where(id: @page.posts.joins(:likes).pluck('likes.user_id').uniq)

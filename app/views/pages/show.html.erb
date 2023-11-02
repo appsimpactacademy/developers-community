@@ -11,7 +11,7 @@
             <small><%= @page.content %></small><br>
             <small class="text-muted"><%= @page.industry %></small><br>
             <small class="text-muted"><%= @page.organization_size %></small><br>
-            <small class="text-primary">Followers: <%=@page.follows.count %></small>
+            <small class="text-primary">Followers: <%= @follower_count  %></small>
           </div>
           <div class="mt-2">
             <% if current_user.following?(@page) %>

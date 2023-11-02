@@ -50,6 +50,8 @@ class User < ApplicationRecord
   # for sharing the post
   has_many :sent_shares, class_name: 'Share', foreign_key: 'sender_id'
   has_many :received_shares, class_name: 'Share', foreign_key: 'recipient_id'
+  has_many :profile_views, foreign_key: 'viewed_user_id'
+  has_many :viewers, through: :profile_views, source: :viewer
 
   has_many :notifications
   

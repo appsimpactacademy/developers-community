@@ -1,0 +1,21 @@
+<% if notifications.present? %>
+  <% viewer = notifications.map { |notification| notification.item.viewer } %>
+  <% final_viewers = viewer.uniq %>
+  <%= link_to profile_views_path do %>
+    <li>
+      <% if final_viewers.size == 1 %>
+        <%= "#{final_viewers.first.name} just viewed your profile" %>
+      <% elsif final_viewers.size == 2 %>
+        <%= "#{final_viewers.first.name} and #{final_viewers.last.name} just viewed your profile" %>
+      <% else %>
+        <%= "#{final_viewers.first.name} and #{final_viewers.size - 1} others just viewed your profile" %>
+      <% end %>
+    </li>
+  <% end %>
+<% else %>
+  <div class="card">
+    <div class="card-body">
+      <h6>No notification is present!</h6>
+    </div>
+  </div>
+<% end %>

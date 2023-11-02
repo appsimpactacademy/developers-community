@@ -32,7 +32,9 @@
                   <% end %>
                 </small>
                 <br>
-                <%= link_to 'View Profile', member_path(@user), class: 'btn btn-outline-primary btn-sm mt-2 rounded-pill' %>
+                <div data-controller="profile-view">
+                  <%= link_to 'View Profile', member_path(@user), class: 'btn btn-outline-primary btn-sm mt-2 rounded-pill', data: { action: "click->profile-view#viewProfile", user_id: @user.id } %>
+                </div>
             </div>
           </div>
         </div>

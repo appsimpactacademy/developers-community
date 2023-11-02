@@ -1,9 +1,16 @@
-<div class="container col-lg-10 mx-auto mt-3">
+<div class="container col-lg-10 mx-auto mt-3" data-controller="profile-view">
   <% if @notifications.present? %>
     <h2>Notifications</h2>
-    <ul class="list-group" id="notifications">
-      <%= render @notifications %>
-    </ul>
+
+    <% if is_all_profile_view = @notifications.map(&:item_type).all? { |item_type| item_type == 'ProfileView' } %>
+      <ul class="list-group">
+        <%= render 'profileview', notifications: @notifications  %>
+      </ul>
+    <% else %>
+      <ul class="list-group" id="notifications">
+        <%= render @notifications %>
+      </ul>
+    <% end %>
   <% else %>
     <div class="card">
       <div class="card-body">

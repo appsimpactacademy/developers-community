@@ -30,11 +30,11 @@ class SearchController < ApplicationController
   private
 
   def search_results
-    User.where("first_name LIKE ? OR last_name LIKE ?", "%#{params[:query]}%", "%#{params[:query]}%") +
-    Post.where("title LIKE ? OR description LIKE ?", "%#{params[:query]}%", "%#{params[:query]}%") + 
-    Job.where("title LIKE ? OR description LIKE ?", "%#{params[:query]}%", "%#{params[:query]}%") + 
-    Event.where("event_name LIKE ? OR description LIKE ?", "%#{params[:query]}%", "%#{params[:query]}%") + 
-    Page.where("title LIKE ? OR content LIKE ?", "%#{params[:query]}%", "%#{params[:query]}%")
+    query = params[:query]
+    User.where("first_name ILIKE ? OR last_name ILIKE ?", "%#{query}%", "%#{query}%") +
+      Post.where("title ILIKE ?", "%#{query}%") + 
+      Job.where("title ILIKE ?", "%#{query}%") + 
+      Event.where("event_name ILIKE ?", "%#{query}%") + 
+      Page.where("title ILIKE ? OR content ILIKE ?", "%#{query}%", "%#{query}%")
   end
-
 end

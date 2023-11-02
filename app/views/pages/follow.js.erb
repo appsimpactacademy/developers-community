@@ -1,3 +1,3 @@
 $('.follow-button[data-page-id="<%= @page.id %>"]').attr('data-following', true);
 $('.follow-button[data-page-id="<%= @page.id %>"]').html(`<%= link_to 'Unfollow', unfollow_page_path(@page), method: :delete, remote: true, class: 'btn btn-danger btn-sm mt-2' %>`);
-$('.follower_count').html(`Followers: <%= @page.followers_count %>`);
+$('.follower_count_<%= @page.id %>').html(`Followers: <%= @page.followers_count %>`);

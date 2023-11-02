@@ -9,6 +9,7 @@ class HomeController < ApplicationController
 
     # Now, you can create a hash where keys are post IDs and values are comment counts
     @post_comment_counts = comment_counts.transform_keys(&:to_i)
+    @connections = Connection.where('user_id = ? OR connected_user_id = ?', current_user.id, current_user.id).where(status: 'accepted')
   end
 
   def sort
@@ -45,4 +46,8 @@ class HomeController < ApplicationController
     end
   end
 
+  def profile_views
+    viewer_ids = current_user.profile_views.map(&:viewer_id).uniq
+    @viewer_users = User.where(id: viewer_ids)
+  end
 end

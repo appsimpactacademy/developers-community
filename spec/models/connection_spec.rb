@@ -27,13 +27,13 @@ RSpec.describe Connection, type: :model do
   end
 
   it 'is valid with a valid status' do
-    connection = Connection.new(user: user, connected_user_id: connected_user, status: 'accepted')
+    connection = Connection.new(user: user, requested: connected_user, status: 'accepted')
     expect(connection).to be_valid
   end
 
   it 'is valid with all possible status values' do
     Connection::CONNECTION_STATUSES.each do |status|
-      connection = Connection.new(user: user, connected_user_id: connected_user, status: status)
+      connection = Connection.new(user: user, requested: connected_user, status: status)
       expect(connection).to be_valid
     end
   end

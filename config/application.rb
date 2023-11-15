@@ -19,6 +19,6 @@ module DevCommunity
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-    config.hosts << "658e-2405-201-300b-717e-60dc-2023-ea69-3176.ngrok-free.app"
+    # config.hosts << "658e-2405-201-300b-717e-60dc-2023-ea69-3176.ngrok-free.app"
   end
 end

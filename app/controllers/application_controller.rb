@@ -47,7 +47,7 @@ class ApplicationController < ActionController::Base
         case action
         when 'replace'
           render turbo_stream: turbo_stream.replace(target, partial: partial, locals: locals)
-        when 'appned'
+        when 'append'
           render turbo_stream: turbo_stream.append(target, partial: partial, locals: locals)
         when 'remove'
           render turbo_stream: turbo_stream.remove(target)

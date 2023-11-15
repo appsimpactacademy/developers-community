@@ -3,15 +3,15 @@
     <% results.each do |result| %>
       <div class="p-2 border-bottom">
         <% if result.is_a?(User) %>
-          <%= link_to "#{result.first_name} #{result.last_name}", search_results_path(user_id: result.id), class: "text-primary", style: "text-decoration:none;" %>
+          <%= link_to "#{result.first_name} #{result.last_name} (User)", search_results_path(user_id: result.id), class: "text-primary", style: "text-decoration:none;" %>
         <% elsif result.is_a?(Post) %>
-          <%= link_to result.title, post_path(result), class: "text-primary", style: "text-decoration:none;" %>
+          <%= link_to "#{result.title} (Post)", post_path(result), class: "text-primary", style: "text-decoration:none;" %>
         <% elsif result.is_a?(Job) %>
-          <%= link_to result.title, job_path(result), class: "text-primary", style: "text-decoration:none;" %>
+          <%= link_to "#{result.title} (Job)", job_path(result), class: "text-primary", style: "text-decoration:none;" %>
         <% elsif result.is_a?(Event) %>
-          <%= link_to result.event_name, event_path(result), class: "text-primary", style: "text-decoration:none;" %>
+          <%= link_to "#{result.event_name} (Event)", event_path(result), class: "text-primary", style: "text-decoration:none;" %>
         <% elsif result.is_a?(Page) %>
-          <%= link_to result.title, page_path(result), class: "text-primary", style: "text-decoration:none;" %>
+          <%= link_to "#{result.title} (Page)", page_path(result), class: "text-primary", style: "text-decoration:none;" %>
         <% end %>
       </div>
     <% end %>

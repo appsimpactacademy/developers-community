@@ -116,6 +116,7 @@ class User < ApplicationRecord
     unless user
       user = User.create(
         email: data['email'],
+        profile_title: data['name'],
         password: Devise.friendly_token[0,20],
         first_name: data['first_name'],
         last_name: data['last_name'],

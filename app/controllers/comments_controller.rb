@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
   before_action :set_comments, only: %i[edit destroy]
-  before_action :find_commentable, only: [:create, :destroy, :new, :edit, :update, :show]
+  before_action :find_commentable, only: [:create, :destroy, :new, :edit, :update]
 
   def create
     @comment = @commentable.comments.new(comment_params)
@@ -29,11 +29,6 @@ class CommentsController < ApplicationController
         format.html { redirect_to post_path(@commentable), alert: 'Comment was not updated.' }
       end
     end
-  end
-
-  def show
-    @comment = @post.comments.build
-    render :edit
   end
 
   private

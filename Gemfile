@@ -54,6 +54,7 @@ group :development, :test do
   gem "letter_opener"
   gem "factory_bot_rails"
   gem "rspec-rails", '~> 6.0.0'
+  gem 'simplecov', require: false, group: :test
 end
 
 group :development do
@@ -72,6 +73,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem 'rails-controller-testing'
 end
 
 gem 'faker'

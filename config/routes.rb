@@ -71,7 +71,7 @@ Rails.application.routes.draw do
   resources :work_experiences
   resources :connections
   resources :skills
-  resources :messages
+  resources :messages, only: [:index]
   resources :shares, only: [:new, :create,:index]
 
   resources :users do

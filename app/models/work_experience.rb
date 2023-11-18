@@ -29,7 +29,7 @@ class WorkExperience < ApplicationRecord
   end
 
   def end_date_greater_than_start_date
-    return if end_date.nil?
+    return if end_date.nil? || start_date.nil?
 
     if end_date < start_date
       errors.add(:end_date, ' must be greater than start_date')
@@ -54,7 +54,6 @@ class WorkExperience < ApplicationRecord
     result = months.divmod(12)
 
     duration = "#{result.first} #{result.first > 1 ? 'years' : 'year'} #{result.last} #{result.last > 1 ? 'months' : 'month' }"
-
     if currently_working_here
       "#{start_date.strftime("%b %Y")} - Present (#{duration})"
     else

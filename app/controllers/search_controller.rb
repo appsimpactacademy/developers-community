@@ -25,8 +25,6 @@ class SearchController < ApplicationController
     @people_i_follow_count = @user.following.size
   end
 
-
-
   private
 
   def search_results

@@ -1,6 +1,4 @@
 class Post < ApplicationRecord
-  belongs_to :user
-  belongs_to :page, optional: true
 
   validates :title, presence: true
   validates :description, presence: true
@@ -10,23 +8,19 @@ class Post < ApplicationRecord
   scope :with_details, -> { includes(:user, :likes, :reposts, :post_visits, images_attachments: :blob) }
   
   has_many_attached :images
-
   has_many :hidden_posts
-
   # for repost the post
   has_many :reposts, dependent: :destroy
-
   has_many :comments, as: :commentable
-
   # for sharing the post
   has_many :shares, dependent: :destroy
-
   # for posts likes
   has_many :likes, dependent: :destroy
   has_many :users, through: :likes
-
    # for visiting the post by current user
   has_many :post_visits, dependent: :destroy
+  belongs_to :user
+  belongs_to :page, optional: true
 
   include Notificable
 

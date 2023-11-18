@@ -16,17 +16,17 @@ class SkillsController < ApplicationController
         'skill_items',
         'skills/skill',
         {skill: @skill }
-        )
+      )
     else
       render_turbo_stream(
         'replace',
         'remote_modal',
         'shared/turbo_modal',
         { 
-          form_partial: 'skills/form', 
+          form_partial: 'skills/form',
           modal_title: 'Add New Work Experience' 
         }
-        )
+      )
     end
   end
 

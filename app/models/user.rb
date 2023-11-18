@@ -5,12 +5,21 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :trackable,
          :omniauthable, omniauth_providers: [:google_oauth2]
 
+  
+  PROFILE_TITLE = [
+    'Senior Ruby on Rails Developer',
+    'Full Stack Ruby on Rails Developer',
+    'Senior Full Stack Ruby on Rails Developer',
+    'Junior Full Stack Ruby on Rails Developer',
+    'Senior Java Developer',
+    'Senior Front End Developer'
+  ].freeze         
+
   validates :first_name, :last_name, presence: true
   validates :username, :profile_title, presence: true
   validates :email, presence: true, uniqueness: true
 
   scope :with_country, ->(country) { where(country: country) }
-  scope :with_images, -> { where.not(image: nil) }
 
   has_many :connections, dependent: :destroy
   has_many :posts, dependent: :destroy
@@ -109,6 +118,7 @@ class User < ApplicationRecord
     unless user
       user = User.create(
         email: data['email'],
+        profile_title: data['name'],
         password: Devise.friendly_token[0,20],
         first_name: data['first_name'],
         last_name: data['last_name'],
@@ -117,16 +127,6 @@ class User < ApplicationRecord
     end
     user
   end
-
-  
-  PROFILE_TITLE = [
-    'Senior Ruby on Rails Developer',
-    'Full Stack Ruby on Rails Developer',
-    'Senior Full Stack Ruby on Rails Developer',
-    'Junior Full Stack Ruby on Rails Developer',
-    'Senior Java Developer',
-    'Senior Front End Developer'
-  ].freeze
 
   def name
     "#{first_name} #{last_name}".strip
@@ -157,5 +157,4 @@ class User < ApplicationRecord
   def mutually_connected_ids(user)
     self.connected_user_ids.intersection(user.connected_user_ids)
   end
-  
 end

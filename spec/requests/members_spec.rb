@@ -25,7 +25,7 @@ RSpec.describe MembersController, type: :request do
     it 'updates the user description' do
       sign_in user
 
-      patch update_member_description_path(user), params: { user: { about: 'New description' } }, as: :turbo_stream
+      patch update_member_description_path(user), as: :turbo_stream, params: { user: { about: 'New description' } }
 
       expect(response).to have_http_status(:success)
     end

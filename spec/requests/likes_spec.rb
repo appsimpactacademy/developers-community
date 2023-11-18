@@ -1,4 +1,4 @@
-# spec/requests/likes_controller_spec.rb
+# spec/requests/likes_spec.rb
 
 require 'rails_helper'
 

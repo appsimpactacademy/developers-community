@@ -1,49 +1,69 @@
-# spec/requests/comments_controller_spec.rb
-
 require 'rails_helper'
 
 RSpec.describe CommentsController, type: :request do
-  let(:user) { create(:user) }
-  let(:post) { create(:post, user: user) }
-  let(:comment) { create(:comment, post: post, user: user) }
+  let(:user) { create(:user) } # Assuming you have a User factory
+  let(:post) { create(:post, user: user) } # Assuming you have a Post factory
 
   describe 'POST /posts/:post_id/comments' do
-    it 'creates a new comment' do
-      post post_comments_path(post), params: { comment: { title: 'Test Comment', user_id: user.id } }
-      expect(response).to redirect_to(post_path(post))
-      expect(Comment.count).to eq(1)
+    context 'with valid parameters' do
+      it 'creates a new comment' do
+        sign_in user
+        comment_params = attributes_for(:comment) # Assuming you have a Comment factory
+        expect {
+          post post_comments_path(post), params: { comment: comment_params }, as: :turbo_stream
+        }.to change(Comment, :count).by(1)
+        expect(response).to redirect_to(post)
+        expect(flash[:notice]).to eq('Comment was successfully created.')
+      end
+    end
+
+    context 'with invalid parameters' do
+      it 'does not create a new comment' do
+        sign_in user
+        comment_params = attributes_for(:comment, title: nil) # Invalid parameters
+        expect {
+          post post_comments_path(post), params: { comment: comment_params }, as: :turbo_stream
+        }.not_to change(Comment, :count)
+        expect(response).to redirect_to(post)
+        expect(flash[:alert]).to eq('Error creating comment.')
+      end
     end
   end
 
-
-  describe "DELETE /comments/:id" do
-    it "deletes a comment" do
-      delete comment_path(comment)
+  describe 'DELETE /posts/:post_id/comments/:id' do
+    it 'destroys the comment' do
+      sign_in user
+      comment = create(:comment, user: user, commentable: post) # Assuming you have a Comment factory
+      expect {
+        delete post_comment_path(post, comment), as: :turbo_stream
+      }.to change(Comment, :count).by(-1)
       expect(response).to redirect_to(post)
       expect(flash[:notice]).to eq('Comment was successfully deleted.')
     end
   end
 
-  describe "GET /comments/:id/edit" do
-    it "renders the edit page" do
-      get edit_comment_path(comment)
-      expect(response).to have_http_status(200)
+  describe 'PATCH /posts/:post_id/comments/:id' do
+    context 'with valid parameters' do
+      it 'updates the comment' do
+        sign_in user
+        comment = create(:comment, user: user, commentable: post) # Assuming you have a Comment factory
+        new_title = 'Updated Title'
+        patch post_comment_path(post, comment), params: { comment: { title: new_title } }
+        expect(comment.reload.title).to eq(new_title)
+        expect(response).to redirect_to(post)
+        expect(flash[:notice]).to eq('Comment was successfully updated.')
+      end
     end
-  end
 
-  describe "PATCH /comments/:id" do
-    it "updates a comment" do
-      patch comment_path(comment), params: { comment: { title: "Updated Comment" } }
-      expect(response).to redirect_to(post)
-      expect(flash[:notice]).to eq('Comment was successfully updated.')
-    end
-  end
-
-  describe "GET /comments/:id/show" do
-    it "renders the show page" do
-      get comment_path(comment)
-      expect(response).to render_template(:edit)
-      expect(assigns(:comment)).to be_a_new(Comment)
+    context 'with invalid parameters' do
+      it 'does not update the comment' do
+        sign_in user
+        comment = create(:comment, user: user, commentable: post) # Assuming you have a Comment factory
+        patch post_comment_path(post, comment), params: { comment: { title: nil } }
+        expect(comment.reload.title).not_to be_nil
+        expect(response).to redirect_to(post)
+        expect(flash[:alert]).to eq('Comment was not updated.')
+      end
     end
   end
 end

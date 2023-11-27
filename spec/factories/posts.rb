@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :post do
     title { "MyString" }
     description { "MyText" }
-    user { nil }
+    user { association :user }
     hidden { false }
   end
 end

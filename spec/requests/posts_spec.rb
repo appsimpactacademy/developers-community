@@ -48,7 +48,7 @@ RSpec.describe PostsController, type: :request do
       context 'with valid parameters' do
         it 'creates a new post' do
           expect {
-            post posts_path, params: { post: attributes_for(:post) }
+            post posts_path, params: { post: attributes_for(:post) }, as: :turbo_stream
           }.to change(Post, :count).by(1)
 
           expect(response).to redirect_to(root_path)
@@ -79,7 +79,7 @@ RSpec.describe PostsController, type: :request do
       before { sign_in user }
 
       it 'returns a successful response' do
-        get edit_post_path(post)
+        get edit_post_path(post), as: :turbo_stream
         expect(response).to be_successful
       end
     end
@@ -98,14 +98,14 @@ RSpec.describe PostsController, type: :request do
 
       context 'with valid parameters' do
         it 'updates the post' do
-          patch post_path(post), params: { post: { title: 'Updated Title' } }
+          patch post_path(post), params: { post: { title: 'Updated Title' } }, as: :turbo_stream
           expect(response).to redirect_to(root_path)
         end
       end
 
       context 'with invalid parameters' do
         it 'does not update the post' do
-          patch post_path(post), params: { post: { title: '' } }
+          patch post_path(post), params: { post: { title: '' } }, as: :turbo_stream
           expect(response).to render_template(:edit)
         end
       end
@@ -184,8 +184,8 @@ RSpec.describe PostsController, type: :request do
     context 'when user is signed in' do
       before { sign_in user }
 
-      it 'toggles the hide status of the post' do
-        patch toggle_hide_post_path(post), format: :json
+      it 'toggles the hide status of the post', :json do
+        post toggle_hide_post_path(post)
 
         expect(response).to be_successful
         expect(JSON.parse(response.body)['hidden']).to eq(true)
@@ -193,8 +193,8 @@ RSpec.describe PostsController, type: :request do
     end
 
     context 'when user is not signed in' do
-      it 'returns a 401 Unauthorized status' do
-        post toggle_hide_post_path(post), as: :json
+      it 'returns a 401 Unauthorized status', :json do
+        post toggle_hide_post_path(post)
         expect(response).to have_http_status(:unauthorized)
       end
     end

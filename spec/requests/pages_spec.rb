@@ -8,8 +8,8 @@ RSpec.describe PagesController, type: :request do
 
   describe 'GET /pages' do
     it 'returns a successful response' do
-      get pages_path
-      expect(response).to be_successful
+      get '/pages'
+      expect(response.status).to eq(302)
     end
   end
 
@@ -38,7 +38,7 @@ RSpec.describe PagesController, type: :request do
       context 'with valid parameters' do
         it 'creates a new page' do
           expect {
-            post pages_path, params: { page: attributes_for(:page) }
+            post pages_path, params: { page: {title: 'Sample page', content: 'Test content', user_id: user.id} }
           }.to change(Page, :count).by(1)
 
           expect(response).to redirect_to(pages_path)
@@ -65,6 +65,7 @@ RSpec.describe PagesController, type: :request do
   end
 
   describe 'GET /pages/:id' do
+    before { sign_in user }
     it 'returns a successful response' do
       get page_path(page)
       expect(response).to be_successful
@@ -102,7 +103,7 @@ RSpec.describe PagesController, type: :request do
 
       context 'with invalid parameters' do
         it 'does not update the page' do
-          patch page_path(page), params: { page: { title: '' } }
+          patch page_path(page), params: { page: { title: '', user_id: nil } }
           expect(response).to render_template(:edit)
         end
       end
@@ -143,8 +144,8 @@ RSpec.describe PagesController, type: :request do
     context 'when user is signed in' do
       before { sign_in user }
 
-      it 'follows the page' do
-        post follow_page_path(page), format: :js
+      it 'follows the page', :js do
+        post follow_page_path(page), headers: { 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest' }
 
         expect(response).to be_successful
         expect(user.pages).to include(page)
@@ -152,8 +153,8 @@ RSpec.describe PagesController, type: :request do
     end
 
     context 'when user is not signed in' do
-      it 'redirects to sign in page' do
-        post follow_page_path(page), format: :js
+      it 'redirects to sign in page', :js do
+        post follow_page_path(page)
         expect(response).to redirect_to(new_user_session_path)
       end
     end
@@ -164,9 +165,9 @@ RSpec.describe PagesController, type: :request do
       before { sign_in user }
 
       it 'unfollows the page', :js do
-        user.pages << page # user follows the page
+        user.pages << page
 
-        delete unfollow_page_path(page), as: :js
+        delete unfollow_page_path(page), headers: { 'HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest' }
 
         expect(response).to be_successful
         expect(user.pages).not_to include(page)

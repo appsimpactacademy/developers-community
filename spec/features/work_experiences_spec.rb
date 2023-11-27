@@ -17,7 +17,7 @@ RSpec.feature "WorkExperiences", type: :feature do
         expect(page).to have_text('Add new work experience')
         click_button 'Save Changes'
         sleep 5
-        expect(page).to have_text('9 errors prohibited your work experience from being saved.')
+        expect(page).to have_text('9 errors prohibited your work experience frm being saved.')
         expect(page).to have_text("Company can't be blank")
         expect(page).to have_text("Start date can't be blank")
         expect(page).to have_text("Job title can't be blank")

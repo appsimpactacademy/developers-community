@@ -52,7 +52,7 @@ RSpec.describe SharesController, type: :request do
     context 'with invalid parameters' do
       it 'renders the new template' do
         sign_in user
-        post shares_path, params: { share: { invalid_param: 'invalid_value' } }
+        post '/shares', params: { share: { invalid_param: 'invalid_value' } }
 
         expect(response).to render_template(:new)
       end

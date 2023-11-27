@@ -60,7 +60,7 @@ RSpec.describe RepostsController, type: :request do
         repost # create the repost
 
         expect {
-          delete post_repost_path(repost)
+          delete "/posts/#{post.id}/reposts/#{repost.id}"
         }.to change(Repost, :count).by(-1)
 
         expect(response).to redirect_to(root_path)
@@ -71,7 +71,7 @@ RSpec.describe RepostsController, type: :request do
         other_user_repost = create(:repost, user: other_user, post: post)
 
         expect {
-          delete post_repost_path(other_user_repost)
+          delete "/posts/#{post.id}/reposts/#{other_user_repost.id}"
         }.not_to change(Repost, :count)
 
         expect(response).to redirect_to(root_path)
@@ -81,7 +81,7 @@ RSpec.describe RepostsController, type: :request do
 
     context 'when user is not signed in' do
       it 'redirects to sign in page' do
-        delete post_repost_path(repost)
+        delete "/posts/#{post.id}/reposts/#{repost.id}"
         expect(response).to redirect_to(new_user_session_path)
       end
     end

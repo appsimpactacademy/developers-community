@@ -8,9 +8,8 @@ RSpec.describe CommentsController, type: :request do
     context 'with valid parameters' do
       it 'creates a new comment' do
         sign_in user
-        comment_params = attributes_for(:comment) # Assuming you have a Comment factory
         expect {
-          post post_comments_path(post), params: { comment: comment_params }, as: :turbo_stream
+          post post_comments_path(post), params: { comment: {title: 'sadhjashdjkadsh'} }, as: :turbo_stream
         }.to change(Comment, :count).by(1)
         expect(response).to redirect_to(post)
         expect(flash[:notice]).to eq('Comment was successfully created.')

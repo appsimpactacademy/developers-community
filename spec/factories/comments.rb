@@ -1,6 +1,8 @@
 FactoryBot.define do
   factory :comment do
-    commentable { nil }
-    title { "MyString" }
+    commentable_type { 'Post' }
+    association :commentable, factory: :post 
+    title { Faker::Lorem.sentence }
+    association :user
   end
 end

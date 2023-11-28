@@ -1,5 +1,3 @@
-# spec/requests/reposts_controller_spec.rb
-
 require 'rails_helper'
 
 RSpec.describe RepostsController, type: :request do

@@ -1,5 +1,3 @@
-# spec/requests/home_spec.rb
-
 require 'rails_helper'
 
 RSpec.describe 'Home', type: :request do
@@ -8,18 +6,16 @@ RSpec.describe 'Home', type: :request do
   let(:post) { create(:post, user: user) }
   let(:connection) { create(:connection, user: user, status: 'pending', connected_user_id: other_user.id) }
 
-  before do
-    sign_in(user)
-  end
+  before { sign_in(user) }
 
   describe 'GET /home/index' do
+    before { get root_path }
+
     it 'renders the index template' do
-      get root_path
       expect(response).to render_template(:index)
     end
 
     it 'assigns posts, post_likes_count, and post_comment_counts' do
-      get root_path
       expect(assigns(:posts)).to be_an(ActiveRecord::Relation)
       expect(assigns(:post_likes_count)).to be_a(Hash)
       expect(assigns(:post_comment_counts)).to be_a(Hash)
@@ -27,7 +23,7 @@ RSpec.describe 'Home', type: :request do
   end
 
   describe 'GET /home/sort' do
-    it 'renders the index template' do
+    it 'renders the index template with Turbo Stream' do
       get home_sort_path(sort_by: 'alphabetical'), as: :turbo_stream
       expect(response.status).to eq(204)
     end

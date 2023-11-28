@@ -1,5 +1,3 @@
-# spec/requests/messages_controller_spec.rb
-
 require 'rails_helper'
 
 RSpec.describe MessagesController, type: :request do
@@ -7,9 +5,10 @@ RSpec.describe MessagesController, type: :request do
   let(:other_user) { create(:user) }
   let(:chatroom) { create(:chatroom, user1: user, user2: other_user) }
 
+  before { sign_in user }
+
   describe 'GET /messages' do
     it 'returns a successful response with recent messages and chatrooms' do
-      sign_in user
       get messages_path
 
       expect(response).to be_successful
@@ -28,7 +27,6 @@ RSpec.describe MessagesController, type: :request do
 
   describe 'GET /all_messages' do
     it 'returns all messages in JSON format' do
-      sign_in user
       create(:message, user: user, chatroom: chatroom, message: 'Hello, World!')
       get all_messages_path, as: :json
       

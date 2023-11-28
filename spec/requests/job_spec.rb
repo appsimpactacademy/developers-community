@@ -1,5 +1,3 @@
-# spec/requests/jobs_spec.rb
-
 require 'rails_helper'
 
 RSpec.describe 'Jobs', type: :request do
@@ -7,9 +5,7 @@ RSpec.describe 'Jobs', type: :request do
   let(:job_category) { create(:job_category) }
   let(:job) { create(:job, user: user, job_category: job_category) }
 
-  before do
-  	sign_in(user)
-  end
+  before { sign_in(user) }
 
   describe 'GET /jobs' do
     it 'renders the index template' do
@@ -35,7 +31,6 @@ RSpec.describe 'Jobs', type: :request do
 
   describe 'GET /jobs/new' do
     it 'renders the new template' do
-      sign_in user
       get new_job_path, as: :turbo_stream
       expect(response).to render_template(:new)
     end
@@ -43,7 +38,6 @@ RSpec.describe 'Jobs', type: :request do
 
   describe 'POST /jobs' do
     it 'creates a new job' do
-      sign_in user
       expect {
         post jobs_path, params: { job: attributes_for(:job, job_category_id: job_category.id) }
       }.to change(Job, :count).by(1)
@@ -53,7 +47,6 @@ RSpec.describe 'Jobs', type: :request do
 
   describe 'GET /jobs/:id/edit' do
     it 'renders the edit template' do
-      sign_in user
       get edit_job_path(job), as: :turbo_stream
       expect(response).to render_template(:edit)
     end
@@ -68,7 +61,6 @@ RSpec.describe 'Jobs', type: :request do
 
   describe 'PATCH /jobs/:id' do
     it 'updates the job' do
-      sign_in user
       patch job_path(job), params: { job: { title: 'Updated Title' } }
       expect(job.reload.title).to eq('Updated Title')
       expect(response).to redirect_to(jobs_path)
@@ -77,7 +69,6 @@ RSpec.describe 'Jobs', type: :request do
 
   describe 'DELETE /jobs/:id' do
     it 'destroys the job' do
-      sign_in user
       job # Ensure the job is created before attempting to destroy it
       expect {
         delete job_path(job)

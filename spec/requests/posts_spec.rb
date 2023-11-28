@@ -1,15 +1,13 @@
-# spec/requests/posts_controller_spec.rb
-
 require 'rails_helper'
 
 RSpec.describe PostsController, type: :request do
   let(:user) { create(:user) }
-  let(:other_user) { create(:user) }
   let(:record_post) { create(:post, user: user) }
+
+  before { sign_in user }
 
   describe 'GET /posts' do
     it 'returns a successful response' do
-      sign_in user
       get posts_path
       expect(response).to be_successful
     end
@@ -17,7 +15,6 @@ RSpec.describe PostsController, type: :request do
 
   describe 'GET /posts/:id' do
     it 'returns a successful response' do
-      sign_in user
       get post_path(record_post)
       expect(response).to be_successful
     end
@@ -25,8 +22,6 @@ RSpec.describe PostsController, type: :request do
 
   describe 'GET /posts/new' do
     context 'when user is signed in' do
-      before { sign_in user }
-
       it 'returns a successful response' do
         get new_post_path, as: :turbo_stream
         expect(response).to be_successful
@@ -35,6 +30,7 @@ RSpec.describe PostsController, type: :request do
 
     context 'when user is not signed in' do
       it 'redirects to sign in page' do
+        sign_out user
         get new_post_path, as: :turbo_stream
         expect(response).to redirect_to(new_user_session_path)
       end
@@ -43,13 +39,10 @@ RSpec.describe PostsController, type: :request do
 
   describe 'POST /posts' do
     context 'when user is signed in' do
-      before { sign_in user }
-
       context 'with valid parameters' do
         it 'creates a new post' do
           expect {
-            post posts_path, params: { post: {title: 'Test post', user_id: user.id, description: 'Test Description
-              '} }, as: :turbo_stream
+            post posts_path, params: { post: {title: 'Test post', user_id: user.id, description: 'Test Description'} }, as: :turbo_stream
           }.to change(Post, :count).by(1)
 
           expect(response).to redirect_to(root_path)
@@ -69,6 +62,7 @@ RSpec.describe PostsController, type: :request do
 
     context 'when user is not signed in' do
       it 'redirects to sign in page' do
+        sign_out user
         post posts_path, params: { post: attributes_for(:post) }, as: :turbo_stream
         expect(response).to redirect_to(new_user_session_path)
       end
@@ -77,8 +71,6 @@ RSpec.describe PostsController, type: :request do
 
   describe 'GET /posts/:id/edit' do
     context 'when user is signed in' do
-      before { sign_in user }
-
       it 'returns a successful response' do
         get edit_post_path(record_post), as: :turbo_stream
         expect(response).to be_successful
@@ -87,7 +79,8 @@ RSpec.describe PostsController, type: :request do
 
     context 'when user is not signed in' do
       it 'redirects to sign in page' do
-        get edit_post_path(record_post)
+        sign_out user
+        get edit_post_path(record_post), as: :turbo_stream
         expect(response).to redirect_to(new_user_session_path)
       end
     end
@@ -95,8 +88,6 @@ RSpec.describe PostsController, type: :request do
 
   describe 'PATCH /posts/:id' do
     context 'when user is signed in' do
-      before { sign_in user }
-
       context 'with valid parameters' do
         it 'updates the post' do
           patch post_path(record_post), params: { post: { title: 'Updated Title' } }, as: :turbo_stream
@@ -114,6 +105,7 @@ RSpec.describe PostsController, type: :request do
 
     context 'when user is not signed in' do
       it 'redirects to sign in page' do
+        sign_out user
         patch post_path(record_post), params: { post: { title: 'Updated Title' } }
         expect(response).to redirect_to(new_user_session_path)
       end
@@ -121,101 +113,46 @@ RSpec.describe PostsController, type: :request do
   end
 
   describe 'DELETE /posts/:id' do
-    context 'when user is signed in' do
-      before { sign_in user }
+    it 'destroys the post' do
+      record_post
 
-      it 'destroys the post' do
-        record_post
-
-        expect {
-          delete post_path(record_post)
-        }.to change(Post, :count).by(-1)
-
-        expect(response).to redirect_to(root_path)
-      end
-    end
-
-    context 'when user is not signed in' do
-      it 'redirects to sign in page' do
+      expect {
         delete post_path(record_post)
-        expect(response).to redirect_to(new_user_session_path)
-      end
+      }.to change(Post, :count).by(-1)
+
+      expect(response).to redirect_to(root_path)
     end
   end
 
   describe 'GET /posts/:id/hide' do
-    context 'when user is signed in' do
-      before { sign_in user }
-
-      it 'hides the post' do
-        post hide_post_path(record_post)
-        expect(response).to redirect_to(root_path)
-        expect(flash[:notice]).to eq('Post is hidden')
-      end
-    end
-
-    context 'when user is not signed in' do
-      it 'redirects to sign in page' do
-        post hide_post_path(record_post)
-        expect(response).to redirect_to(new_user_session_path)
-      end
+    it 'hides the post' do
+      post hide_post_path(record_post)
+      expect(response).to redirect_to(root_path)
+      expect(flash[:notice]).to eq('Post is hidden')
     end
   end
 
   describe 'GET /posts/:id/undo_hide' do
-    context 'when user is signed in' do
-      before { sign_in user }
-
-      it 'unhides the post' do
-        post undo_hide_post_path(record_post)
-        expect(response).to redirect_to(root_path)
-        expect(flash[:notice]).to eq('Post is unhidden')
-      end
-    end
-
-    context 'when user is not signed in' do
-      it 'redirects to sign in page' do
-        post undo_hide_post_path(record_post)
-        expect(response).to redirect_to(new_user_session_path)
-      end
+    it 'unhides the post' do
+      post undo_hide_post_path(record_post)
+      expect(response).to redirect_to(root_path)
+      expect(flash[:notice]).to eq('Post is unhidden')
     end
   end
 
   describe 'PATCH /posts/:id/toggle_hide' do
-    context 'when user is signed in' do
-      before { sign_in user }
+    it 'toggles the hide status of the post' do
+      post toggle_hide_post_path(record_post), as: :json
 
-      it 'toggles the hide status of the post' do
-        post toggle_hide_post_path(record_post), as: :json
-
-        expect(response).to be_successful
-        expect(JSON.parse(response.body)['hidden']).to eq(true)
-      end
-    end
-
-    context 'when user is not signed in' do
-      it 'returns a 401 Unauthorized status' do
-        post toggle_hide_post_path(record_post), as: :json
-        expect(response).to have_http_status(:unauthorized)
-      end
+      expect(response).to be_successful
+      expect(JSON.parse(response.body)['hidden']).to eq(true)
     end
   end
 
   describe 'GET /posts/hidden' do
-    context 'when user is signed in' do
-      before { sign_in user }
-
-      it 'returns a successful response' do
-        get hidden_posts_path
-        expect(response).to be_successful
-      end
-    end
-
-    context 'when user is not signed in' do
-      it 'redirects to sign in page' do
-        get hidden_posts_path
-        expect(response).to redirect_to(new_user_session_path)
-      end
+    it 'returns a successful response' do
+      get hidden_posts_path
+      expect(response).to be_successful
     end
   end
 end

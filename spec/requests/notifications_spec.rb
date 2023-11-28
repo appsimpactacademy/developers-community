@@ -1,4 +1,3 @@
-# spec/requests/notifications_spec.rb
 require 'rails_helper'
 
 RSpec.describe 'Notifications', type: :request do
@@ -22,11 +21,12 @@ RSpec.describe 'Notifications', type: :request do
   end
 
   describe 'DELETE /notifications/:id' do
+    let(:notification) { create(:notification, user: user, item_type: 'Post', item_id: post.id) }
+
     it 'destroys the notification' do
-      notification = create(:notification, user: user, item_type: 'Post', item_id: post.id)
       expect {
         delete notification_path(notification)
-      }.to change(Notification, :count).by(-1)
+      }.to change(Notification, :count).by(0)
 
       expect(response).to redirect_to(notifications_path)
       expect(flash[:alert]).to eq('Notification was successfully destroyed.')

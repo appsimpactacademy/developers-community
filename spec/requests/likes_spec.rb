@@ -4,12 +4,13 @@ require 'rails_helper'
 
 RSpec.describe LikesController, type: :request do
   let(:user) { create(:user) }
-  let(:post) { create(:post, user: user) }
-  let(:valid_params) { { post_id: post.id } }
+  let(:post_record) { create(:post, user: user) }
+  let(:valid_params) { { like: {post_id: post_record.id} } }
 
 
   describe 'POST /likes' do
     it 'creates a new like' do
+      sign_in user
       expect {
         post likes_path, params: valid_params, as: :turbo_stream
       }.to change(Like, :count).by(1)
@@ -19,7 +20,7 @@ RSpec.describe LikesController, type: :request do
   end
 
   describe 'DELETE /likes/:id' do
-    let(:like) { create(:like, user: user, post: post) }
+    let(:like) { create(:like, user: user, post: post_record) }
 
     it 'destroys the like' do
       sign_in user

@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe PostsController, type: :request do
   let(:user) { create(:user) }
   let(:other_user) { create(:user) }
-  let(:post) { create(:post, user: user) }
+  let(:record_post) { create(:post, user: user) }
 
   describe 'GET /posts' do
     it 'returns a successful response' do
@@ -18,7 +18,7 @@ RSpec.describe PostsController, type: :request do
   describe 'GET /posts/:id' do
     it 'returns a successful response' do
       sign_in user
-      get post_path(post)
+      get post_path(record_post)
       expect(response).to be_successful
     end
   end
@@ -48,7 +48,8 @@ RSpec.describe PostsController, type: :request do
       context 'with valid parameters' do
         it 'creates a new post' do
           expect {
-            post posts_path, params: { post: attributes_for(:post) }, as: :turbo_stream
+            post posts_path, params: { post: {title: 'Test post', user_id: user.id, description: 'Test Description
+              '} }, as: :turbo_stream
           }.to change(Post, :count).by(1)
 
           expect(response).to redirect_to(root_path)
@@ -79,14 +80,14 @@ RSpec.describe PostsController, type: :request do
       before { sign_in user }
 
       it 'returns a successful response' do
-        get edit_post_path(post), as: :turbo_stream
+        get edit_post_path(record_post), as: :turbo_stream
         expect(response).to be_successful
       end
     end
 
     context 'when user is not signed in' do
       it 'redirects to sign in page' do
-        get edit_post_path(post)
+        get edit_post_path(record_post)
         expect(response).to redirect_to(new_user_session_path)
       end
     end
@@ -98,14 +99,14 @@ RSpec.describe PostsController, type: :request do
 
       context 'with valid parameters' do
         it 'updates the post' do
-          patch post_path(post), params: { post: { title: 'Updated Title' } }, as: :turbo_stream
+          patch post_path(record_post), params: { post: { title: 'Updated Title' } }, as: :turbo_stream
           expect(response).to redirect_to(root_path)
         end
       end
 
       context 'with invalid parameters' do
         it 'does not update the post' do
-          patch post_path(post), params: { post: { title: '' } }, as: :turbo_stream
+          patch post_path(record_post), params: { post: { title: '' } }, as: :turbo_stream
           expect(response).to render_template(:edit)
         end
       end
@@ -113,7 +114,7 @@ RSpec.describe PostsController, type: :request do
 
     context 'when user is not signed in' do
       it 'redirects to sign in page' do
-        patch post_path(post), params: { post: { title: 'Updated Title' } }
+        patch post_path(record_post), params: { post: { title: 'Updated Title' } }
         expect(response).to redirect_to(new_user_session_path)
       end
     end
@@ -124,10 +125,10 @@ RSpec.describe PostsController, type: :request do
       before { sign_in user }
 
       it 'destroys the post' do
-        post # create the post
+        record_post
 
         expect {
-          delete post_path(post)
+          delete post_path(record_post)
         }.to change(Post, :count).by(-1)
 
         expect(response).to redirect_to(root_path)
@@ -136,7 +137,7 @@ RSpec.describe PostsController, type: :request do
 
     context 'when user is not signed in' do
       it 'redirects to sign in page' do
-        delete post_path(post)
+        delete post_path(record_post)
         expect(response).to redirect_to(new_user_session_path)
       end
     end
@@ -147,7 +148,7 @@ RSpec.describe PostsController, type: :request do
       before { sign_in user }
 
       it 'hides the post' do
-        get hide_post_path(post)
+        post hide_post_path(record_post)
         expect(response).to redirect_to(root_path)
         expect(flash[:notice]).to eq('Post is hidden')
       end
@@ -155,7 +156,7 @@ RSpec.describe PostsController, type: :request do
 
     context 'when user is not signed in' do
       it 'redirects to sign in page' do
-        get hide_post_path(post)
+        post hide_post_path(record_post)
         expect(response).to redirect_to(new_user_session_path)
       end
     end
@@ -166,7 +167,7 @@ RSpec.describe PostsController, type: :request do
       before { sign_in user }
 
       it 'unhides the post' do
-        get undo_hide_post_path(post)
+        post undo_hide_post_path(record_post)
         expect(response).to redirect_to(root_path)
         expect(flash[:notice]).to eq('Post is unhidden')
       end
@@ -174,7 +175,7 @@ RSpec.describe PostsController, type: :request do
 
     context 'when user is not signed in' do
       it 'redirects to sign in page' do
-        get undo_hide_post_path(post)
+        post undo_hide_post_path(record_post)
         expect(response).to redirect_to(new_user_session_path)
       end
     end
@@ -184,8 +185,8 @@ RSpec.describe PostsController, type: :request do
     context 'when user is signed in' do
       before { sign_in user }
 
-      it 'toggles the hide status of the post', :json do
-        post toggle_hide_post_path(post)
+      it 'toggles the hide status of the post' do
+        post toggle_hide_post_path(record_post), as: :json
 
         expect(response).to be_successful
         expect(JSON.parse(response.body)['hidden']).to eq(true)
@@ -193,8 +194,8 @@ RSpec.describe PostsController, type: :request do
     end
 
     context 'when user is not signed in' do
-      it 'returns a 401 Unauthorized status', :json do
-        post toggle_hide_post_path(post)
+      it 'returns a 401 Unauthorized status' do
+        post toggle_hide_post_path(record_post), as: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe SharesController, type: :request do
   let(:user) { create(:user) }
-  let(:post) { create(:post, user: user) }
+  let(:record_post) { create(:post, user: user) }
   let(:recipient) { create(:user) }
 
   describe 'GET /shares' do
@@ -32,7 +32,7 @@ RSpec.describe SharesController, type: :request do
     context 'with valid parameters' do
       it 'creates a new share' do
         sign_in user
-        share_params = { recipient_id: recipient.id, post_id: post.id }
+        share_params = { recipient_id: recipient.id, post_id: record_post.id }
         expect {
           post shares_path, params: { share: share_params }
         }.to change(Share, :count).by(1)
@@ -40,7 +40,7 @@ RSpec.describe SharesController, type: :request do
 
       it 'sends a notification email and redirects to the root path' do
         sign_in user
-        share_params = { recipient_id: recipient.id, post_id: post.id }
+        share_params = { recipient_id: recipient.id, post_id: record_post.id }
         expect {
           post shares_path, params: { share: share_params }
         }.to change(ActionMailer::Base.deliveries, :count).by(1)
@@ -52,7 +52,7 @@ RSpec.describe SharesController, type: :request do
     context 'with invalid parameters' do
       it 'renders the new template' do
         sign_in user
-        post '/shares', params: { share: { invalid_param: 'invalid_value' } }
+        post '/shares', params: { share: { invalid_param: 'invalid_value' } }, as: :turbo_stream
 
         expect(response).to render_template(:new)
       end

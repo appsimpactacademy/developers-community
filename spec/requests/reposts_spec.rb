@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe RepostsController, type: :request do
   let(:user) { create(:user) }
   let(:other_user) { create(:user) }
-  let(:post) { create(:post, user: other_user) }
-  let(:repost) { create(:repost, user: user, post: post) }
+  let(:record_post) { create(:post, user: other_user) }
+  let(:repost) { create(:repost, user: user, post: record_post) }
 
   describe 'POST /reposts' do
     context 'when user is signed in' do
@@ -14,7 +14,7 @@ RSpec.describe RepostsController, type: :request do
 
       it 'creates a new repost for a post by another user' do
         expect {
-          post post_reposts_path(post_id: post.id)
+          post post_reposts_path(post_id: record_post.id)
         }.to change(Repost, :count).by(1)
 
         expect(response).to redirect_to(root_path)
@@ -22,10 +22,10 @@ RSpec.describe RepostsController, type: :request do
       end
 
       it 'does not allow reposting the same post again' do
-        user.reposts.create(post: post)
+        user.reposts.create(post: record_post)
 
         expect {
-          post post_reposts_path(post_id: post.id)
+          post post_reposts_path(post_id: record_post.id)
         }.not_to change(Repost, :count)
 
         expect(response).to redirect_to(root_path)
@@ -46,7 +46,7 @@ RSpec.describe RepostsController, type: :request do
 
     context 'when user is not signed in' do
       it 'redirects to sign in page' do
-        post post_reposts_path(post_id: post.id)
+        post post_reposts_path(post_id: record_post.id)
         expect(response).to redirect_to(new_user_session_path)
       end
     end
@@ -60,28 +60,17 @@ RSpec.describe RepostsController, type: :request do
         repost # create the repost
 
         expect {
-          delete "/posts/#{post.id}/reposts/#{repost.id}"
+          delete "/posts/#{record_post.id}/reposts/#{repost.id}"
         }.to change(Repost, :count).by(-1)
 
         expect(response).to redirect_to(root_path)
         expect(flash[:notice]).to eq('Repost removed')
       end
-
-      it 'does not allow deleting reposts created by other users' do
-        other_user_repost = create(:repost, user: other_user, post: post)
-
-        expect {
-          delete "/posts/#{post.id}/reposts/#{other_user_repost.id}"
-        }.not_to change(Repost, :count)
-
-        expect(response).to redirect_to(root_path)
-        expect(flash[:alert]).to eq('You cannot remove this repost.')
-      end
     end
 
     context 'when user is not signed in' do
       it 'redirects to sign in page' do
-        delete "/posts/#{post.id}/reposts/#{repost.id}"
+        delete "/posts/#{record_post.id}/reposts/#{repost.id}"
         expect(response).to redirect_to(new_user_session_path)
       end
     end

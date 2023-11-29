@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-    @posts = Post.includes(:likes, :comments, :reposts, :user_reactions, user: [:reposts, :groups, :articles, :user_reactions, :follows, :notifications, :articles, image_attachment: :blob], images_attachments: :blob).order(created_at: :desc)
+    @posts = Post.includes(:likes, :comments, :reposts, :user_reactions, user: [:reposts, :groups, :user_reactions, :follows, :notifications, :articles, image_attachment: :blob], images_attachments: :blob).order(created_at: :desc)
     @post_likes_count = Post.joins(:likes).group('posts.id').count
     comment_counts = Comment.where(commentable_id: @posts.map(&:id), 
                      commentable_type: 'Post')

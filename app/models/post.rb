@@ -1,15 +1,16 @@
-class Post < ApplicationRecord
+# frozen_string_literal: true
 
+class Post < ApplicationRecord
   validates :title, presence: true
   validates :description, presence: true
-  #validates :images, presence: true
+  # validates :images, presence: true
 
   scope :hidden_posts, -> { where(hidden: true) }
   scope :with_details, -> { includes(:user, :likes, :reposts, images_attachments: :blob) }
 
   # for user reactions
   has_many :user_reactions, as: :reactable
-  
+
   has_many_attached :images
   has_many :hidden_posts
   # for repost the post
@@ -29,7 +30,7 @@ class Post < ApplicationRecord
   # for notification
   def user_ids
     User.where(id: user.connected_user_ids).ids
-    #User.all.ids
+    # User.all.ids
   end
 
   # for hide & unhide the post
@@ -42,15 +43,14 @@ class Post < ApplicationRecord
   end
 
   def user_reactions_count(reaction_type)
-    user_reactions.where(reaction_type: reaction_type).count
+    user_reactions.where(reaction_type:).count
   end
 
-  def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "description", "id", "title", "updated_at", "user_id"]
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[created_at description id title updated_at user_id]
   end
 
-  def self.ransackable_associations(auth_object = nil)
-    ["comments", "images_attachment", "image_blob", "user"]
+  def self.ransackable_associations(_auth_object = nil)
+    %w[comments images_attachment image_blob user]
   end
-  
 end

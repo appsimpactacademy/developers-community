@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 # spec/requests/pages_controller_spec.rb
 
 require 'rails_helper'
 
 RSpec.describe PagesController, type: :request do
   let(:user) { create(:user) }
-  let(:page) { create(:page, user: user) }
+  let(:page) { create(:page, user:) }
 
   describe 'GET /pages' do
     it 'returns a successful response' do
@@ -37,9 +39,9 @@ RSpec.describe PagesController, type: :request do
 
       context 'with valid parameters' do
         it 'creates a new page' do
-          expect {
-            post pages_path, params: { page: {title: 'Sample page', content: 'Test content', user_id: user.id} }
-          }.to change(Page, :count).by(1)
+          expect do
+            post pages_path, params: { page: { title: 'Sample page', content: 'Test content', user_id: user.id } }
+          end.to change(Page, :count).by(1)
 
           expect(response).to redirect_to(pages_path)
         end
@@ -47,9 +49,9 @@ RSpec.describe PagesController, type: :request do
 
       context 'with invalid parameters' do
         it 'does not create a new page' do
-          expect {
+          expect do
             post pages_path, params: { page: { title: '' } }
-          }.not_to change(Page, :count)
+          end.not_to change(Page, :count)
 
           expect(response).to render_template(:new)
         end
@@ -124,9 +126,9 @@ RSpec.describe PagesController, type: :request do
       it 'destroys the page' do
         page # create the page
 
-        expect {
+        expect do
           delete page_path(page)
-        }.to change(Page, :count).by(-1)
+        end.to change(Page, :count).by(-1)
 
         expect(response).to redirect_to(pages_path)
       end

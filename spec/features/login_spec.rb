@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.feature "Logins", type: :feature do
+RSpec.feature 'Logins', type: :feature do
   shared_examples 'a successful login' do |login_field|
     let(:user) { create(:user) }
-    it "should login user with #{login_field}" do 
+    it "should login user with #{login_field}" do
       visit root_path
       fill_in 'user_email', with: user.email
       fill_in 'user_password', with: user.password
@@ -17,7 +19,7 @@ RSpec.feature "Logins", type: :feature do
     end
   end
 
-  describe 'login' do 
+  describe 'login' do
     include_examples 'a successful login', :username
     include_examples 'a successful login', :email
   end

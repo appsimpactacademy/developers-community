@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserReactionsController < ApplicationController
   before_action :find_post, only: [:create]
 
@@ -32,8 +34,7 @@ class UserReactionsController < ApplicationController
   end
 
   def destroy_previous_reactions
-    previous_reactions = UserReaction.where(user_id: current_user.id, reactable_id: @post.id, reactable_type: "Post")
+    previous_reactions = UserReaction.where(user_id: current_user.id, reactable_id: @post.id, reactable_type: 'Post')
     previous_reactions.destroy_all
   end
-
 end

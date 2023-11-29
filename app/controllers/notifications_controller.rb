@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NotificationsController < ApplicationController
   before_action :authenticate_user!
 
@@ -8,9 +10,8 @@ class NotificationsController < ApplicationController
 
   def destroy
     @notification = current_user.notifications.find(params[:id])
-    if @notification && @notification.destroy
-      redirect_to notifications_path, alert: 'Notification was successfully destroyed.'
-    end
-  end
+    return unless @notification&.destroy
 
+    redirect_to notifications_path, alert: 'Notification was successfully destroyed.'
+  end
 end

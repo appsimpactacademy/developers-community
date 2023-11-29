@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.feature 'Chat feature', js: true do
@@ -6,7 +8,6 @@ RSpec.feature 'Chat feature', js: true do
   let!(:user3) { create(:user) }
   let!(:connection1) { create(:connection, user: user1, connected_user_id: user2.id, status: 'accepted') }
   let!(:connection2) { create(:connection, user: user1, connected_user_id: user3.id, status: 'accepted') }
-
 
   describe 'Accepting a Connection Request' do
     it 'creates a chatroom when a connection request is accepted' do
@@ -45,23 +46,22 @@ RSpec.feature 'Chat feature', js: true do
   end
 
   describe 'Message Index Page' do
-    let!(:chatroom) { create(:chatroom, user1: user1, user2: user2) }
-    let!(:chatroom2) { create(:chatroom, user1: user1, user2: user3) }
-    let!(:message) {create(:message, user: user1, chatroom: chatroom, message: 'Hi here is my code 2367')}
-    let!(:message2) {create(:message, user: user1, chatroom: chatroom, message: 'my code 4567')}
+    let!(:chatroom) { create(:chatroom, user1:, user2:) }
+    let!(:chatroom2) { create(:chatroom, user1:, user2: user3) }
+    let!(:message) { create(:message, user: user1, chatroom:, message: 'Hi here is my code 2367') }
+    let!(:message2) { create(:message, user: user1, chatroom:, message: 'my code 4567') }
     it 'displays a list of connected users and by default first user chatroom is open' do
-
       connected_user = user2
       visit messages_path
 
       expect(page).to have_content(connected_user.name)
-      element = find('#chat-window-user')
+      find('#chat-window-user')
       # expect(element).to have_content(user2.name)
       # expect(page).to have_selector('#chat-window-container')
     end
 
     it 'Opening a Chat allows the user to open a chat with another user' do
-      chatroom = create(:chatroom, user1: user1, user2: user3)
+      create(:chatroom, user1:, user2: user3)
 
       visit messages_path
       find("h3[data-user-id='#{user3.id}']").click
@@ -77,15 +77,15 @@ RSpec.feature 'Chat feature', js: true do
 
       find("h3[data-user-id='#{user3.id}']").click
 
-      fill_in 'message_message', with: "Hello !!!"
+      fill_in 'message_message', with: 'Hello !!!'
 
       click_button 'Send', class: 'btn btn-primary'
 
       sleep 5
-      
+
       element = find('#user-message', wait: 20)
 
-      expect(element).to have_content("Hello !!!")
+      expect(element).to have_content('Hello !!!')
 
       sign_in(user3)
 
@@ -98,15 +98,15 @@ RSpec.feature 'Chat feature', js: true do
 
       element = find('#user-message', wait: 20)
 
-      expect(element).to have_content("Hello !!!")
+      expect(element).to have_content('Hello !!!')
     end
 
     it 'Search by username' do
       visit messages_path
 
       sleep 2
-    
-      fill_in 'search-input', with: "#{user2.name}"
+
+      fill_in 'search-input', with: user2.name.to_s
 
       sleep 5
 
@@ -124,7 +124,7 @@ RSpec.feature 'Chat feature', js: true do
 
       sleep 3
 
-      fill_in 'message_message', with: "2356 !!"
+      fill_in 'message_message', with: '2356 !!'
 
       click_button 'Send', class: 'btn btn-primary'
 
@@ -132,11 +132,11 @@ RSpec.feature 'Chat feature', js: true do
 
       element = find('#user-message', wait: 10)
 
-      expect(element).to have_content("2356 !!")
+      expect(element).to have_content('2356 !!')
 
       sleep 2
-    
-      fill_in 'search-input', with: "2356 !!"
+
+      fill_in 'search-input', with: '2356 !!'
 
       sleep 5
 
@@ -148,19 +148,19 @@ RSpec.feature 'Chat feature', js: true do
 
       element = find('.user-name', wait: 20)
 
-      expect(element).to have_content("#{user3.name}")
+      expect(element).to have_content(user3.name.to_s)
     end
 
     it 'Search by chatroom message' do
       visit messages_path
-      
-      fill_in 'search-input', with: "my code 2367"
+
+      fill_in 'search-input', with: 'my code 2367'
 
       sleep 5
 
       element = find('.user-name', wait: 20)
 
-      expect(element).to have_content("#{user2.name}")
+      expect(element).to have_content(user2.name.to_s)
     end
   end
 end

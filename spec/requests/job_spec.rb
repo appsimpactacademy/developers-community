@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'Jobs', type: :request do
   let(:user) { create(:user) }
   let(:job_category) { create(:job_category) }
-  let(:job) { create(:job, user: user, job_category: job_category) }
+  let(:job) { create(:job, user:, job_category:) }
 
   before { sign_in(user) }
 
@@ -38,9 +40,9 @@ RSpec.describe 'Jobs', type: :request do
 
   describe 'POST /jobs' do
     it 'creates a new job' do
-      expect {
+      expect do
         post jobs_path, params: { job: attributes_for(:job, job_category_id: job_category.id) }
-      }.to change(Job, :count).by(1)
+      end.to change(Job, :count).by(1)
       expect(response).to redirect_to(jobs_path)
     end
   end
@@ -70,9 +72,9 @@ RSpec.describe 'Jobs', type: :request do
   describe 'DELETE /jobs/:id' do
     it 'destroys the job' do
       job # Ensure the job is created before attempting to destroy it
-      expect {
+      expect do
         delete job_path(job)
-      }.to change(Job, :count).by(-1)
+      end.to change(Job, :count).by(-1)
       expect(response).to redirect_to(jobs_path)
     end
   end

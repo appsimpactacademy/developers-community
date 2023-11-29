@@ -1,14 +1,14 @@
 require 'rails_helper'
 
-RSpec.feature "UserSettings", type: :feature do
-  describe 'User Settings' do 
-    before :each do 
+RSpec.feature 'UserSettings', type: :feature do
+  describe 'User Settings' do
+    before :each do
       @user = create(:user)
       sign_in(@user)
       sleep 1
     end
 
-    it 'should allow users to edit their personal information' do 
+    it 'should allow users to edit their personal information' do
       visit "/member/#{@user.id}"
       sleep 2
       expect(page).to have_text(@user.name)
@@ -23,7 +23,7 @@ RSpec.feature "UserSettings", type: :feature do
       fill_in 'user_last_name', with: 'Anderson'
       fill_in 'user_city', with: 'Indore'
       fill_in 'user_state', with: 'Madhya Pradesh'
-      fill_in 'user_country', with: 'India'
+      select 'India', from: 'user_country'
       fill_in 'user_pincode', with: '1234567890'
       fill_in 'user_profile_title', with: 'Advanced Ruby on Rails Developer'
       sleep 2
@@ -31,11 +31,11 @@ RSpec.feature "UserSettings", type: :feature do
       expect(page).to have_current_path("/member/#{@user.id}")
       expect(page).to have_text('Marks Anderson')
       expect(page).to have_text('Advanced Ruby on Rails Developer')
-      expect(page).to have_text('Indore, Madhya Pradesh, India, 1234567890')
+      expect(page).to have_text('Indore, Madhya Pradesh, IN, 1234567890')
       sleep 5
     end
 
-    it 'should allow users to edit their about/description' do 
+    it 'should allow users to edit their about/description' do
       visit "/member/#{@user.id}"
       sleep 2
       expect(page).to have_text(@user.name)

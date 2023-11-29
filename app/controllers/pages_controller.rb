@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class PagesController < ApplicationController
   before_action :set_page, only: %i[edit update destroy]
 
   def index
-    @pages = Page.includes(:user, :follows, :followers, image_attachment: :blob ).order(created_at: :desc)
+    @pages = Page.includes(:user, :follows, :followers, image_attachment: :blob).order(created_at: :desc)
   end
 
   def new
@@ -18,8 +20,7 @@ class PagesController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def show
     @page = Page.includes(posts: [:user, { likes: :user }, { comments: :user }]).find(params[:id])
@@ -30,10 +31,10 @@ class PagesController < ApplicationController
 
     @posts = @page.posts
     @post_likes_count = Post.joins(:likes).group('posts.id').count
-    comment_counts = Comment.where(commentable_id: @posts.map(&:id), 
-                     commentable_type: 'Post')
-                     .group(:commentable_id)
-                     .count
+    comment_counts = Comment.where(commentable_id: @posts.map(&:id),
+                                   commentable_type: 'Post')
+                            .group(:commentable_id)
+                            .count
     @post_comment_counts = comment_counts.transform_keys(&:to_i)
     @jobs = @page.jobs
   end
@@ -47,25 +48,21 @@ class PagesController < ApplicationController
   end
 
   def destroy
-    if @page.destroy
-      redirect_to pages_path
-    end
+    return unless @page.destroy
+
+    redirect_to pages_path
   end
 
   def follow
     @page = Page.find(params[:id])
     current_user.pages << @page
-    respond_to do |format|
-      format.js
-    end
+    respond_to(&:js)
   end
 
   def unfollow
     @page = Page.find(params[:id])
     current_user.pages.delete(@page)
-    respond_to do |format|
-      format.js
-    end
+    respond_to(&:js)
   end
 
   private
@@ -75,7 +72,7 @@ class PagesController < ApplicationController
   end
 
   def pages_params
-    params.require(:page).permit(:title, :about, :industry, :website, :organization_size, :organization_type, :user_id, :content, :image)
+    params.require(:page).permit(:title, :about, :industry, :website, :organization_size, :organization_type, :user_id,
+                                 :content, :image)
   end
-
 end

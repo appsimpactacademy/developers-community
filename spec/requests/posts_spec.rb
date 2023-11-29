@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe PostsController, type: :request do
   let(:user) { create(:user) }
-  let(:record_post) { create(:post, user: user) }
+  let(:record_post) { create(:post, user:) }
 
   before { sign_in user }
 
@@ -41,9 +43,10 @@ RSpec.describe PostsController, type: :request do
     context 'when user is signed in' do
       context 'with valid parameters' do
         it 'creates a new post' do
-          expect {
-            post posts_path, params: { post: {title: 'Test post', user_id: user.id, description: 'Test Description'} }, as: :turbo_stream
-          }.to change(Post, :count).by(1)
+          expect do
+            post posts_path, params: { post: { title: 'Test post', user_id: user.id, description: 'Test Description' } },
+                             as: :turbo_stream
+          end.to change(Post, :count).by(1)
 
           expect(response).to redirect_to(root_path)
         end
@@ -51,9 +54,9 @@ RSpec.describe PostsController, type: :request do
 
       context 'with invalid parameters' do
         it 'does not create a new post' do
-          expect {
+          expect do
             post posts_path, params: { post: { title: '' } }, as: :turbo_stream
-          }.not_to change(Post, :count)
+          end.not_to change(Post, :count)
 
           expect(response).to render_template(:new)
         end
@@ -116,9 +119,9 @@ RSpec.describe PostsController, type: :request do
     it 'destroys the post' do
       record_post
 
-      expect {
+      expect do
         delete post_path(record_post)
-      }.to change(Post, :count).by(-1)
+      end.to change(Post, :count).by(-1)
 
       expect(response).to redirect_to(root_path)
     end

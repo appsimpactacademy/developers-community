@@ -24,12 +24,12 @@ export default class extends Controller {
   }
 
   showLess() {
-    this.descriptionTarget.style.maxHeight = "4em"; 
+    this.descriptionTarget.style.maxHeight = "5em"; 
     this.toggleButtonTarget.textContent = "Show More";
   }
 
   isDescriptionVisible() {
-      return this.descriptionTarget.style.maxHeight !== "4em";
+      return this.descriptionTarget.style.maxHeight !== "5em";
   }
 
   toggleButtonVisibility() {

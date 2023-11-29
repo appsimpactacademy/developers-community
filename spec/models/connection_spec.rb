@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/models/connection_spec.rb
 
 require 'rails_helper'
@@ -7,39 +9,39 @@ RSpec.describe Connection, type: :model do
   let(:connected_user) { create(:user) }
 
   it 'is valid with valid attributes' do
-    connection = Connection.new(user: user, connected_user_id: connected_user.id, status: 'pending')
+    connection = Connection.new(user:, connected_user_id: connected_user.id, status: 'pending')
     expect(connection).to be_valid
   end
 
   it 'is not valid without a connected_user' do
-    connection = Connection.new(user: user, status: 'pending')
+    connection = Connection.new(user:, status: 'pending')
     expect(connection).to_not be_valid
   end
 
   it 'is not valid without a status' do
-    connection = Connection.new(user: user, connected_user_id: connected_user)
+    connection = Connection.new(user:, connected_user_id: connected_user)
     expect(connection).to_not be_valid
   end
 
   it 'is not valid with an invalid status' do
-    connection = Connection.new(user: user, connected_user_id: connected_user, status: 'invalid_status')
+    connection = Connection.new(user:, connected_user_id: connected_user, status: 'invalid_status')
     expect(connection).to_not be_valid
   end
 
   it 'is valid with a valid status' do
-    connection = Connection.new(user: user, requested: connected_user, status: 'accepted')
+    connection = Connection.new(user:, requested: connected_user, status: 'accepted')
     expect(connection).to be_valid
   end
 
   it 'is valid with all possible status values' do
     Connection::CONNECTION_STATUSES.each do |status|
-      connection = Connection.new(user: user, requested: connected_user, status: status)
+      connection = Connection.new(user:, requested: connected_user, status:)
       expect(connection).to be_valid
     end
   end
 
   it 'belongs to a user' do
-    connection = Connection.new(user: user)
+    connection = Connection.new(user:)
     expect(connection.user).to be_a(User)
   end
 

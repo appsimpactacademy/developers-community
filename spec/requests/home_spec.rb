@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'Home', type: :request do
   let(:user) { create(:user) }
   let(:other_user) { create(:user) }
-  let(:post) { create(:post, user: user) }
-  let(:connection) { create(:connection, user: user, status: 'pending', connected_user_id: other_user.id) }
+  let(:post) { create(:post, user:) }
+  let(:connection) { create(:connection, user:, status: 'pending', connected_user_id: other_user.id) }
 
   before { sign_in(user) }
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'Events', type: :request do
@@ -24,9 +26,9 @@ RSpec.describe 'Events', type: :request do
       let(:event_params) { attributes_for(:event) }
 
       it 'creates a new event' do
-        expect {
+        expect do
           post events_path, params: { event: event_params }
-        }.to change(Event, :count).by(1)
+        end.to change(Event, :count).by(1)
       end
 
       it 'redirects to the events path' do
@@ -71,9 +73,9 @@ RSpec.describe 'Events', type: :request do
     let(:event) { create(:event) }
 
     it 'destroys the event' do
-      expect {
+      expect do
         delete event_path(event), as: :turbo_stream
-      }.to change(Event, :count).by(0)
+      end.to change(Event, :count).by(0)
     end
 
     it 'redirects to the events path' do

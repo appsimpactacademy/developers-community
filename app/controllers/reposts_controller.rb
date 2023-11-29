@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RepostsController < ApplicationController
   before_action :authenticate_user!
 
@@ -6,16 +8,15 @@ class RepostsController < ApplicationController
     post = Post.find(params[:post_id])
 
     if post.user != current_user
-      unless current_user.has_reposted?(post)
-        current_user.reposts.create(post: post)
-        redirect_to root_path, notice: 'Post reposted successfully.'
-      else
+      if current_user.has_reposted?(post)
         redirect_to root_path, alert: 'You have already reposted this post.'
+      else
+        current_user.reposts.create(post:)
+        redirect_to root_path, notice: 'Post reposted successfully.'
       end
     else
-      redirect_to root_path, alert: 'You cannot repost your own post.'      
+      redirect_to root_path, alert: 'You cannot repost your own post.'
     end
-    
   end
 
   def show
@@ -28,7 +29,6 @@ class RepostsController < ApplicationController
     @repost.destroy
     redirect_to root_path, notice: 'Repost removed successfully.'
   end
-  
 
   def repost_with_thought
     post = Post.find(params[:id])
@@ -36,7 +36,7 @@ class RepostsController < ApplicationController
     if current_user.has_reposted?(post)
       redirect_to root_path, alert: 'You have already reposted this post.'
     else
-      current_user.reposts.create(post: post, thought: thought)
+      current_user.reposts.create(post:, thought:)
       redirect_to root_path, notice: 'Post reposted successfully with your thought.'
     end
   end
@@ -46,5 +46,4 @@ class RepostsController < ApplicationController
     repost.destroy
     redirect_to root_path, notice: 'Repost removed'
   end
-
 end

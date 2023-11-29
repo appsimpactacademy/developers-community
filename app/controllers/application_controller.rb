@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :set_query
@@ -7,31 +9,31 @@ class ApplicationController < ActionController::Base
     @query = Post.ransack(params[:q])
   end
 
-  def prepare_meta_tags(options={})
-    site_name   = "DeveloperCommunity"
-    title       = [controller_name, action_name].join(" ")
-    description = "Awesome and Incredible learning platform for Ruby on Rails and Other Web Technology"
-    image       = options[:image] || "your-default-image-url"
+  def prepare_meta_tags(options = {})
+    site_name   = 'DeveloperCommunity'
+    title       = [controller_name, action_name].join(' ')
+    description = 'Awesome and Incredible learning platform for Ruby on Rails and Other Web Technology'
+    image       = options[:image] || 'your-default-image-url'
     current_url = request.url
     defaults = {
-      site:        site_name,
-      title:       title,
-      image:       image,
-      description: description,
-      keywords:    %w[posting_job post search_user shared_post ],
+      site: site_name,
+      title:,
+      image:,
+      description:,
+      keywords: %w[posting_job post search_user shared_post],
       twitter: {
-        site_name: site_name,
+        site_name:,
         site: '@thecookieshq',
         card: 'summary',
-        description: description,
-        image: image
+        description:,
+        image:
       },
       og: {
         url: current_url,
-        site_name: site_name,
-        title: title,
-        image: image,
-        description: description,
+        site_name:,
+        title:,
+        image:,
+        description:,
         type: 'website'
       }
     }
@@ -46,9 +48,9 @@ class ApplicationController < ActionController::Base
       format.turbo_stream do
         case action
         when 'replace'
-          render turbo_stream: turbo_stream.replace(target, partial: partial, locals: locals)
+          render turbo_stream: turbo_stream.replace(target, partial:, locals:)
         when 'append'
-          render turbo_stream: turbo_stream.append(target, partial: partial, locals: locals)
+          render turbo_stream: turbo_stream.append(target, partial:, locals:)
         when 'remove'
           render turbo_stream: turbo_stream.remove(target)
         end

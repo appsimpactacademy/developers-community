@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Share < ApplicationRecord
   belongs_to :post
   belongs_to :sender, class_name: 'User'

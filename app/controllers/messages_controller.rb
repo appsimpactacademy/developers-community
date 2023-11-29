@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MessagesController < ApplicationController
   def index
     @received_connections = Connection.includes(:received).where(connected_user_id: current_user.id, status: 'accepted')
@@ -21,7 +23,7 @@ class MessagesController < ApplicationController
     SQL
 
     result = ActiveRecord::Base.connection.execute(
-      ActiveRecord::Base.send(:sanitize_sql_array, [most_recent_chatroom_query, user_id: current_user.id])
+      ActiveRecord::Base.send(:sanitize_sql_array, [most_recent_chatroom_query, { user_id: current_user.id }])
     ).first
 
     if result

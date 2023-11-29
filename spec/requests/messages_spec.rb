@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe MessagesController, type: :request do
@@ -27,9 +29,9 @@ RSpec.describe MessagesController, type: :request do
 
   describe 'GET /all_messages' do
     it 'returns all messages in JSON format' do
-      create(:message, user: user, chatroom: chatroom, message: 'Hello, World!')
+      create(:message, user:, chatroom:, message: 'Hello, World!')
       get all_messages_path, as: :json
-      
+
       expect(response).to be_successful
       parsed_response = JSON.parse(response.body)
       expect(parsed_response.length).to eq(1)

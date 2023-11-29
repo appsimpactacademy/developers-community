@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'Comments', type: :request do
@@ -19,7 +21,7 @@ RSpec.describe 'Comments', type: :request do
   end
 
   describe 'PUT /posts/:post_id/comments/:id' do
-    let(:comment) { create(:comment, user: user, commentable: post_record) }
+    let(:comment) { create(:comment, user:, commentable: post_record) }
     let(:updated_title) { 'Updated Title' }
 
     it 'updates an existing comment' do
@@ -34,12 +36,12 @@ RSpec.describe 'Comments', type: :request do
   end
 
   describe 'DELETE /posts/:post_id/comments/:id' do
-    let!(:comment) { create(:comment, user: user, commentable: post_record) }
+    let!(:comment) { create(:comment, user:, commentable: post_record) }
 
     it 'destroys the specified comment' do
-      expect {
+      expect do
         delete post_comment_path(post_record, comment)
-      }.to change(Comment, :count).by(-1)
+      end.to change(Comment, :count).by(-1)
 
       expect(response).to redirect_to(post_record)
       expect(flash[:notice]).to eq('Comment was successfully deleted.')

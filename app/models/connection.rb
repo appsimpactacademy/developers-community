@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Connection < ApplicationRecord
-  CONNECTION_STATUSES = %w(pending accepted rejected deleted)
+  CONNECTION_STATUSES = %w[pending accepted rejected deleted].freeze
   belongs_to :user
 
   belongs_to :requested, foreign_key: :connected_user_id, class_name: 'User', optional: true
@@ -10,12 +12,12 @@ class Connection < ApplicationRecord
 
   def status_btn
     case status
-    when "accepted"
-      "btn btn-success"
-    when "rejected"
-      "btn btn-danger"
+    when 'accepted'
+      'btn btn-success'
+    when 'rejected'
+      'btn btn-danger'
     else
-      "btn btn-primary"
+      'btn btn-primary'
     end
   end
 end

@@ -1,5 +1,6 @@
-class ShareNotificationMailer < ApplicationMailer
+# frozen_string_literal: true
 
+class ShareNotificationMailer < ApplicationMailer
   def create_notification(object, recipient_email, sender_email)
     @object = object
     @recipient_email = recipient_email

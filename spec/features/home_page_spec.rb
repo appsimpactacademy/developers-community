@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.feature "HomePages", type: :feature do
-  describe 'Landing page' do 
+RSpec.feature 'HomePages', type: :feature do
+  describe 'Landing page' do
     it 'should show the login form on root page' do
       visit root_path
       expect(page).to have_text('Dev Community')

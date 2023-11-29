@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserMailer < ApplicationMailer
   def send_otp_email(user, otp, otp_verification_url)
     @user = user

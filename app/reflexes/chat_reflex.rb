@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChatReflex < StimulusReflex::Reflex
   delegate :current_user, to: :connection
 
@@ -13,27 +15,27 @@ class ChatReflex < StimulusReflex::Reflex
     image_key = data['image_key']
     chatroom = find_chatroom(data['otherUserId'])
 
-    if chatroom
-      message = create_message_in_chatroom(chatroom, image_key)
-      broadcast_message(message, chatroom)
-      open_chat(data['otherUserId'])
-      morph ".last-msg-#{data['otherUserId']}","<small class='text-muted user-last-message'>
+    return unless chatroom
+
+    message = create_message_in_chatroom(chatroom, image_key)
+    broadcast_message(message, chatroom)
+    open_chat(data['otherUserId'])
+    morph ".last-msg-#{data['otherUserId']}", "<small class='text-muted user-last-message'>
         <div class='message-content'>
           <p data-user-id='#{data['otherUserId']}' class='#{message.sent_by?(message.user) ? 'you-message' : 'other-message'} message-text-truncated'>
-            #{message.sent_by?(current_user) ? 'You: ' : "#{current_user.first_name}: " }#{message.message == '' && message.cover_image.attached? ? 'You sent an attachment' : message.message}
+            #{message.sent_by?(current_user) ? 'You: ' : "#{current_user.first_name}: "}#{message.message == '' && message.cover_image.attached? ? 'You sent an attachment' : message.message}
           </p>
         </div>
       </small>
       <p class='timestamp' data-user-id='#{data['otherUserId']}'>
         #{message.created_at.strftime('%I:%M %p')}
       </p>"
-    end
   end
 
   def update_messages(other_user)
     user2 = User.find(other_user)
     chatroom = find_chatroom(user2)
-    messages = chatroom ? chatroom.messages.includes(:user,  cover_image_attachment: :blob).order(created_at: :asc) : []
+    messages = chatroom ? chatroom.messages.includes(:user, cover_image_attachment: :blob).order(created_at: :asc) : []
 
     render_message_update(messages, other_user)
   end
@@ -51,7 +53,7 @@ class ChatReflex < StimulusReflex::Reflex
     message.user = current_user
     message.cover_image.attach(blob)
     message.save(validate: false)
-    return message
+    message
   end
 
   def broadcast_message(message, chatroom)
@@ -59,16 +61,16 @@ class ChatReflex < StimulusReflex::Reflex
   end
 
   def render_chat_window(chatroom, user, messages)
-    morph "#chat-window-container", render(partial: "chat_window", locals: {
-      messages: messages, chatroom: chatroom, other_user: user
-    })
+    morph '#chat-window-container', render(partial: 'chat_window', locals: {
+                                             messages:, chatroom:, other_user: user
+                                           })
   end
 
   def render_message_update(messages, other_user)
     open_chat(other_user)
     cable_ready['chat'].morph(
       selector: '[data-reflex="click->chat#update_messages"]',
-      html: render(partial: 'message', locals: { messages: messages })
+      html: render(partial: 'message', locals: { messages: })
     )
     cable_ready.broadcast
   end

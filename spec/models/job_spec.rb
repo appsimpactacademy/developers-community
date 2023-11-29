@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Job, type: :model do
@@ -6,12 +8,12 @@ RSpec.describe Job, type: :model do
   let(:job_category) { create(:job_category) }
 
   it 'belongs to a job_category' do
-    job = create(:job, job_category: job_category)
+    job = create(:job, job_category:)
     expect(job.job_category).to eq(job_category)
   end
 
   it 'belongs to a user' do
-    job = create(:job, user: user)
+    job = create(:job, user:)
     expect(job.user).to eq(user)
   end
 
@@ -34,12 +36,12 @@ RSpec.describe Job, type: :model do
   it 'defines ransackable attributes' do
     ransackable_attributes = Job.ransackable_attributes
     expect(ransackable_attributes).to include(
-      "created_at", "description", "employee_type", "id", "job_category_id", "location", "qualification", "salary", "status", "title", "updated_at", "user_id"
+      'created_at', 'description', 'employee_type', 'id', 'job_category_id', 'location', 'qualification', 'salary', 'status', 'title', 'updated_at', 'user_id'
     )
   end
 
   it 'defines ransackable associations' do
     ransackable_associations = Job.ransackable_associations
-    expect(ransackable_associations).to include("job_category", "user")
+    expect(ransackable_associations).to include('job_category', 'user')
   end
 end

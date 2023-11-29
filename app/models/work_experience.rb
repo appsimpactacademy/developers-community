@@ -1,7 +1,8 @@
-class WorkExperience < ApplicationRecord
+# frozen_string_literal: true
 
-  EMPLOYMENT_TYPE = ['Full-time', 'Part-time', 'Self-employeed', 'Freelance', 'Trainee', 'Internship']
-  LOCATION_TYPE = ['On-site', 'Hybrid', 'Remote']
+class WorkExperience < ApplicationRecord
+  EMPLOYMENT_TYPE = %w[Full-time Part-time Self-employeed Freelance Trainee Internship].freeze
+  LOCATION_TYPE = %w[On-site Hybrid Remote].freeze
   belongs_to :user
 
   validates :company, :start_date, :job_title, :location, presence: true
@@ -13,15 +14,15 @@ class WorkExperience < ApplicationRecord
   validate :end_date_greater_than_start_date, if: :currently_not_working_here?
 
   def work_experience_last_date
-    if end_date.present? && currently_working_here
-      errors.add(:end_date, ' must be blank if you are currently working in this company')
-    end
+    return unless end_date.present? && currently_working_here
+
+    errors.add(:end_date, ' must be blank if you are currently working in this company')
   end
 
   def presence_of_end_date
-    if end_date.nil? && !currently_working_here
-      errors.add(:end_date, ' must be present if you are not currently working in this company')
-    end
+    return unless end_date.nil? && !currently_working_here
+
+    errors.add(:end_date, ' must be present if you are not currently working in this company')
   end
 
   def currently_not_working_here?
@@ -31,9 +32,9 @@ class WorkExperience < ApplicationRecord
   def end_date_greater_than_start_date
     return if end_date.nil? || start_date.nil?
 
-    if end_date < start_date
-      errors.add(:end_date, ' must be greater than start_date')
-    end
+    return unless end_date < start_date
+
+    errors.add(:end_date, ' must be greater than start_date')
   end
 
   def company_with_employment_type
@@ -53,11 +54,11 @@ class WorkExperience < ApplicationRecord
 
     result = months.divmod(12)
 
-    duration = "#{result.first} #{result.first > 1 ? 'years' : 'year'} #{result.last} #{result.last > 1 ? 'months' : 'month' }"
+    duration = "#{result.first} #{result.first > 1 ? 'years' : 'year'} #{result.last} #{result.last > 1 ? 'months' : 'month'}"
     if currently_working_here
-      "#{start_date.strftime("%b %Y")} - Present (#{duration})"
+      "#{start_date.strftime('%b %Y')} - Present (#{duration})"
     else
-      "#{start_date.strftime("%b %Y")} - #{end_date.strftime("%b %Y")} (#{duration})"
+      "#{start_date.strftime('%b %Y')} - #{end_date.strftime('%b %Y')} (#{duration})"
     end
   end
 

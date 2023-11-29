@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -5,7 +7,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :trackable,
          :omniauthable, omniauth_providers: [:google_oauth2]
 
-  
   PROFILE_TITLE = [
     'Senior Ruby on Rails Developer',
     'Full Stack Ruby on Rails Developer',
@@ -13,14 +14,12 @@ class User < ApplicationRecord
     'Junior Full Stack Ruby on Rails Developer',
     'Senior Java Developer',
     'Senior Front End Developer'
-  ].freeze         
+  ].freeze
 
-  validates :first_name, :last_name, presence: true
-  validates :username, presence: true
-  validates :profile_title, presence: true, if: -> { profile_title.present? }
+  validates :first_name, :last_name, :username, :profile_title, presence: true
   validates :email, presence: true, uniqueness: true
 
-  scope :with_country, ->(country) { where(country: country) }
+  scope :with_country, ->(country) { where(country:) }
 
   has_and_belongs_to_many :groups
   has_many :user_reactions
@@ -46,17 +45,17 @@ class User < ApplicationRecord
   has_many :pages, through: :follows, source: :followed, source_type: 'Page'
 
   # for follow & unfollow
-  has_many :active_relationships, 
-            class_name: "Relationship", 
-            foreign_key: "follower_id",
-            dependent: :destroy
-  
+  has_many :active_relationships,
+           class_name: 'Relationship',
+           foreign_key: 'follower_id',
+           dependent: :destroy
+
   has_many :following, through: :active_relationships, source: :followed
 
-  has_many :passive_relationships, 
-            class_name: "Relationship", 
-            foreign_key: "followed_id",        
-            dependent: :destroy
+  has_many :passive_relationships,
+           class_name: 'Relationship',
+           foreign_key: 'followed_id',
+           dependent: :destroy
 
   has_many :followers, through: :passive_relationships, source: :follower
 
@@ -67,9 +66,9 @@ class User < ApplicationRecord
   has_many :viewers, through: :profile_views, source: :viewer
 
   has_many :notifications
-  
+
   def unviewed_notifications_count
-    self.notifications.present? ? self.notifications.unviewed.count : 0
+    notifications.present? ? notifications.unviewed.count : 0
   end
 
   def follow(user)
@@ -102,7 +101,7 @@ class User < ApplicationRecord
   attr_accessor :otp_token
 
   def generate_and_save_otp
-    self.otp = SecureRandom.random_number(100000..999999).to_s.rjust(6, '0')
+    self.otp = SecureRandom.random_number(100_000..999_999).to_s.rjust(6, '0')
     generate_and_save_otp_token # Generate and save the OTP token
     save
   end
@@ -119,16 +118,14 @@ class User < ApplicationRecord
   def self.from_omniauth(access_token)
     data = access_token.info
     user = User.where(email: data['email']).first
-    unless user
-      user = User.create(
-        email: data['email'],
-        profile_title: data['name'],
-        password: Devise.friendly_token[0,20],
-        first_name: data['first_name'],
-        last_name: data['last_name'],
-        username: data['name'],
-       )
-    end
+    user ||= User.create(
+      email: data['email'],
+      profile_title: data['name'],
+      password: Devise.friendly_token[0, 20],
+      first_name: data['first_name'],
+      last_name: data['last_name'],
+      username: data['name']
+    )
     user
   end
 
@@ -142,16 +139,17 @@ class User < ApplicationRecord
     "#{city}, #{state}, #{country}, #{pincode}"
   end
 
-  def self.ransackable_attributes(auth_object = nil)
-    ["country", "city"]
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[country city]
   end
 
-  def self.ransackable_associations(auth_object = nil)
+  def self.ransackable_associations(_auth_object = nil)
     []
   end
 
   def my_connection(user)
-    Connection.where("(user_id = ? AND connected_user_id = ? ) OR (user_id = ? AND connected_user_id = ? )", user.id, id, id, user.id)
+    Connection.where('(user_id = ? AND connected_user_id = ? ) OR (user_id = ? AND connected_user_id = ? )', user.id,
+                     id, id, user.id)
   end
 
   def check_if_already_connected?(user)
@@ -159,6 +157,6 @@ class User < ApplicationRecord
   end
 
   def mutually_connected_ids(user)
-    self.connected_user_ids.intersection(user.connected_user_ids)
+    connected_user_ids.intersection(user.connected_user_ids)
   end
 end

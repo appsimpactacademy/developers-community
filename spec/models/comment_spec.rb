@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/models/comment_spec.rb
 
 require 'rails_helper'
@@ -12,17 +14,17 @@ RSpec.describe Comment, type: :model do
   end
 
   it 'is not valid without a title' do
-    comment = Comment.new(user: user, commentable: post)
+    comment = Comment.new(user:, commentable: post)
     expect(comment).to_not be_valid
   end
 
   it 'belongs to a user' do
-    comment = Comment.new(user: user, commentable: post)
+    comment = Comment.new(user:, commentable: post)
     expect(comment.user).to be_a(User)
   end
 
   it 'belongs to a commentable (polymorphic)' do
-    comment = Comment.new(user: user, commentable: post)
+    comment = Comment.new(user:, commentable: post)
     expect(comment.commentable).to be_a(Post)
   end
 
@@ -31,12 +33,12 @@ RSpec.describe Comment, type: :model do
     user2 = create(:user)
 
     user = create(:user, connected_user_ids: [user1.id, user2.id])
-     # Use a block to capture the notification creation
-    comment = Comment.new(user: user, commentable: post, title: 'Test comment 1')
-    expect {
+    # Use a block to capture the notification creation
+    comment = Comment.new(user:, commentable: post, title: 'Test comment 1')
+    # Assuming two connected users
+    expect do
       comment.save
-    }.to change(Notification, :count).by(2) # Assuming two connected users
-
+    end.to change(Notification, :count).by(2)
     expect(Notification.last.item_id).to eq(comment.id)
   end
 end

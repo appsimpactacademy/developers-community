@@ -1,194 +1,194 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  let(:connected_user) {create(:user)}
+  let(:connected_user) { create(:user) }
   describe '#association and scops' do
-
-    it "is valid with valid attributes" do
-      user = build(:user)  # Use the factory to create a user instance
+    it 'is valid with valid attributes' do
+      user = build(:user) # Use the factory to create a user instance
 
       expect(user).to be_valid
     end
 
-    it "is not valid without a first name" do
+    it 'is not valid without a first name' do
       user = build(:user, first_name: nil)
 
       expect(user).not_to be_valid
     end
 
-    it "is not valid without a last name" do
+    it 'is not valid without a last name' do
       user = build(:user, last_name: nil)
 
       expect(user).not_to be_valid
     end
 
-    it "is not valid without a username" do
+    it 'is not valid without a username' do
       user = build(:user, username: nil)
 
       expect(user).not_to be_valid
     end
 
-    it "is not valid without a profile title" do
+    it 'is not valid without a profile title' do
       user = build(:user, profile_title: nil)
 
       expect(user).not_to be_valid
     end
 
-    it "is not valid without an email" do
+    it 'is not valid without an email' do
       user = build(:user, email: nil)
 
       expect(user).not_to be_valid
     end
 
-    it "is not valid with a duplicate email" do
-      existing_user = create(:user)  # Create a user in the database
+    it 'is not valid with a duplicate email' do
+      existing_user = create(:user) # Create a user in the database
       user = build(:user, email: existing_user.email)
 
       expect(user).not_to be_valid
     end
 
-    it "is valid with valid attributes" do
+    it 'is valid with valid attributes' do
       user = create(:user)
       expect(user).to be_valid
     end
 
-    it "is valid with associated connections" do
+    it 'is valid with associated connections' do
       user = create(:user)
-      connection = create(:connection, user: user, requested: connected_user)
+      create(:connection, user:, requested: connected_user)
       expect(user).to be_valid
     end
 
-    it "is valid with associated posts" do
+    it 'is valid with associated posts' do
       user = create(:user)
-      post = create(:post, user: user)
+      create(:post, user:)
       expect(user).to be_valid
     end
 
-    it "is valid with associated events" do
+    it 'is valid with associated events' do
       user = create(:user)
-      event = create(:event, user: user)
+      create(:event, user:)
       expect(user).to be_valid
     end
 
-    it "is valid with associated reposts" do
+    it 'is valid with associated reposts' do
       user = create(:user)
-      post = create(:post, user: user)
-      repost = create(:repost, user: user, post: post)
+      post = create(:post, user:)
+      create(:repost, user:, post:)
       expect(user).to be_valid
     end
 
-    it "is valid with associated comments" do
+    it 'is valid with associated comments' do
       user = create(:user)
-      comment = create(:comment, commentable: user, user_id: user.id)
+      create(:comment, commentable: user, user_id: user.id)
       expect(user).to be_valid
     end
 
-    it "is valid with associated likes" do
+    it 'is valid with associated likes' do
       user = create(:user)
-      post = create(:post, user: user)
-      like = create(:like, user: user, post: post)
+      post = create(:post, user:)
+      create(:like, user:, post:)
       expect(user).to be_valid
     end
 
-    it "is valid with an attached image" do
+    it 'is valid with an attached image' do
       user = create(:user)
       image = fixture_file_upload(Rails.root.join('spec', 'fixtures', 'download.jpeg'), 'image/jpeg')
       user.image.attach(image)
       expect(user).to be_valid
     end
 
-    it "is valid with associated skills" do
+    it 'is valid with associated skills' do
       user = create(:user)
-      skill = create(:skill, user: user)
+      create(:skill, user:)
       expect(user).to be_valid
     end
 
-    it "is valid with associated jobs" do
+    it 'is valid with associated jobs' do
       user = create(:user)
       job_category = create(:job_category)
-      job = create(:job, user: user, job_category: job_category)
+      create(:job, user:, job_category:)
       expect(user).to be_valid
     end
 
-    it "is valid with associated work experiences" do
+    it 'is valid with associated work experiences' do
       user = create(:user)
-      work_experience = create(:work_experience, user: user)
+      create(:work_experience, user:)
       expect(user).to be_valid
     end
 
-    it "is valid with associated pages" do
+    it 'is valid with associated pages' do
       user = create(:user)
-      page = create(:page, user: user)
+      create(:page, user:)
       expect(user).to be_valid
     end
 
-    it "is valid with associated follows" do
+    it 'is valid with associated follows' do
       user = create(:user)
-      followed_page = create(:page, user: user)
-      follow = create(:follow, user: user, followed: followed_page, followed_type: 'Page')
+      followed_page = create(:page, user:)
+      create(:follow, user:, followed: followed_page, followed_type: 'Page')
       expect(user).to be_valid
     end
 
-    it "is valid with active relationships" do
+    it 'is valid with active relationships' do
       user = create(:user)
       followed_user = create(:user)
-      relationship = create(:relationship, follower: user, followed: followed_user)
+      create(:relationship, follower: user, followed: followed_user)
       expect(user).to be_valid
     end
 
-    it "is valid with passive relationships" do
+    it 'is valid with passive relationships' do
       user = create(:user)
       follower = create(:user)
-      relationship = create(:relationship, follower: follower, followed: user)
+      create(:relationship, follower:, followed: user)
       expect(user).to be_valid
     end
 
-    it "is valid with sent shares" do
+    it 'is valid with sent shares' do
       user = create(:user)
-      post = create(:post, user: user)
-      share = create(:share, sender: user, post: post)
+      post = create(:post, user:)
+      create(:share, sender: user, post:)
       expect(user).to be_valid
     end
 
-    it "is valid with received shares" do
+    it 'is valid with received shares' do
       user = create(:user)
-      post = create(:post, user: user)
-      share = create(:share, recipient: user, post: post)
+      post = create(:post, user:)
+      create(:share, recipient: user, post:)
       expect(user).to be_valid
     end
 
-    it "is valid with associated notifications" do
+    it 'is valid with associated notifications' do
       user = create(:user)
-      post = create(:post, user: user)
-      notification = create(:notification, user: user, item_type: 'Post', item_id: post.id)
+      post = create(:post, user:)
+      create(:notification, user:, item_type: 'Post', item_id: post.id)
       expect(user).to be_valid
     end
 
-    it "has a scope with_country" do
+    it 'has a scope with_country' do
       user1 = create(:user, country: 'CountryA')
       user2 = create(:user, country: 'CountryA')
-      user3 = create(:user, country: 'CountryB')
+      create(:user, country: 'CountryB')
 
       expect(User.with_country('CountryA')).to match_array([user1, user2])
     end
   end
 
-
   describe '#Methods' do
     it 'unviewed_notifications_count method# returns the count of unviewed notifications' do
       user = create(:user)
-      post = create(:post, user: user)
-      viewed_notification = create(:notification, user: user, viewed: true,  item_type: 'Post', item_id: post.id)
-      unviewed_notification1 = create(:notification, user: user, viewed: false,  item_type: 'Post', item_id: post.id)
-      unviewed_notification2 = create(:notification, user: user, viewed: false,  item_type: 'Post', item_id: post.id)
+      post = create(:post, user:)
+      create(:notification, user:, viewed: true, item_type: 'Post', item_id: post.id)
+      create(:notification, user:, viewed: false,  item_type: 'Post', item_id: post.id)
+      create(:notification, user:, viewed: false,  item_type: 'Post', item_id: post.id)
 
       expect(user.unviewed_notifications_count).to eq(2)
     end
 
     it 'returns 0 when there are no unviewed notifications' do
       user = create(:user)
-      post = create(:post, user: user)
-      viewed_notification = create(:notification, user: user, viewed: true,  item_type: 'Post', item_id: post.id)
+      post = create(:post, user:)
+      create(:notification, user:, viewed: true, item_type: 'Post', item_id: post.id)
 
       expect(user.unviewed_notifications_count).to eq(0)
     end
@@ -214,7 +214,7 @@ RSpec.describe User, type: :model do
 
     it 'following?#returns true if the user is following the specified page' do
       user = create(:user)
-      page = create(:page, user: user)
+      page = create(:page, user:)
       user.follows.create(followed: page, followed_type: 'Page')
 
       expect(user.following?(page)).to be_truthy
@@ -222,45 +222,45 @@ RSpec.describe User, type: :model do
 
     it 'following?#returns false if the user is not following the specified page' do
       user = create(:user)
-      page = create(:page, user: user)
+      page = create(:page, user:)
 
       expect(user.following?(page)).to be_falsey
     end
 
     it 'has_reposted?#returns true if the user has reposted the specified post' do
       user = create(:user)
-      post = create(:post, user: user)
-      user.reposts.create(post: post)
+      post = create(:post, user:)
+      user.reposts.create(post:)
 
       expect(user.has_reposted?(post)).to be_truthy
     end
 
     it 'has_reposted?#returns false if the user has not reposted the specified post' do
       user = create(:user)
-      post = create(:post, user: user)
+      post = create(:post, user:)
 
       expect(user.has_reposted?(post)).to be_falsey
     end
 
     it 'repost_for#returns the repost record for the specified post' do
       user = create(:user)
-      post = create(:post, user: user)
-      repost = user.reposts.create(post: post)
+      post = create(:post, user:)
+      repost = user.reposts.create(post:)
 
       expect(user.repost_for(post)).to eq(repost)
     end
 
     it 'repost_for#returns nil if the user has not reposted the specified post' do
       user = create(:user)
-      post = create(:post, user: user)
+      post = create(:post, user:)
 
       expect(user.repost_for(post)).to be_nil
     end
 
     it 'returns an array of posts that the user has received shares for' do
       user = create(:user)
-      post1 = create(:post, user: user)
-      post2 = create(:post, user: user)
+      post1 = create(:post, user:)
+      post2 = create(:post, user:)
       user.received_shares.create(post: post1)
       user.received_shares.create(post: post2)
 
@@ -310,7 +310,7 @@ RSpec.describe User, type: :model do
 
     it 'from_omniauth#creates a new user if the email does not exist' do
       auth_data = OmniAuth::AuthHash.new(provider: 'facebook', uid: '123456',
-        info: { email: 'new_user@example.com', first_name: 'John', last_name: 'Doe', name: 'John Doe' })
+                                         info: { email: 'new_user@example.com', first_name: 'John', last_name: 'Doe', name: 'John Doe' })
 
       user = User.from_omniauth(auth_data)
 
@@ -321,9 +321,10 @@ RSpec.describe User, type: :model do
     end
 
     it 'from_omniauth#returns an existing user if the email exists' do
-      existing_user = create(:user, email: 'existing@example.com', first_name: 'Jane', last_name: 'Smith', username: 'Jane Smith')
+      existing_user = create(:user, email: 'existing@example.com', first_name: 'Jane', last_name: 'Smith',
+                                    username: 'Jane Smith')
       auth_data = OmniAuth::AuthHash.new(provider: 'facebook', uid: '123456',
-        info: { email: 'existing@example.com', first_name: 'Jane', last_name: 'Smith', name: 'Jane Smith' })
+                                         info: { email: 'existing@example.com', first_name: 'Jane', last_name: 'Smith', name: 'Jane Smith' })
       user = User.from_omniauth(auth_data)
 
       expect(user).to eq(existing_user)
@@ -365,7 +366,7 @@ RSpec.describe User, type: :model do
     it 'my_connection#returns the connection between the user and specified user' do
       user1 = create(:user)
       user2 = create(:user)
-      connection = create(:connection, user: user1, connected_user_id: user2,requested: user2)
+      connection = create(:connection, user: user1, connected_user_id: user2, requested: user2)
 
       result = user1.my_connection(user2)
 
@@ -412,11 +413,10 @@ RSpec.describe User, type: :model do
       create(:connection, user: user2, connected_user_id: user3.id)
       create(:connection, user: user1, connected_user_id: user3.id)
 
-
       user1.connected_user_ids = [user2.id, user3.id]
       user2.connected_user_ids = [user1.id, user3.id]
       user3.connected_user_ids = [user1.id, user2.id]
-      
+
       result = user1.mutually_connected_ids(user3)
 
       expect(result).to contain_exactly(user2.id)

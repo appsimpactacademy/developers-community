@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe SearchController, type: :request do
@@ -18,7 +20,7 @@ RSpec.describe SearchController, type: :request do
   describe 'GET /search/results' do
     it 'returns a successful response with search results for a user' do
       other_user.follow(user)
-      
+
       get search_results_path(user_id: other_user.id)
 
       expect(response).to be_successful

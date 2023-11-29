@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'MyEvents', type: :request do
@@ -12,7 +14,7 @@ RSpec.describe 'MyEvents', type: :request do
     end
 
     context 'with events for the current user' do
-      let!(:events) { create_list(:event, 3, user: user) }
+      let!(:events) { create_list(:event, 3, user:) }
       let!(:other_user_event) { create(:event) } # Event belonging to another user
 
       before { get user_my_events_path(user) }

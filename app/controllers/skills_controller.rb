@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SkillsController < ApplicationController
   before_action :set_skill, only: %i[edit update destroy]
 
@@ -5,8 +7,7 @@ class SkillsController < ApplicationController
     @skill = current_user.skills.new
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @skill = current_user.skills.new(skill_params)
@@ -15,16 +16,16 @@ class SkillsController < ApplicationController
         'append',
         'skill_items',
         'skills/skill',
-        {skill: @skill }
+        { skill: @skill }
       )
     else
       render_turbo_stream(
         'replace',
         'remote_modal',
         'shared/turbo_modal',
-        { 
+        {
           form_partial: 'skills/form',
-          modal_title: 'Add New Work Experience' 
+          modal_title: 'Add New Work Experience'
         }
       )
     end
@@ -34,8 +35,8 @@ class SkillsController < ApplicationController
     @skill.destroy
     render_turbo_stream(
       'remove',
-      "skill_item_#{@skill.id}",
-      )
+      "skill_item_#{@skill.id}"
+    )
   end
 
   def update
@@ -44,21 +45,20 @@ class SkillsController < ApplicationController
         'replace',
         "skill_item_#{@skill.id}",
         'skills/skill',
-        {skill: @skill }
-        )
+        { skill: @skill }
+      )
     else
       render_turbo_stream(
         'replace',
         'remote_modal',
         'shared/turbo_modal',
-        { 
-          form_partial: 'skills/form', 
-          modal_title: 'Edit Work Experience' 
+        {
+          form_partial: 'skills/form',
+          modal_title: 'Edit Work Experience'
         }
-        )
+      )
     end
   end
-
 
   private
 

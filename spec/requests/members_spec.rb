@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe MembersController, type: :request do
@@ -35,9 +37,9 @@ RSpec.describe MembersController, type: :request do
 
   describe 'PATCH #update_personal_details' do
     it 'updates the user personal details' do
-      expect {
+      expect do
         patch update_member_personal_details_path, params: { user: { first_name: 'John' } }, as: :turbo_stream
-      }.to change { user.reload.first_name }.to('John')
+      end.to change { user.reload.first_name }.to('John')
 
       expect(response).to have_http_status(:success)
     end

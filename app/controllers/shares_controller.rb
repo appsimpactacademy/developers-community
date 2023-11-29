@@ -1,5 +1,6 @@
-class SharesController < ApplicationController
+# frozen_string_literal: true
 
+class SharesController < ApplicationController
   def index
     @shared_posts = Post.includes(:user).where(id: current_user.shared_posts.map(&:id))
   end
@@ -27,5 +28,4 @@ class SharesController < ApplicationController
   def share_params
     params.require(:share).permit(:recipient_id, :post_id)
   end
-
 end

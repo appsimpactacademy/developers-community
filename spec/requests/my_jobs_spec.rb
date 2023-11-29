@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'MyJobs', type: :request do
@@ -12,7 +14,7 @@ RSpec.describe 'MyJobs', type: :request do
     end
 
     context 'with jobs for the current user' do
-      let!(:jobs) { create_list(:job, 3, user: user) }
+      let!(:jobs) { create_list(:job, 3, user:) }
       let!(:other_user_job) { create(:job) } # Job belonging to another user
 
       before { get user_my_jobs_path(user) }

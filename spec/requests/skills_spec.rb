@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe SkillsController, type: :request do
   let(:user) { create(:user) }
-  let(:skill) { create(:skill, user: user) }
+  let(:skill) { create(:skill, user:) }
 
   before { sign_in user }
 
@@ -27,9 +29,9 @@ RSpec.describe SkillsController, type: :request do
       let(:skill_params) { attributes_for(:skill, user_id: user.id) }
 
       it 'creates a new skill' do
-        expect {
+        expect do
           post skills_path, params: { skill: skill_params }, as: :turbo_stream
-        }.to change(Skill, :count).by(1)
+        end.to change(Skill, :count).by(1)
       end
 
       it 'renders turbo_stream for successful creation' do

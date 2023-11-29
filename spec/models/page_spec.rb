@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # spec/models/page_spec.rb
 
 require 'rails_helper'
@@ -6,15 +8,15 @@ RSpec.describe Page, type: :model do
   let(:user) { create(:user) }
 
   it 'has many posts' do
-    page = create(:page, user: user)
-    post_1 = create(:post, user: user, page: page)
-    post_2 = create(:post, user: user, page: page)
+    page = create(:page, user:)
+    post_1 = create(:post, user:, page:)
+    post_2 = create(:post, user:, page:)
 
     expect(page.posts).to include(post_1, post_2)
   end
 
   it 'has many follows' do
-    page = create(:page, user: user)
+    page = create(:page, user:)
     follower = create(:user)
     follow = create(:follow, followed: page, user: follower)
 
@@ -22,19 +24,19 @@ RSpec.describe Page, type: :model do
   end
 
   it 'has many followers through follows' do
-    page = create(:page, user: user)
+    page = create(:page, user:)
     follower = create(:user)
-    follow = create(:follow, followed: page, user: follower)
+    create(:follow, followed: page, user: follower)
 
     expect(page.followers).to include(follower)
   end
 
   it 'has a followers_count method that returns the count of followers' do
-    page = create(:page, user: user)
+    page = create(:page, user:)
     follower_1 = create(:user)
     follower_2 = create(:user)
-    follow_1 = create(:follow, followed: page, user: follower_1)
-    follow_2 = create(:follow, followed: page, user: follower_2)
+    create(:follow, followed: page, user: follower_1)
+    create(:follow, followed: page, user: follower_2)
 
     expect(page.followers_count).to eq(2)
   end

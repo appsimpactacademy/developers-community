@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Notificable
   extend ActiveSupport::Concern
 
@@ -7,28 +9,28 @@ module Notificable
   end
 
   def send_notifications_to_users
-    if self.respond_to? :user_ids
-      user_ids = self.user_ids
-      return if user_ids.blank?
+    return unless respond_to? :user_ids
 
-      item_type = self.class.name
-      item_id = self.id
-      created_at = Time.now
-      updated_at = Time.now
-      viewed = false
+    user_ids = self.user_ids
+    return if user_ids.blank?
 
-      notifications = user_ids.map do |user_id|
-        {
-          user_id: user_id,
-          item_type: item_type,
-          item_id: item_id,
-          viewed: viewed,
-          created_at: created_at,
-          updated_at: updated_at
-        }
-      end
+    item_type = self.class.name
+    item_id = id
+    created_at = Time.now
+    updated_at = Time.now
+    viewed = false
 
-      Notification.insert_all(notifications)
+    notifications = user_ids.map do |user_id|
+      {
+        user_id:,
+        item_type:,
+        item_id:,
+        viewed:,
+        created_at:,
+        updated_at:
+      }
     end
+
+    Notification.insert_all(notifications)
   end
 end

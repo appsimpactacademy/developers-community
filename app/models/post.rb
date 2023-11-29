@@ -5,7 +5,10 @@ class Post < ApplicationRecord
   #validates :images, presence: true
 
   scope :hidden_posts, -> { where(hidden: true) }
-  scope :with_details, -> { includes(:user, :likes, :reposts, :post_visits, images_attachments: :blob) }
+  scope :with_details, -> { includes(:user, :likes, :reposts, images_attachments: :blob) }
+
+  # for user reactions
+  has_many :user_reactions, as: :reactable
   
   has_many_attached :images
   has_many :hidden_posts
@@ -17,10 +20,9 @@ class Post < ApplicationRecord
   # for posts likes
   has_many :likes, dependent: :destroy
   has_many :users, through: :likes
-   # for visiting the post by current user
-  has_many :post_visits, dependent: :destroy
   belongs_to :user
   belongs_to :page, optional: true
+  belongs_to :group, optional: true
 
   include Notificable
 
@@ -39,9 +41,8 @@ class Post < ApplicationRecord
     update(hidden: false)
   end
 
-  # for visiting the post by current user
-  def visited_by?(user)
-    post_visits.exists?(user: user)
+  def user_reactions_count(reaction_type)
+    user_reactions.where(reaction_type: reaction_type).count
   end
 
   def self.ransackable_attributes(auth_object = nil)

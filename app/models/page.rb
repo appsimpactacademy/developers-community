@@ -2,6 +2,7 @@ class Page < ApplicationRecord
   belongs_to :user
   has_one_attached :image
   has_many :posts
+  has_many :jobs
 
   has_many :follows, as: :followed, dependent: :destroy
   has_many :followers, through: :follows, source: :user

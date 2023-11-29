@@ -1,22 +1,24 @@
-<div class="col-lg-10 mx-auto mt-5 mb-4">
-  <div class="card">
-    <div class="card-header">
-      <h1 class="card-title text-center">Job Detail</h1>
+<div class="col-lg-10 mx-auto mt-3 mb-5">
+  <div class="row mt-3">
+    <div class="col-lg-8">
+      <small>User ID : <%= @job.user_id %></small>
+      <p class="lead fs-3"><%= @job.title %></p>
+      <small><i class="fa-solid fa-location-dot"></i> <%= @job.location %></small><br><br>
+      <p class="lead"><%= @job.description %></p>
     </div>
-    <div class="card-body">
-      <p><strong>User ID : </strong> <%= @job.user_id %></p>
-      <p><strong>Title : </strong> <%= @job.title %></p>
-      <p><strong>Description : </strong> <%= @job.description %></p>
-      <p><strong>Salary </strong> <%= @job.salary %></p>
-      <p><strong>Location : </strong> <%= @job.location %></p>
-      <p><strong>Employee Type : </strong> <%= @job.employee_type %></p>
-      <p><strong>Qualification : </strong> <%= @job.qualification %></p>
-      <p><strong>Job Category : </strong> <%= @job.job_category.name %></p>
-      <p><strong>Status : </strong> <%= @job.status %></p>
-      <%= link_to 'Back to Jobs', jobs_path, class:"btn btn-primary" %>
-      <% if current_user && current_user.id == @job.user_id %>
-        <%= link_to 'Edit Job', edit_job_path(@job), class: "btn btn-primary" %>
-      <% end %>
+    <div class="lead col-lg-4 border p-3">
+      <p class="border-bottom text-center">Job OverView</p>
+      <p class="fs-6"><strong>Company Name : </strong> <%= @job.page.title if @job.page.present? %></p>
+      <p class="fs-6"><strong>Salary </strong> <%= @job.salary %></p>
+      <p class="fs-6"><strong>Employee Type : </strong> <%= @job.employee_type %></p>
+      <p class="fs-6"><strong>Qualification : </strong> <%= @job.qualification %></p>
+      <p class="fs-6"><strong>Job Category : </strong> <%= @job.job_category.name %></p>
+      <p class="fs-6"><strong>Status : </strong> <%= @job.status %></p>
+      <p class="fs-6"><strong>Posted on : </strong> <%= @job.created_at.strftime('%Y-%m-%d') %></p>
     </div>
   </div>
+  <%= link_to 'Back to Jobs', jobs_path, class:"btn btn-warning" %>
+  <% if current_user && current_user.id == @job.user_id %>
+   <%= link_to 'Edit', edit_job_path(@job), class:"btn btn-outline-primary", data: { controller: "bs-modal-form" } %>
+  <% end %>
 </div>

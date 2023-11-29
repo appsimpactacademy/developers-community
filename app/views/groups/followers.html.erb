@@ -1,0 +1,29 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <h4>Followers of <%= @group.name %></h4>
+  <% if @followers.present? %>
+    <% @followers.each do |follower| %>
+      <div class="card mb-2 shadow">
+      <div class="row">
+        <div class="col-lg-1">
+          <% if follower.image.attached? %>
+            <%= image_tag follower.image, class: "user-image mt-3 py-1 mx-2", style: "width:70px;" %>
+          <% else %>
+            <%= image_tag 'human.avif', class: "user-image mt-3 py-1 mx-2", style: "width:70px;" %>
+          <% end %>
+        </div>
+        <div class="col-lg-9 mt-2">
+          <div class="card-body">
+            <%= link_to member_path(follower), style: "text-decoration:none;", target: "_blank" do %>
+              <h4 style="margin-bottom: -2px;"><%= follower.name %></h4>
+            <% end %>
+            <small class="text-muted"><%= follower.profile_title %></small><br>
+            <small class="text-muted"><%= follower.email %></small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% end %>
+  <% else %>
+    <p class="border border-1 rounded p-2">No followers are present.</p>
+  <% end %>
+</div>

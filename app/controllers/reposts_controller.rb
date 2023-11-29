@@ -18,6 +18,29 @@ class RepostsController < ApplicationController
     
   end
 
+  def show
+    @repost = Repost.includes(post: [:user]).find(params[:id])
+    @user_reposts = @repost.post.reposts
+  end
+
+  def destroy
+    @repost = Repost.find(params[:id])
+    @repost.destroy
+    redirect_to root_path, notice: 'Repost removed successfully.'
+  end
+  
+
+  def repost_with_thought
+    post = Post.find(params[:id])
+    thought = params[:repost][:thought] # Assuming 'thought' is sent through the params
+    if current_user.has_reposted?(post)
+      redirect_to root_path, alert: 'You have already reposted this post.'
+    else
+      current_user.reposts.create(post: post, thought: thought)
+      redirect_to root_path, notice: 'Post reposted successfully with your thought.'
+    end
+  end
+
   def destroy
     repost = current_user.reposts.find(params[:id])
     repost.destroy

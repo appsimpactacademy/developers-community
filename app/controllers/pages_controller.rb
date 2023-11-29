@@ -2,7 +2,7 @@ class PagesController < ApplicationController
   before_action :set_page, only: %i[edit update destroy]
 
   def index
-    @pages = Page.includes(:user, :follows, image_attachment: :blob ).order(created_at: :desc)
+    @pages = Page.includes(:user, :follows, :followers, image_attachment: :blob ).order(created_at: :desc)
   end
 
   def new
@@ -35,6 +35,7 @@ class PagesController < ApplicationController
                      .group(:commentable_id)
                      .count
     @post_comment_counts = comment_counts.transform_keys(&:to_i)
+    @jobs = @page.jobs
   end
 
   def update

@@ -1,6 +1,7 @@
 class Job < ApplicationRecord
   belongs_to :job_category
   belongs_to :user
+  belongs_to :page
 
   EMPLOYEE_TYPE = ['Full-time', 'Part-time', 'Self-Employeed', 'Freelance', 'Trainee', 'Internship']
 

@@ -1,0 +1,153 @@
+<div class="container col-lg-10 mx-auto mt-3 my-container">
+  <div class="row">
+    <div class="col-lg-3 col-md-4 col-sm-12 mt-3">
+      <div class="card text-center mb-2 shadow current_user_profile">
+        <div class="card-body">
+          <% if current_user.image.attached? %>
+            <%= image_tag current_user.image, style: "width: 80px; max-width:100%;", class: 'border border-1 rounded-circle mb-3 mt-3' %>
+          <% else %> 
+            <%= image_tag 'human.avif', class: "border border-1 rounded-circle mb-3 mt-3", style: "width: 130px; max-width:100%;" %>
+          <% end %>
+          <%= link_to member_path(current_user), style: "text-decoration:none;" do %>
+            <h5 class="text-dark"><%= current_user.name %></h5>
+          <% end %>
+          <% if @group.user == current_user %>
+            <small class="text-muted">Joined on : <%= @group.created_at.strftime('%b %Y') %></small>
+          <% end %>
+          <% if current_user.groups.include?(@group) %>
+            <%= button_to "Unfollow Group", unfollow_group_path(@group), method: :delete, class: 'btn btn-danger btn-sm mt-2 mb-2' %>
+          <% else %>
+            <%= button_to "Follow Group", follow_group_path(@group), method: :post, class: 'btn btn-primary btn-sm mt-2 mb-2' %>
+          <% end %>
+          <% if @group.users.count > 0 %>
+            <small class="text-primary mt-3">
+              <%= link_to group_followers_group_path(@group), style: 'text-decoration:none;' do %>
+                <%= pluralize(@group.users.count, 'Follower') %>
+              <% end %>
+              </small>
+          <% end %>
+
+        </div>
+      </div>
+      <div class="card mb-3 shadow">
+        <div class="card-body">
+          <%= link_to 'Groups', groups_path, style: 'text-decoration:none;' %>
+          <% @groups.each do |group|%><br>
+            <%= link_to group_path(group), style: 'text-decoration:none;' do %>
+              <small class="text-dark"><%= group.name %></small>
+            <% end %>
+          <% end %>
+          <hr>
+          <div class="row">
+            <div class="col-lg-10">
+              <%= link_to "Events", user_my_events_path(current_user), style: 'text-decoration:none;'  %>
+            </div>
+            <div class="col-lg-2">
+              <%= link_to new_event_path, data: { controller: 'bs-modal-form' } do %>
+                <i class="fa-solid fa-plus"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-7 col-md-8 col-sm-12 mt-2">
+      <div class="card shadow mt-2 mb-2">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-8"> 
+              <h4><%= @group.name %></h4>
+              <small class="text-muted"><%= @group.group_type %> Listed</small>
+              <p><b>Industry : </b><%= @group.industry %></p>
+              <p><b>Location : </b><%= @group.location %></p>
+              <p><b>Created : </b><%= @group.created_at.strftime('%Y-%m-%d') %></p>
+            </div>
+            <% if @group.image.present? %>
+              <div class="col-lg-4">
+                <%= image_tag @group.image, class: 'w-100' %>
+              </div>  
+            <% end %>
+            <div data-controller="show-more">
+              <div data-show-more-target="description">
+                <p><b>Description : </b><%= simple_format @group.description %></p>
+              </div>
+              <div class="d-flex justify-content-end" >
+                <button 
+                  data-action="click->show-more#toggleVisibility" 
+                  data-show-more-target="toggleButton" 
+                  class="btn btn-light text-primary btn-sm mt-2">
+                  Show More
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>        
+      </div>
+      <div class="card mt-2 mb-2 shadow">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-1 col-12 mb-2 d-grid">
+              <% if current_user.image.attached? %>
+                <%= image_tag current_user.image, style: "width: 50px;", class: "mt-2 border border-1 rounded-circle" %>
+              <% else %> 
+                <%= image_tag 'human.avif', style: "width: 50px;", class: "mt-2 border border-1 rounded-circle" %>
+              <% end %>
+            </div>
+            <div class="col-md-11 col-12 mt-1 mb-3 d-grid">
+              <%= link_to new_post_path(group_id: @group.id), class: "d-flex btn btn-outline-light text-dark border py-2 rounded-pill mr-1 pr-5 mt-2", data: { controller: "bs-modal-form" } do %>
+              Start a Post
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%= render 'home/post_sort' %>        
+      <%= render 'groups/group_posts' %>
+    </div>
+    <div class="col-lg-2 mt-3">
+      <div class="card shadow text-center admin-card">
+        <div class="card-body">
+          <h5 class="mb-3 admin-heading">Group Admin</h5>
+          <% if @group.user.present? %>
+            <%= link_to member_path(@group.user), style: "text-decoration:none;" do %>
+              <% if @group.user.image.attached? %>
+                <%= image_tag @group.user.image, class: "admin-image mb-2 border border-1 rounded-circle", style: 'width:50px;' %>
+              <% else %> 
+                <%= image_tag 'human.avif', class: "admin-image mb-2 border border-1 rounded-circle", style: 'width:50px;' %>
+              <% end %>
+              <h6 class="text-dark admin-name"><%= @group.user.name %></h6>
+              <small class="text-muted admin-title"><%= @group.user.profile_title %></small>
+            <% end %>
+          <% else %>
+            <p>No admin found for this group</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .admin-card {
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+
+    .admin-heading {
+      font-size: 20px;
+    }
+
+    .admin-image {
+      width: 50px;
+      height: 50px;
+    }
+
+    .admin-name {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .admin-title {
+      font-size: 12px;
+    }
+
+</style>

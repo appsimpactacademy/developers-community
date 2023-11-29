@@ -1,0 +1,28 @@
+<div class="user-reactions mt-2">
+  <% if user_signed_in? %>
+    <%= link_to post_user_reactions_path(post, user_reaction: { reactable_type: 'love' }), method: :post, class:"user-reaction love btn btn-light position-relative", remote: true, id: "love-reaction" do %>
+      <i class="fa-solid fa-heart fa-xl", title="Love"></i>
+      <span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger reaction-love"> <%= post.user_reactions_count('love') %></span>
+    <% end %>
+
+    <%= link_to post_user_reactions_path(post, user_reaction: { reactable_type: 'laugh' }), method: :post, class:"user-reaction laugh btn btn-light position-relative", remote: true, id: "laugh-reaction" do %>
+      <i class="fa-solid fa-face-laugh fa-xl ", title="Laugh"></i>
+      <span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger reaction-laugh"><%= post.user_reactions_count('laugh') %></span>
+    <% end %>
+
+    <%= link_to post_user_reactions_path(post, user_reaction: { reactable_type: 'support' }), method: :post, class:"user-reaction support btn btn-light position-relative", remote: true, id: "support-reaction" do %>
+      <i class="fa-solid fa-circle-info fa-xl ", title="Support"></i>
+      <span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger reaction-support"><%= post.user_reactions_count('support') %></span>
+    <% end %>
+
+    <%= link_to post_user_reactions_path(post, user_reaction: { reactable_type: 'celebrate' }), method: :post, class:"user-reaction celebrate btn btn-light position-relative", remote: true, id: "celebrate-reaction" do %>
+      <i class="fa-solid fa-hands-clapping fa-xl ", title="Celebrate"></i>
+      <span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger reaction-celebrate"><%= post.user_reactions_count('celebrate') %></span>
+    <% end %>
+
+    <%= link_to post_user_reactions_path(post, user_reaction: { reactable_type: 'insightful' }), method: :post, class:"user-reaction insightful btn btn-light position-relative", remote: true, id: "insightful-reaction" do %>
+      <i class="fa-solid fa-lightbulb fa-xl ", title="Insightful"></i>
+      <span class="position-absolute top-0 translate-middle badge rounded-pill bg-danger reaction-insightful"><%= post.user_reactions_count('insightful') %></span>
+    <% end %>
+  <% end %>
+</div>

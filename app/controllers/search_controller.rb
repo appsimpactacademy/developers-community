@@ -25,14 +25,16 @@ class SearchController < ApplicationController
     @people_i_follow_count = @user.following.size
   end
 
+
+
   private
 
   def search_results
     query = params[:query]
     User.where("first_name ILIKE ? OR last_name ILIKE ?", "%#{query}%", "%#{query}%") +
-      Post.where("title ILIKE ?", "%#{query}%") + 
-      Job.where("title ILIKE ?", "%#{query}%") + 
-      Event.where("event_name ILIKE ?", "%#{query}%") + 
-      Page.where("title ILIKE ? OR content ILIKE ?", "%#{query}%", "%#{query}%")
+    Post.where("title ILIKE ?", "%#{query}%") + 
+    Job.where("title ILIKE ?", "%#{query}%") + 
+    Event.where("event_name ILIKE ?", "%#{query}%") + 
+    Page.where("title ILIKE ? OR content ILIKE ?", "%#{query}%", "%#{query}%")
   end
 end

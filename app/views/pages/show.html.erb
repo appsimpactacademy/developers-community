@@ -11,7 +11,8 @@
             <small><%= @page.content %></small><br>
             <small class="text-muted"><%= @page.industry %></small><br>
             <small class="text-muted"><%= @page.organization_size %></small><br>
-            <small class="text-primary">Followers: <%= @follower_count  %></small>
+            <small class="text-primary">Followers: <%=@page.follows.count %></small><br>
+            <small class="text-primary">User ID: <%=@page.user_id %></small>
           </div>
           <div class="mt-2">
             <% if current_user.following?(@page) %>
@@ -22,9 +23,21 @@
           </div>
         </div>
       </div>
+      <% if @jobs.present? %>
+        <div class="card shadow mt-2 mb-2">
+          <div class="card-body">
+              <h5>Jobs</h5>
+              <% @jobs.each do |job| %>
+                <%= link_to job_path(job), style: 'text-decoration:none;' do %>
+                  <%= job.title %>
+                <% end %>
+              <% end %>
+          </div>
+        </div>
+      <% end %>
       <div class="card shadow mt-2 mb-2">
         <div class="card-body">
-          <h3>About</h3>
+          <h5>About</h5>
           <div data-controller="show-more">
             <div data-show-more-target="description">
               <p><%= simple_format(@page.about) %></p>

@@ -1,0 +1,42 @@
+<%= form_with model: @group do |form| %>
+  <div class="modal-body">
+    <div class="form-group">
+       <%= form.hidden_field :user_id, value:current_user.id %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :group_name %>
+      <%= form.text_field :name, class: 'form-control mt-2 mb-2' %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :description %>
+      <%= form.text_area :description, class: 'form-control mt-2 mb-2' %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :group_industry %>
+      <%= form.select :industry, options_for_select(Group::INDUSTRY, selected: form.object.industry ),{prompt: 'Select Group Industry'},  {class: 'form-select mt-2 mb-2'} %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :location %>
+      <%= form.text_field :location, class: 'form-control mt-2 mb-2' %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :group_type %>
+      <%= form.select :group_type, options_for_select(Group::GROUP_TYPE, selected: form.object.group_type ),{prompt: 'Select Group Type'},  {class: 'form-select mt-2 mb-2'} %>
+    </div> 
+
+    <div class="form-group">
+      <%= form.label :image %>
+      <%= form.file_field :image, class: 'form-control mt-2 mb-2' %>
+    </div> 
+
+    <div class="form-group mt-2 mb-2">
+      <%= form.submit class: 'btn btn-primary' %>
+      <%= link_to 'Back', groups_path, class: 'btn btn-warning' %>
+    </div>
+  </div>
+<% end %>

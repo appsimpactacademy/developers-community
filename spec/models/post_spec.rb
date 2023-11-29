@@ -47,12 +47,6 @@ RSpec.describe Post, type: :model do
     expect(post.users).to include(user2)
   end
 
-  it 'has many post_visits' do
-    post = create(:post, user: user)
-    visit = create(:post_visit, post: post, user: user) # Assuming you have a factory for post_visits
-    expect(post.post_visits).to include(visit)
-  end
-
   it 'belongs to a user' do
     post = create(:post, user: user)
     expect(post.user).to eq(user)
@@ -81,13 +75,6 @@ RSpec.describe Post, type: :model do
     post = create(:post, user: user, hidden: true)
     post.unhide
     expect(post.hidden).to eq(false)
-  end
-
-  it 'defines visited_by? method' do
-    post = create(:post, user: user)
-    visitor = create(:user)
-    post_visit = create(:post_visit, post: post, user: visitor) # Assuming you have a factory for post_visits
-    expect(post.visited_by?(visitor)).to eq(true)
   end
 
   it 'defines ransackable_attributes method' do

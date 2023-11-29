@@ -32,6 +32,9 @@
             <%= link_to "Pages", pages_path, class: 'nav-link active'  %>
           </li>
           <li>
+            <%= link_to "Articles", articles_path, class: 'nav-link active'  %>
+          </li>
+          <li>
             <%= link_to notifications_path, class: "btn btn-primary mt-1 position-relative" do %>
                 <i class="fa-solid fa-bell fa-lg"></i>
                 <% if current_user.unviewed_notifications_count > 0 %>
@@ -48,7 +51,7 @@
         <% end %>  
       </ul>
       <% if user_signed_in? %>
-       <div class="d-flex col-lg-3" >
+       <div class="d-flex justify-content-end col-lg-3" >
         <%= render partial: "search/form", locals: { results: [] } %>
       </div>
       <% end %>

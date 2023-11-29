@@ -18,6 +18,7 @@ class JobsController < ApplicationController
 
   def new
     @job = Job.new
+    @pages = Page.all
   end
 
   def create
@@ -28,7 +29,7 @@ class JobsController < ApplicationController
   end
 
   def edit
-    
+    @pages = Page.all
   end
 
   def show
@@ -55,7 +56,7 @@ class JobsController < ApplicationController
   end
 
   def job_params
-    params.require(:job).permit(:title, :employee_type, :location, :salary, :description, :qualification, :status, :job_category_id, :user_id)
+    params.require(:job).permit(:title, :employee_type, :location, :salary, :description, :qualification, :status, :job_category_id, :user_id, :page_id)
   end
 
 end

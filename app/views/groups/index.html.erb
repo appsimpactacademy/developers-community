@@ -1,0 +1,25 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <%= link_to 'Create Group', new_group_path, class: "btn btn-outline-primary mb-3", data: { controller: "bs-modal-form" } %>
+  <% @groups.each do |group|%>
+    <div class="card shadow mb-1">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-9">
+            <%= link_to group_path(group), style: 'text-decoration:none;' do %>
+              <h5><%= group.name %></h5>
+            <% end %>
+          </div>
+          <div class="col-lg-3">
+            <% if current_user && current_user.id == group.user_id %>
+              <%= link_to 'View', group_path(group), class: 'btn btn-primary btn-sm' %>
+              <%= link_to 'Edit', edit_group_path(group), class: 'btn btn-primary btn-sm', data: { controller: "bs-modal-form" } %>
+              <%= link_to 'Delete', group_path(group), class: 'btn btn-danger btn-sm', data: { turbo_method: :delete, turbo_confirm: 'Are You Sure?' } %>
+            <% else %>
+              <%= link_to 'View', group_path(group), class: 'btn btn-primary btn-sm' %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>    
+  <% end %>
+</div>

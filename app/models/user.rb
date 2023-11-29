@@ -16,14 +16,18 @@ class User < ApplicationRecord
   ].freeze         
 
   validates :first_name, :last_name, presence: true
-  validates :username, :profile_title, presence: true
+  validates :username, presence: true
+  validates :profile_title, presence: true, if: -> { profile_title.present? }
   validates :email, presence: true, uniqueness: true
 
   scope :with_country, ->(country) { where(country: country) }
 
+  has_and_belongs_to_many :groups
+  has_many :user_reactions
   has_many :connections, dependent: :destroy
   has_many :posts, dependent: :destroy
   has_many :events, dependent: :destroy
+  has_many :articles
 
   # for repost the post
   has_many :reposts, dependent: :destroy
@@ -35,7 +39,7 @@ class User < ApplicationRecord
   has_one_attached :image
   has_many :skills
   has_many :jobs
-  has_many :work_experiences, dependent: :destroy
+  has_many :work_experiences, class_name: 'WorkExperience', dependent: :destroy
   has_many :pages
 
   has_many :follows

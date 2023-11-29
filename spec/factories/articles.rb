@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :post_visit do
+  factory :article do
     
   end
 end

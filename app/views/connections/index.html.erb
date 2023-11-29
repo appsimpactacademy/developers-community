@@ -1,4 +1,4 @@
-<div class="col-lg-10 mx-auto mt-5">
+<div class="col-lg-10 mx-auto mt-3">
   <% if @requested_connections.present? ||  @received_connections.present?%>
     <% if @requested_connections.present? %>
       <div class="card">
@@ -11,16 +11,20 @@
               <div class="col-lg-3">
                 <div class="card mt-3">
                   <div class="card-body">
-                    <%= image_tag 'dmu1.jpg', class: "img-fluid mb-1" %>
+                    <% if connection.requested.image.attached? %>
+                      <%= image_tag connection.requested.image, style: "width: 150px; ", class: 'mb-3 border border-1 rounded-circle' %>
+                    <% else %>
+                      <%= image_tag "human.avif", style: "width: 150px; ", class: 'mb-3 border border-1 rounded-circle' %>
+                    <% end %>
                     <div style="min-height:100px;">
-                      <%= link_to member_path(connection.requested), style: "text-decoration:none;", class: "text-primary", target: "_blank" do %>
+                      <%= link_to member_path(connection.requested), class: 'text-primary', style: "text-decoration:none;", target: "_blank" do %>
                         <p class="lead fw-bold"><%= connection.requested.name %></p>
                       <% end %>
                       <small class="text-muted"><%= connection.requested.profile_title %></small><br>
                     </div>
                     <div class="d-grid">
-                      <%= link_to connection.status.titleize, "javascript:void(0)", class: "#{connection.status_btn} mt-2" %>
-                    </div>  
+                      <%= link_to connection.status.titleize, "javascript.void(0)", class: " #{connection.status_btn} mt-2" %>
+                    </div>
                   </div>
                 </div>
               </div>

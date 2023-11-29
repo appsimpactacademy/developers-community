@@ -1,0 +1,18 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <div class="card shadow">
+    <h3 class="card-header text-center">Article</h3>
+    <div class="card-body">
+      <p><strong>User ID : </strong><%= @article.user_id %></p>
+      <p><strong>Title : </strong><%= @article.title %></p>
+      <p><strong>Content : </strong><%= @article.content %></p>
+      <p><strong>Created At : </strong><%= @article.created_at.strftime('%d %B %Y') %></p>
+      <%= link_to 'Back', articles_path, class: 'btn btn-primary' %>
+
+      <% if current_user == @article.user %>
+        <%= link_to "Edit", edit_article_path(@article), data: { controller: 'bs-modal-form' }, class: 'btn btn-warning' %>
+        <%= link_to 'Delete', article_path(@article), data: { turbo_confirm: 'Are you sure?', turbo_method: :delete}, class: "btn btn-danger", title: "Delete this Article" %>
+      <% end %>
+      
+    </div>
+  </div>
+</div>

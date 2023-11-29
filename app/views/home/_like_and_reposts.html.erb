@@ -1,0 +1,141 @@
+<!-- for display the names of users who liked & repost a post and show the count of remaining users into the modal popup -->
+<% if post.likes.present? || post.reposts.present? %>
+  <div class="row border border-1 mt-3 mb-3">
+    <div class="col-lg-6 mt-2 mb-2">
+      <% likes = post.likes.includes(:user) %>
+      <% if likes.present? %>
+        <% first_user = likes.first.user %>
+        <% other_users = likes[1..] %>
+        <div>
+          <span>
+            <% has_liked = current_user && likes.pluck(:user_id).include?(current_user.id) %>
+            <% if has_liked %>
+              Liked by You
+            <% else %>
+              Liked by
+              <% if other_users.present? %>
+                <%= link_to first_user.name, member_path(first_user), style: 'text-decoration:none;' %>
+              <% else %>
+                <%= link_to first_user.name, member_path(first_user), style: 'text-decoration:none;' %>
+              <% end %>
+            <% end %>
+            <% if other_users.present? %>
+              <% if has_liked %>
+                and
+              <% end %>
+              <a href="#" data-bs-toggle="modal" data-bs-target="#likeModal-<%= post.id %>">
+                <%= other_users.size > 1 ? "#{other_users.size} others" : "#{other_users.size} other" %>
+              </a>
+              liked
+              <!-- Modal -->
+              <div class="modal fade" id="likeModal-<%= post.id %>" tabindex="-1" aria-labelledby="likeModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="likeModalLabel-<%= post.id %>">Users Who liked This Post</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <% likes.each do |like| %>
+                        <% user = like.user %>
+                        <% like_time_ago = time_ago_in_words(like.created_at) %>
+                        <div class="d-flex align-items-center mb-2">
+                          <%= image_tag user.image, alt: "User Image", style: "width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" if user.image.attached? %>
+                          <p class="ms-2 mb-0">
+                            <% if current_user && current_user == user %>
+                              liked by You - <%= like_time_ago %> ago
+                            <% else %>
+                              <%= link_to user.name, member_path(user), style: 'text-decoration:none;' %> - <%= like_time_ago %> ago
+                            <% end %>
+                          </p>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-lg-6 mt-2 mb-2 d-flex justify-content-end">
+      <% reposts = post.reposts.includes(:user) %>
+      <% if reposts.present? %>
+        <% first_user = reposts.first.user %>
+        <% other_users = reposts[1..] %>
+        <div>
+          <span>
+            <% has_reposted = current_user && reposts.pluck(:user_id).include?(current_user.id) %>
+            <% if has_reposted %>
+              Reposted by You
+            <% else %>
+              Reposted by
+              <% if other_users.present? %>
+                <%= link_to first_user.name, member_path(first_user), style: 'text-decoration:none;' %>
+              <% else %>
+                <%= link_to first_user.name, member_path(first_user), style: 'text-decoration:none;' %>
+              <% end %>
+            <% end %>
+            <% if other_users.present? %>
+              <% if has_reposted %>
+                and
+              <% end %>
+              <a href="#" data-bs-toggle="modal" data-bs-target="#repostModal-<%= post.id %>">
+                <%= other_users.size > 1 ? "#{other_users.size} others" : "#{other_users.size} other" %>
+              </a>
+              reposted
+              <!-- Modal -->
+              <div class="modal fade" id="repostModal-<%= post.id %>" tabindex="-1" aria-labelledby="repostModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="repostModalLabel-<%= post.id %>">Users Who Reposted This Post</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <% reposts.each do |repost| %>
+                        <% user = repost.user %>
+                        <% repost_time_ago = time_ago_in_words(repost.created_at) %>
+                        <div class="d-flex align-items-center mb-2">
+                          <%= image_tag user.image, alt: "User Image", style: "width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" if user.image.attached? %>
+                          <p class="ms-2 mb-0">
+                            <% if current_user && current_user == user %>
+                              Reposted by You - <%= repost_time_ago %> ago
+                            <% else %>
+                              <%= link_to user.name, member_path(user), style: 'text-decoration:none;' %> - <%= repost_time_ago %> ago
+                            <% end %>
+                          </p>
+                        </div>
+                        <div class="container mb-4">
+                          <%= link_to post_path(post), style: 'text-decoration:none; color:black;' do %>
+                            <h5 class= "text-primary">Title : <%= post.title %></h5>
+                              <p><%= truncate(post.description, length: 150) %></p>
+                                <% first_image = post.images.first %>
+                                <% if first_image.present? %>
+                                  <% if first_image.content_type.include?("image") %>
+                                    <a href="<%= rails_blob_path(first_image) %>" class="post_images me-2 mb-3 mt-3" data-turbolinks="false" data-mfp-title="<%= post.title %>">
+                                      <%= image_tag first_image, style: 'width: 370px; height: 280px; max-width: 100%;', class: 'mt-2 mb-2 border border-1' %>
+                                    </a>
+                                  <% else %>
+                                    <div class="bg-dark text-center">
+                                      <%= video_tag rails_blob_path(first_image), autoplay: :autoplay, loop: :loop, muted: :muted, class: "home_video", controls: true, type: 'video/mp4', style: "max-width: 100%; height: 320px;" do %>
+                                        Your browser does not support the video tag.
+                                      <% end %>
+                                    </div>
+                                  <% end %>
+                                <% end %>
+                          <% end %>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

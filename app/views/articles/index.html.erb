@@ -1,0 +1,23 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <% if @articles.present? %>
+    <% @articles.each do |article| %>
+      <div class="card shadow mt-2 mb-3">
+        <div class="card-body">
+          <%= link_to article_path(article), style: 'text-decoration:none;' do %>
+            <h2><%= article.title %></h2>
+            <p class= 'text-dark'><%= article.content %></p>
+          <% end %>
+        </div>
+        <div class="card-footer">
+          <%= link_to 'Back', root_path, :class => "btn btn-primary mt-2"%>
+          <% if current_user == article.user %>
+            <%= link_to 'Delete', article_path(article), data: { turbo_confirm: 'Are you sure?', turbo_method: :delete}, class: "btn btn-danger mt-2", title: "Delete this Article" %>
+          <% end %>
+          <%= link_to 'View', article_path(article), class: 'btn btn-primary mt-2' %>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="border border-1 rounded p-2">No Article is present!</p>
+  <% end %>
+</div>

@@ -29,9 +29,11 @@ Rails.application.routes.draw do
       post 'hide'
       post 'undo_hide'
       post 'toggle_hide'
+      post 'repost_with_thought', to: 'reposts#repost_with_thought', as: 'repost_thought'
     end
-    resources :reposts, only: [:create, :destroy]
+    resources :reposts
     resources :comments
+    resources :user_reactions, only: [:create, :destroy]
   end
 
   get 'hidden_posts', to: 'posts#hidden'
@@ -39,6 +41,9 @@ Rails.application.routes.draw do
   post 'search', to: 'search#index', as: 'search'
   post 'search/suggestions', to: 'search#suggestions', as: 'search_suggestions'
   get '/search_results', to: 'search#results', as: 'search_results'
+
+  get "password", to: "passwords#edit", as: :edit_password
+  patch "password", to: "passwords#update"
 
   resources :events do
     collection do
@@ -73,12 +78,23 @@ Rails.application.routes.draw do
   resources :skills
   resources :messages, only: [:index]
   resources :shares, only: [:new, :create,:index]
+  resources :articles 
+
+
+  resources :groups do
+    member do
+      post 'follow'
+      delete 'unfollow'
+      get 'followers', to: 'groups#followers', as: 'group_followers'
+    end
+  end
 
   resources :users do
     resources :posts
     resources :jobs
     resources :my_jobs, only: [:index]
     resources :my_events, only: [:index]
+    resources :my_article, only: [:index]
   end
 
   resources :members, controllers: 'members' do

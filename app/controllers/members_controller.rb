@@ -1,7 +1,7 @@
 class MembersController < ApplicationController
 
   def show
-    @user = User.find(params[:id])
+    @user = User.includes(image_attachment: :blob).find(params[:id])
     @connections = Connection.where('user_id = ? OR connected_user_id = ?', params[:id], params[:id]).where(status: 'accepted')
     @mutual_connections = current_user.mutually_connected_ids(@user)
   end

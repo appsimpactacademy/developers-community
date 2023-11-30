@@ -6,14 +6,16 @@
       </div>
     </div>
     <div class="col-lg-3">
-      <div class="d-flex justify-content-end">
-        <%= link_to edit_work_experience_path(work_experience), data: { controller: "bs-modal-form" } do %>
-          <i class="bi bi-pencil-fill"></i>
-        <% end %>
-        <%= link_to work_experience_path(work_experience), data: { turbo_method: :delete, turbo_confirm: 'Are you sure you want to delete this experience? This action can not be undo.' } do %>
-          <i class="bi bi-trash text-danger"></i>
-        <% end %>
-      </div>
+      <% if @user == current_user %>
+        <div class="d-flex justify-content-end">
+          <%= link_to edit_work_experience_path(work_experience), data: { controller: "bs-modal-form" } do %>
+            <i class="bi bi-pencil-fill"></i>
+          <% end %>
+          <%= link_to work_experience_path(work_experience), data: { turbo_method: :delete, turbo_confirm: 'Are you sure you want to delete this experience? This action can not be undo.' } do %>
+            <i class="bi bi-trash text-danger"></i>
+          <% end %>
+        </div>
+      <% end %>  
     </div>
   </div>
   <small><%= work_experience.company_with_employment_type %></small><br>

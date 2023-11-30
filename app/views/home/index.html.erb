@@ -16,7 +16,7 @@
           <p>
             <%# if @total_connections.present? %>
               <div id="connection-count">
-                <%= link_to pluralize(@total_connections.count, 'connection'), member_connections_path(current_user), style: "text-decoration:none;" %>
+                <%= link_to pluralize((@total_connections ? @total_connections.count : 0), 'connection'), member_connections_path(current_user), style: "text-decoration:none;" %>
               </div>
             <%# end %>
           </p>
@@ -34,16 +34,18 @@
           <%= link_to 'View Calendar', calendar_events_events_path, style: 'text-decoration:none;' %>
         </div>
       </div>
-      <div class="card mb-2 shadow">
-        <div class="card-body">
-          <%= link_to 'Groups', groups_path, style: 'text-decoration:none;' %>
-          <% @groups.each do |group|%><br>
-            <%= link_to group_path(group), style: 'text-decoration:none;' do %>
-              <small class="text-dark"><%= group.name %></small>
+      <% if @groups.present? %>
+        <div class="card mb-2 shadow">
+          <div class="card-body">
+            <%= link_to 'Groups', groups_path, style: 'text-decoration:none;' %>
+            <% @groups.each do |group|%><br>
+              <%= link_to group_path(group), style: 'text-decoration:none;' do %>
+                <small class="text-dark"><%= group.name %></small>
+              <% end %>
             <% end %>
-          <% end %>
+          </div>
         </div>
-      </div>
+      <% end %>  
     </div>
     <div class="col-lg-9 col-md-8 col-sm-12 mt-2">
       <div class="card mt-2 mb-2 shadow">

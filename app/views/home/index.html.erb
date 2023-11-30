@@ -1,31 +1,47 @@
-<div class="container col-lg-10 mx-auto mt-3 bg-light my-container">
+<div class="container col-lg-10 mx-auto mt-3 my-container">
   <div class="row">
     <div class="col-lg-3 col-md-4 col-sm-12 mt-3">
-      <div class="card text-center mb-3 shadow current_user_profile">
+      <div class="card text-center mb-2 shadow current_user_profile">
         <div class="card-body">
           <% if current_user.image.attached? %>
-            <%= image_tag current_user.image, style: "width: 130px; max-width:100%;", class: 'border border-3 rounded-circle mb-3 mt-3' %>
+            <%= image_tag current_user.image, style: "width: 130px; max-width:100%;", class: 'border border-1 rounded-circle mb-3 mt-3' %>
           <% else %> 
-            <%= image_tag 'human.avif', class: "border border-3 rounded-circle mb-3 mt-3", style: "width: 130px; max-width:100%;" %>
+            <%= image_tag 'human.avif', class: "border border-1 rounded-circle mb-3 mt-3", style: "width: 130px; max-width:100%;" %>
           <% end %>
-          <%= link_to member_path(current_user), class: 'text-decoration-none' do %>
+          <%= link_to member_path(current_user), style: "text-decoration:none;" do %>
             <h5 class="text-dark"><%= current_user.name %></h5>
           <% end %>
           <small class=" text-muted"><%= current_user.profile_title %></small>
           <hr>
-          <p><%= pluralize(@total_connections.count, "Connection")  if @total_connections.present? %></p>
+          <p>
+            <%# if @total_connections.present? %>
+              <div id="connection-count">
+                <%= link_to pluralize(@total_connections.count, 'connection'), member_connections_path(current_user), style: "text-decoration:none;" %>
+              </div>
+            <%# end %>
+          </p>
           <hr>
-          <%= link_to 'My Job', user_my_jobs_path(current_user), class: 'text-decoration-none'%> 
+          <%= link_to 'My Job', user_my_jobs_path(current_user), style: 'text-decoration:none;'%> 
           <hr>
-          <%= link_to 'My Post', user_posts_path(current_user), class: 'text-decoration-none'%> 
+          <%= link_to 'My Post', user_posts_path(current_user), style: 'text-decoration:none;'%> 
           <hr>
-          <%= link_to "Followers", followers_and_following_member_path(current_user), class: 'text-decoration-none' %> 
+          <%= link_to "My Followers", followers_and_following_member_path(current_user), style: 'text-decoration:none;' %> 
           <hr>
-          <%= link_to "My Events", user_my_events_path(current_user), class: 'text-decoration-none'  %>
+          <%= link_to "My Article", user_my_article_index_path(current_user), style: 'text-decoration:none;' %> 
           <hr>
-          <%= link_to 'View Calendar', calendar_events_events_path, class: 'text-decoration-none', data: { turbolinks: false } %>
+          <%= link_to "My Events", user_my_events_path(current_user), style: 'text-decoration:none;'  %>
           <hr>
-          <%#= link_to 'Create New Page', user_pages_path(current_user), class: 'text-decoration-none' %>
+          <%= link_to 'View Calendar', calendar_events_events_path, style: 'text-decoration:none;' %>
+        </div>
+      </div>
+      <div class="card mb-2 shadow">
+        <div class="card-body">
+          <%= link_to 'Groups', groups_path, style: 'text-decoration:none;' %>
+          <% @groups.each do |group|%><br>
+            <%= link_to group_path(group), style: 'text-decoration:none;' do %>
+              <small class="text-dark"><%= group.name %></small>
+            <% end %>
+          <% end %>
         </div>
       </div>
     </div>
@@ -35,26 +51,34 @@
           <div class="row">
             <div class="col-md-1 col-12 mb-2 d-grid">
               <% if current_user.image.attached? %>
-                <%= image_tag current_user.image, style: "width: 50px;", class: "mt-2 border border-3 rounded-circle" %>
+                <%= image_tag current_user.image, style: "width: 50px;", class: "mt-2 border border-1 rounded-circle" %>
               <% else %> 
-                <%= image_tag 'human.avif', style: "width: 50px;", class: "mt-2 border border-3 rounded-circle" %>
+                <%= image_tag 'human.avif', style: "width: 50px;", class: "mt-2 border border-1 rounded-circle" %>
               <% end %>
             </div>
             <div class="col-md-11 col-12 mt-1 mb-3 d-grid">
               <%= link_to new_post_path, class: "d-flex btn btn-outline-light text-dark border py-2 rounded-pill mr-1 pr-5 mt-2", data: { controller: "bs-modal-form" } do %>
               Start a Post
               <% end %>
-              <div class="mt-3">
-                <%= link_to new_event_path, data: { controller: 'bs-modal-form' }, class: 'text-decoration-none' do %>
-                  <i class="fa-regular fa-calendar-days me-1 text-dark"></i>
-                Add Event
-              <% end %>
+              <div class="row mt-3">
+                <div class="col-lg-2">
+                  <%= link_to new_event_path, data: { controller: 'bs-modal-form' }, style: "text-decoration:none;" do %>
+                    <i class="fa-regular fa-calendar-days me-1 text-dark"></i>
+                    Add Event
+                  <% end %>
+                </div>
+                <div class="col-lg-3">
+                  <%= link_to new_article_path, data: { controller: 'bs-modal-form' }, style: "text-decoration:none;" do %>
+                    <i class="fa-solid fa-newspaper me-1 text-dark"></i>
+                    Write Article
+                  <% end %>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <%= render 'home/post_sort', posts: @posts %>        
+      <%= render 'home/post_sort' %>        
       <%= render 'home/posts' %>
     </div>
   </div>

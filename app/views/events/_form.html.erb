@@ -3,7 +3,7 @@
   <div class="row">
     <% if @event.errors.any? %>
       <div class="error-area" style="color: red;">
-        <h3><%= pluralize(@event.errors.count, 'error') %> prohibited your work experience form being saved. </h3>
+        <h3><%= pluralize(@event.errors.count, 'error') %> prohibited your events form being saved. </h3>
         <ul>
           <% @event.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -14,7 +14,6 @@
 
     <div class="col-lg-12">
       <div class="form-group">
-
         <%= form.hidden_field :user_id, value: current_user.id %>
 
         <label class="mb-2 mt-3">
@@ -31,13 +30,6 @@
       </div>
 
       <div class="form-group row">
-        <div class="col-lg-12 mt-4">
-          <div class="form-check form-switch">
-            <%= form.check_box :add_end_date_or_end_time, class: 'form-check-input', role: 'switch', data: { controller: "disable-end-date-for-event" } %>
-            <label class="form-check-label" for="event_end_date_or_end_time"> Don't want to Add End Date & Time
-            </label>
-          </div>
-        </div>
         <div class="col-lg-6">
           <label class="mb-2 mt-3">
             Start Date: <span class="text-danger">*</span>

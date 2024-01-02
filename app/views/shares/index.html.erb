@@ -10,7 +10,7 @@
               <% end %>
               <div class="user-info" data-controller="user-name" >
                 <h5 data-user-name-target='name' data-action="click->user-name#getUserName" >Posted by : <%= post.user.name %></h5>
-                <h5><%= link_to post.title, post, style: "text-decoration: none;" %></h5>
+                <h5><%= link_to post.title, post, id: "post_title", style: "text-decoration: none;" %></h5>
               </div>
             </div>
           </div>

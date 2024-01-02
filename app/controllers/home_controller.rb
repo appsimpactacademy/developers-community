@@ -11,17 +11,17 @@ class HomeController < ApplicationController
     @post_comment_counts = comment_counts.transform_keys(&:to_i)
 
 
-    user_reaction_counts = UserReaction.where(reactable_id: @posts.map(&:id), 
-                     reactable_type: 'Post')
-                     .group(:reactable_id)
-                     .count
+    # user_reaction_counts = UserReaction.where(reactable_id: @posts.map(&:id), 
+    #                  reactable_type: 'Post')
+    #                  .group(:reactable_id)
+    #                  .count
 
     # Now, you can create a hash where keys are post IDs and values are comment counts
-    @post_user_reaction_counts = user_reaction_counts.transform_keys(&:to_i)
+    #@post_user_reaction_counts = user_reaction_counts.transform_keys(&:to_i)
     
     # for showing the total connected user ids count of current user
     @total_connections = Connection.where('user_id = ? OR connected_user_id = ?', current_user.id, current_user.id).where(status: 'accepted')
-    @groups = Group.all
+    @groups = Group.includes(:user)
     @reposts = Repost.where(post_id: @posts.map(&:id)).group_by(&:post_id)
   end
 
@@ -41,6 +41,8 @@ class HomeController < ApplicationController
       { order_column: :created_at, order_direction: :desc }
     end
 
+    @groups = Group.includes(:user)
+
     @posts = Post.includes(common_includes).order(sort_order[:order_column] => sort_order[:order_direction])
     @post_likes_count = Post.joins(:likes).group('posts.id').count
 
@@ -59,8 +61,14 @@ class HomeController < ApplicationController
     end
   end
 
-  def profile_views
-    viewer_ids = current_user.profile_views.map(&:viewer_id).uniq
-    @viewer_users = User.where(id: viewer_ids)
-  end
+  # def connections
+  #   @user = User.find(params[:id])
+  #   total_users = if params[:mutual_connections].present?
+  #     User.where(id: current_user.mutually_connected_ids(@user))
+  #   else
+  #     User.where(id: @user.connected_user_ids)
+  #   end
+  # end
+
+
 end

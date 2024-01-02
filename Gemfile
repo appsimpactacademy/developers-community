@@ -94,6 +94,4 @@ gem 'stimulus_reflex', '= 3.5.0.pre8'
 gem 'dotenv-rails', groups: %i[development test]
 gem 'meta-tags'
 
-gem 'fullcalendar-rails'
-gem 'momentjs-rails'
 gem 'rubocop', '~> 1.57', require: false

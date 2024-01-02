@@ -46,7 +46,7 @@
           <% end %>
         </div>
         <% if @repost.user == current_user %>
-          <%= button_to "Delete Repost", post_repost_path(@repost.post, @repost), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger mt-3 text-end" %>
+          <%= button_to "Delete Repost", post_repost_path(@repost.post, @repost), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger mt-3 text-end", id: "delete_repost" %>
         <% end %>
       </div>
     </div>

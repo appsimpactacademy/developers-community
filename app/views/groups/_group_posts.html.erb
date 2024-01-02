@@ -60,17 +60,17 @@
                   <%= link_to hide_post_path(post), method: :post, class: 'hide-post', title: 'hide-post', data: { action: "click->hide-post#hidePost" } do  %>
                     <i class="fa-solid fa-xmark"></i>
                   <% end %>  
-                  <div class="hide-dialog" data-hide-post-target="dialog">
+                  <%# <div class="hide-dialog" data-hide-post-target="dialog">
                     <p>Post removed from your feed</p>
                     <p>Your feedback helps improve the feed.</p>
-                    <%= link_to undo_hide_post_path(post), method: :post, class:"undo-hide-post", title: 'undo-post', data: { action: "click->hide-post#undoHidePost", hide_post_target: "undoButton" } do %>
-                      <i class="fa-solid fa-rotate-left"></i>
-                    <% end %>
+                    <%#= link_to undo_hide_post_path(post), method: :post, class:"undo-hide-post", title: 'undo-post', data: { action: "click->hide-post#undoHidePost", hide_post_target: "undoButton" } do %>
+                      <%# <i class="fa-solid fa-rotate-left"></i> %>
+                    <%# end %>
                   </div>                
                 </div>
               </div>
             </div>
-            <div class="user-info mt-2" data-controller="user-name">
+            <div class="user-info mt-2 mx-3" data-controller="user-name">
               <%= link_to post_path(post), style: 'text-decoration:none; color: black;' do %>
                 <h5 data-user-name-target='name'><%= post.title %> </h5>
                 <div data-controller="show-more">
@@ -119,7 +119,7 @@
             <!-- for display the names of users who liked & repost a post and show the count of remaining users into the modal popup -->
             <%= render 'home/like_and_reposts', post: post %>
 
-            <div class="row mt-3">
+            <div class="row mt-3 mb-3">
               <div class="col-lg-1 col-md-2 col-3">
                 <% if user_signed_in? %>
                   <% like = post.likes.find { |like| like.user_id == current_user.id } %>
@@ -171,11 +171,11 @@
                 <% end %>
               </div>
               <div class="col-lg-7 col-md-2 col-3">
-                <%= render 'posts/show', post: post %>
+                <%#= render 'posts/show', post: post %>
               </div>
             </div>
           </div>
-          </div>
+        </div>
       <% end %>
     <% end %>
   <% else %>
@@ -183,87 +183,19 @@
   <% end %>
 </div>
 
-
-<!-- using style for post section -->
-<style>
-  .image-container {
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-  }
-  .image-container img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  .user-image{
-    width: 70px;
-    overflow: hidden;
-    margin-top: 15px;
-  }
-  .post-info {
-    padding: 10px;
-    margin-bottom: 15px;
-  }
-
-  .post-user-image img {
-    width: 60px;
-  }
-
-  .post-user-details {
-    padding-left: 10px;
-  }
-
-  .post-user-name {
-    font-size: 18px;
-  }
-
-  .post-user-title {
-    font-size: 14px;
-  }
-
-  .post-time-ago {
-    font-size: 12px;
-  }
-
-  .post-follow-button {
-    display: flex;
-    align-items: center;
-  }
-
-  .post-more-options {
-    display: flex;
-    align-items: center;
-  }
-
-  .hide-post {
-    display: flex;
-    align-items: center;
-  }
-
-  .hide-dialog {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    padding: 10px;
-  }
-
-</style>
-
-
 <script>
   $(document).ready(function() {
-  $('.post_images').magnificPopup({
-    type: 'image',
-    gallery: {
-      enabled: true
-    },
-    mainClass: 'mfp-with-zoom',
+    $('.post_images').magnificPopup({
+      type: 'image',
+      gallery: {
+        enabled: true
+      },
+      mainClass: 'mfp-with-zoom',
       zoom: {
         enabled: true,
         duration: 300,
         easing: 'ease-in-out'
       }
+    });
   });
-});
 </script>

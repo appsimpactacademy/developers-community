@@ -1,6 +1,7 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :article do
+    title { Faker::Lorem.sentence }
+    content { Faker::Lorem.paragraph }
+    association :user
   end
 end

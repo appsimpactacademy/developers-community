@@ -15,19 +15,19 @@
                   <% end %>
                 <% end %>
                 </div>
-                <div class="col-md-8 col-12 mt-2 mb-3 px-5 d-grid post-user-details">
+                <div class="col-md-8 col-12 mt-2 mb-3 px-5 d-grid post-user-details" id="user_profile">
                   <%= link_to member_path(post.user), style: "text-decoration:none;" do %>
                     <h5 class="text-dark post-user-name"><%= post.user.name %></h5>
                     <small class="text-muted post-user-title"><%= post.user.profile_title %></small><br>
                     <small class="text-muted post-time-ago">Posted <%= time_ago_in_words(post.created_at) %> ago</small>
                   <% end %>
                 </div>
-                <div class="col-md-1 col-12 mt-2 mb-3 px-3 justify-content-end post-follow-button">
+                <div class="col-md-1 col-12 mt-2 mb-3 px-3 justify-content-end post-follow-button" >
                 <% if current_user != post.user %>
                   <% if current_user.following?(post.user) %>
-                    <%= link_to 'Unfollow', unfollow_member_path(post.user), method: :delete, class: 'btn btn-outline-danger btn-sm fw-bold', style: "text-decoration:none;" %>
+                    <%= link_to 'Unfollow', unfollow_member_path(post.user), method: :delete, class: 'btn btn-outline-danger btn-sm fw-bold', id: "unfollow_button_#{post.user.id}", style: "text-decoration:none;" %>
                   <% else %>
-                    <%= link_to 'Follow', follow_member_path(post.user), method: :post, class: "btn btn-outline-primary btn-sm fw-bold", style: 'text-decoration:none;' %>
+                    <%= link_to 'Follow', follow_member_path(post.user), method: :post, class: "btn btn-outline-primary btn-sm fw-bold", id: "follow_button_#{post.user.id}", style: 'text-decoration:none;' %>
                   <% end %>
                 <% end %>
                 </div>
@@ -38,17 +38,18 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                       <% if current_user == post.user %> 
-                        <li><%= link_to 'Delete', post_path(post), data: { turbo_method: :delete, turbo_confirm: "Are You Sure to delete ?" }, class: "dropdown-item" %></li>
-                        <li><%= link_to 'Edit', edit_post_path(post), data: { controller: 'bs-modal-form' }, class: "dropdown-item" %></li>
+                        <li><%= link_to 'Delete', post_path(post), data: { turbo_method: :delete, turbo_confirm: "Are You Sure to delete ?" }, class: "dropdown-item", id: "delete_post_button_#{post.user.id}" %></li>
+                        <li><%= link_to 'Edit', edit_post_path(post), data: { controller: 'bs-modal-form' }, class: "dropdown-item", id: "edit_post_button_#{post.user.id}" %></li>
                       <% end %>
-                      <li><%= link_to 'View', post_path(post), class: 'dropdown-item' %></li>
+                      <li><%= link_to 'View', post_path(post), class: 'dropdown-item', id: "view_post_button_#{post.user.id}" %></li>
                       <li>
                         <button
                           data-controller="copy-url"
                           data-copy-url-target="copyButton"
                           data-copy-url-post-id="<%= post.id %>"
                           data-action="click->copy-url#copyUrl"
-                          class="dropdown-item"
+                          class="dropdown-item" 
+                          id= "url_button_<%= post.user.id %>"                         
                         >
                           Copy URL
                         </button>
@@ -57,20 +58,20 @@
                   </div>
                 </div>
                 <div class="col-md-1 col-12 mt-2 mb-3 px-3 d-grid justify-content-end" data-controller="hide-post" data-hide-post-post-id="<%= post.id %>">
-                  <%= link_to hide_post_path(post), method: :post, class: 'hide-post', title: 'hide-post', data: { action: "click->hide-post#hidePost" } do  %>
+                  <%= link_to hide_post_path(post), method: :post, class: 'hide-post', title: 'hide-post', id:"hidden_post", data: { action: "click->hide-post#hidePost" } do  %>
                     <i class="fa-solid fa-xmark"></i>
                   <% end %>  
-                  <div class="hide-dialog" data-hide-post-target="dialog">
+                  <!-- <div class="hide-dialog" data-hide-post-target="dialog">
                     <p>Post removed from your feed</p>
                     <p>Your feedback helps improve the feed.</p>
-                    <%= link_to undo_hide_post_path(post), method: :post, class:"undo-hide-post", title: 'undo-post', data: { action: "click->hide-post#undoHidePost", hide_post_target: "undoButton" } do %>
+                    <%#= link_to undo_hide_post_path(post), method: :post, class:"undo-hide-post", title: 'undo-post', data: { action: "click->hide-post#undoHidePost", hide_post_target: "undoButton" } do %>
                       <i class="fa-solid fa-rotate-left"></i>
-                    <% end %>
-                  </div>                
+                    <%# end %>
+                  </div>   -->              
                 </div>
               </div>
             </div>
-            <div class="user-info mt-2" data-controller="user-name">
+            <div class="user-info mt-2" data-controller="user-name" id="direct_link_for_user_post">
               <%= link_to post_path(post), style: 'text-decoration:none; color: black;' do %>
                 <h5 data-user-name-target='name'><%= post.title %> </h5>
                 <div data-controller="show-more">
@@ -124,11 +125,11 @@
                 <% if user_signed_in? %>
                   <% like = post.likes.find { |like| like.user_id == current_user.id } %>
                   <% if like.nil? %>
-                    <%= button_to likes_path, params: { like: { post_id: post.id } }, method: :post, class: "btn btn-light position-absolute mt-2" do %>
+                    <%= button_to likes_path, params: { like: { post_id: post.id } }, method: :post, class: "btn btn-light position-absolute mt-2", id: "like_button" do %>
                       <i class="fa-solid fa-thumbs-up fa-xl" title="Like"></i>
                     <% end -%>
                   <% else %>
-                    <%= button_to like_path(like), params: { like: { post_id: post.id } }, method: :delete, class: "btn btn-light position-absolute mt-2" do %>
+                    <%= button_to like_path(like), params: { like: { post_id: post.id } }, method: :delete, class: "btn btn-light position-absolute mt-2", id: "dislike_button" do %>
                       <i class="fa-solid fa-thumbs-down fa-xl" title="Dislike"></i>
                     <% end -%>
                   <% end -%>
@@ -138,7 +139,7 @@
                 <% end %>
               </div>
               <div class="col-lg-1 col-md-2 col-3">
-                <%= link_to new_share_path(post_id: post.id), class: "btn btn-light mt-2", data: { controller: "bs-modal-form" } do %>
+                <%= link_to new_share_path(post_id: post.id), class: "btn btn-light mt-2", id: "share_post", data: { controller: "bs-modal-form" } do %>
                     <i class="fa-solid fa-paper-plane" title="Share"></i>
                 <% end %>
               </div>
@@ -149,10 +150,10 @@
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     <li>
-                      <a href="https://www.facebook.com/sharer/sharer.php?u=<%= ENV['APP_URL']%><%= post_path(post)%>" target="_blank" class="dropdown-item">Share on Facebook</a>
+                      <a href="https://www.facebook.com/sharer/sharer.php?u=<%= ENV['APP_URL']%><%= post_path(post)%>" target="_blank" class="dropdown-item" id="facebook_share">Share on Facebook</a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="https://twitter.com/intent/tweet?url=<%= ENV['APP_URL']%><%= post_path(post)%>&text=<%= post.title %>" target="_blank">Share on Twitter</a>
+                      <a class="dropdown-item" href="https://twitter.com/intent/tweet?url=<%= ENV['APP_URL']%><%= post_path(post)%>&text=<%= post.title %>" target="_blank" id="twitter_share">Share on Twitter</a>
                     </li>
                   </ul>
                 </div>
@@ -160,11 +161,11 @@
               <div class="col-lg-1 col-md-2 col-3">
                 <% if user_signed_in? %>
                   <% if current_user.has_reposted?(post) %>
-                    <%= link_to [post, current_user.repost_for(post)], method: :delete, class: 'btn btn-light mt-2', title: "Remove Repost" do %>
+                    <%= link_to [post, current_user.repost_for(post)], method: :delete, class: 'btn btn-light mt-2', id: "remove_repost", title: "Remove Repost" do %>
                       <i class="fa-solid fa-repeat"></i>
                     <% end %>
                   <% else %>
-                    <%= link_to post_reposts_path(post), method: :post, class: 'btn btn-light mt-2', title: "Repost" do %>
+                    <%= link_to post_reposts_path(post), method: :post, class: 'btn btn-light mt-2', id: "add_repost", title: "Repost" do %>
                     <i class="fa-solid fa-repeat"></i>
                     <% end %>
                   <% end %>
@@ -172,7 +173,7 @@
               </div>
               <div class="col-lg-3 col-md-2 col-3 mt-2">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal<%= post.id %>">
+                <button type="button" class="btn btn-light btn-sm" id="repost_with_thought" data-bs-toggle="modal" data-bs-target="#exampleModal<%= post.id %>">
                   Repost with thought
                 </button>
 
@@ -236,7 +237,7 @@
                 <%#= render 'posts/show', post: post %>
                 <% if current_user.has_reposted?(post) %>
                   <% repost = current_user.reposts.find_by(post_id: post.id) %>
-                  <%= link_to "View Repost", post_repost_path(post, repost), class: "btn btn-light btn-sm text-primary" %>
+                  <%= link_to "View Repost", post_repost_path(post, repost), class: "btn btn-light btn-sm text-primary", id: "view_repost" %>
                 <% end %>
               </div>
             </div>
@@ -247,86 +248,19 @@
   <% end %>
 </div>
 
-<!-- using style for post section -->
-<style>
-  .image-container {
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-  }
-  .image-container img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  .user-image{
-    width: 70px;
-    overflow: hidden;
-    margin-top: 15px;
-  }
-  .post-info {
-    padding: 10px;
-    margin-bottom: 15px;
-  }
-
-  .post-user-image img {
-    width: 60px;
-  }
-
-  .post-user-details {
-    padding-left: 10px;
-  }
-
-  .post-user-name {
-    font-size: 18px;
-  }
-
-  .post-user-title {
-    font-size: 14px;
-  }
-
-  .post-time-ago {
-    font-size: 12px;
-  }
-
-  .post-follow-button {
-    display: flex;
-    align-items: center;
-  }
-
-  .post-more-options {
-    display: flex;
-    align-items: center;
-  }
-
-  .hide-post {
-    display: flex;
-    align-items: center;
-  }
-
-  .hide-dialog {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    padding: 10px;
-  }
-
-</style>
-
-
 <script>
   $(document).ready(function() {
-  $('.post_images').magnificPopup({
-    type: 'image',
-    gallery: {
-      enabled: true
-    },
-    mainClass: 'mfp-with-zoom',
+    $('.post_images').magnificPopup({
+      type: 'image',
+      gallery: {
+        enabled: true
+      },
+      mainClass: 'mfp-with-zoom',
       zoom: {
         enabled: true,
         duration: 300,
         easing: 'ease-in-out'
       }
+    });
   });
-});
 </script>

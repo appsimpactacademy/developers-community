@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class EventsController < ApplicationController
   before_action :set_event, only: %i[edit show update destroy]
 
@@ -11,7 +9,8 @@ class EventsController < ApplicationController
     @event = Event.new
   end
 
-  def edit; end
+  def edit
+  end
 
   def create
     @event = current_user.events.build(event_params)
@@ -22,7 +21,12 @@ class EventsController < ApplicationController
     end
   end
 
-  def show; end
+  def show
+    respond_to do |format|
+      format.html # Render HTML format
+      format.json { render json: @event } # Render JSON format
+    end
+  end
 
   def update
     if @event.update(event_params)
@@ -33,18 +37,38 @@ class EventsController < ApplicationController
   end
 
   def destroy
-    return unless @event.destroy
-
-    redirect_to events_path
-  end
-
-  def calendar_events
-    @events = Event.all
-    respond_to do |format|
-      format.html
-      format.json { render json: @events.map(&:to_calendar_event) }
+    if @event.destroy
+      redirect_to events_path
     end
   end
+
+  def calendar
+    @events = Event.all.map do |event|
+      {
+        id: event.id,
+        title: event.event_name,
+        start: event.start_date,
+        end: event.end_date,
+        # Add other properties as needed
+      }
+    end
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @events }
+    end
+  end
+
+
+  def create_calendar_event
+    @event = current_user.events.build(event_params)
+    if @event.save
+      render json: { event: @event, message: 'Event created successfully' }, status: :created
+    else
+      render json: { errors: @event.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
 
   private
 
@@ -53,7 +77,8 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:event_type, :event_name, :start_date, :end_date, :start_time, :end_time,
-                                  :description, :user_id, images: [])
+    params.require(:event).permit(:event_type, :event_name, :start_date, :end_date, :start_time, :end_time, :description, :user_id, images:[])
   end
+
+
 end

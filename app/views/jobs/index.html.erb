@@ -1,68 +1,72 @@
-<div class="col-lg-10 mx-auto mt-3">
+<div class="col-lg-10 mx-auto mt-3", id="job_user">
   <% if @jobs.present? %>
     <div class="col-lg-3">
       <%= form_tag(jobs_path, method: 'get') do %>
         <%= label_tag :job_category, 'Job Category:' %>
-        <%= select_tag :job_category, options_for_select(JobCategory.pluck(:name), params[:job_category]), prompt: 'Select Job Category', class: 'form-select mt-2 mb-2' %>
+        <%= select_tag :job_category, options_for_select(JobCategory.pluck(:name), params[:job_category]), prompt: 'Select Job Category', class: 'form-select mt-2 mb-2', id:"job_category" %>
         <%= submit_tag 'Submit', class: 'btn btn-primary mb-2' %>
       <% end %>
     </div>
   <% end %>
   <div class="mb-3">
-    <% @jobs.each do |job| %>
-      <div class="job-box bg-white overflow-hidden border rounded mt-3 position-relative overflow-hidden">
-        <div class="p-4">
-          <div class="row align-items-center">
-            <div class="col-md-4">
-              <%= link_to job_path(job), style: 'text-decoration:none;' do %>
+    <% if @jobs.present?  %>
+      <% @jobs.each do |job| %>
+        <div class="job-box bg-white overflow-hidden border rounded mt-3 position-relative overflow-hidden">
+          <div class="p-4">
+            <div class="row align-items-center">
+              <div class="col-md-4">
+                <%= link_to job_path(job), style: 'text-decoration:none;' do %>
+                  <div>
+                    <h5 class="f-18">
+                      <%= job.title %>
+                    </h5>
+                    <p class="text-muted mb-0">
+                      <%= truncate(job.description, length: 30) %>
+                    </p>
+                  </div>
+                <% end %>
+              </div>
+              <div class="col-md-3">
                 <div>
-                  <h5 class="f-18">
-                    <%= job.title %>
-                  </h5>
-                  <p class="text-muted mb-0">
-                    <%= truncate(job.description, length: 30) %>
+                  <p class="text-muted mb-0"><i class="fa-solid fa-location-dot"></i> <%= job.location %></p>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div>
+                  <p class="text-muted mb-0 mo-mb-2">
+                    <span class="text-primary"></span><%= job.salary %>
                   </p>
                 </div>
-              <% end %>
-            </div>
-            <div class="col-md-3">
-              <div>
-                <p class="text-muted mb-0"><i class="fa-solid fa-location-dot"></i> <%= job.location %></p>
+              </div>
+              <div class="col-md-2">
+                <div>
+                  <p class="text-muted mb-0"><%= job.employee_type %></p>
+                </div>
               </div>
             </div>
-            <div class="col-md-3">
-              <div>
-                <p class="text-muted mb-0 mo-mb-2">
-                  <span class="text-primary"></span><%= job.salary %>
-                </p>
+          </div>
+          <div class="p-2 bg-light">
+            <div class="row">
+              <div class="col-md-8">
+                <div>
+                  <p class="text-muted mb-0 mo-mb-2"><span class="text-dark">Job Category :</span> <%= job.job_category.name %></p>
+                </div>
               </div>
-            </div>
-            <div class="col-md-2">
-              <div>
-                <p class="text-muted mb-0"><%= job.employee_type %></p>
+              <div class="col-lg-4 text-end">
+                <% if current_user && current_user.id == job.user_id %>
+                  <%= link_to 'View Job', job, class:"btn btn-primary btn-sm" %>
+                  <%= link_to 'Edit', edit_job_path(job), class:"btn btn-primary btn-sm", data: { controller: "bs-modal-form" } %>
+                  <%= link_to 'Delete', job_path(job), class:"btn btn-primary btn-sm", data: { turbo_confirm: 'Are You Sure?', turbo_method: :delete } %>
+                <% else %>
+                  <%= link_to 'View Job', job, class:"btn btn-primary btn-sm" %>
+                <% end %> 
               </div>
             </div>
           </div>
         </div>
-        <div class="p-2 bg-light">
-          <div class="row">
-            <div class="col-md-8">
-              <div>
-                <p class="text-muted mb-0 mo-mb-2"><span class="text-dark">Job Category :</span> <%= job.job_category.name %></p>
-              </div>
-            </div>
-            <div class="col-lg-4 text-end">
-              <% if current_user && current_user.id == job.user_id %>
-                <%= link_to 'View Job', job, class:"btn btn-primary btn-sm" %>
-                <%= link_to 'Edit', edit_job_path(job), class:"btn btn-primary btn-sm", data: { controller: "bs-modal-form" } %>
-                <%= link_to 'Delete', job_path(job), class:"btn btn-primary btn-sm", data: { turbo_confirm: 'Are You Sure?', turbo_method: :delete } %>
-              <% else %>
-                <%= link_to 'View Job', job, class:"btn btn-primary btn-sm" %>
-              <% end %> 
-            </div>
-          </div>
-        </div>
-      </div>
+      <% end %>
+    <% else %>
+      <p class="h5 mt-3 border border-1 rounded p-2">No job is present!</p>
     <% end %>
   </div>
   <%= paginate @jobs %>

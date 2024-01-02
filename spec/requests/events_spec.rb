@@ -84,9 +84,10 @@ RSpec.describe 'Events', type: :request do
     end
   end
 
-  describe 'GET /calendar_events' do
+  describe 'GET /calendar' do
+    let(:event) { create(:event) }
     it 'returns a successful response' do
-      get calendar_events_events_path(format: :json)
+      get calendar_events_path(event, format: :json)
       expect(response).to be_successful
     end
   end

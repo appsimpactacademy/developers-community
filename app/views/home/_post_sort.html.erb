@@ -10,7 +10,7 @@
           ['Oldest', 'time_posted_reverse'],
           ['A-Z', 'alphabetical'],
           ['Z-A', 'alphabetical_reverse']
-        ], params[:sort_by]), class: "form-select", data: { action: 'post-sort#update', post_sort_target: 'select' } %>
+        ], params[:sort_by]), class: "form-select", id: "sort_by", data: { action: 'post-sort#update', post_sort_target: 'select' } %>
       </div>
     <% end %>
   </div>

@@ -5,6 +5,11 @@ class Job < ApplicationRecord
   belongs_to :user
   belongs_to :page, optional: true
 
+  validates :title, :description, :employee_type, 
+            :location, :salary, :job_category, 
+            :qualification, :status, :page, 
+             presence: true
+
   EMPLOYEE_TYPE = %w[Full-time Part-time Self-Employeed Freelance Trainee Internship].freeze
 
   STATUS = %w[Public Private Archieved].freeze

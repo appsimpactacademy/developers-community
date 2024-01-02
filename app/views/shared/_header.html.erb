@@ -11,13 +11,13 @@
             <%#= link_to 'My Profile', member_path(current_user), class:'nav-link active'%>  
           </li>
           <li>
-            <%= link_to 'My Network', connections_path, class:'nav-link active'%>  
+            <%= link_to 'My Network', connections_path, id: "add-my-network-link", class:'nav-link active'%>
           </li>
           <li>
             <%= link_to 'Messages', messages_path, class:'nav-link active'%>  
           </li>
           <li>
-            <%= link_to 'Job', jobs_path, class:'nav-link active'%>  
+            <%= link_to 'Job', jobs_path, class:'nav-link active', id: 'users_job' %>  
           </li>
           <li>
             <%= link_to "Shared Posts", shares_path, class:'nav-link active' %>
@@ -29,7 +29,7 @@
             <%= link_to "Hidden Posts", hidden_posts_path, class: "nav-link active" %>
           </li>
           <li>
-            <%= link_to "Pages", pages_path, class: 'nav-link active'  %>
+            <%= link_to "Pages", pages_path, id: "pages", class: 'nav-link active'  %>
           </li>
           <li>
             <%= link_to "Articles", articles_path, class: 'nav-link active'  %>
@@ -46,7 +46,7 @@
             <% end %>
           </li>
           <li>
-            <%= link_to 'Sign Out', destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: 'Are You Sure to Sign Out ?' }, class: 'nav-link active' %>
+            <%= link_to 'Sign Out', destroy_user_session_path, id: "add-signout-link", data: { turbo_method: :delete, turbo_confirm: 'Are You Sure to Sign Out ?' }, class: 'nav-link active' %>
           </li>
         <% end %>  
       </ul>

@@ -1,5 +1,17 @@
 <%= form_with model: @post do |form| %>
   <div class="modal-body">
+    <div class="row">
+      <% if @post.errors.any? %>
+        <div class="error-area" style="color: red;">
+          <h3><%= pluralize(@post.errors.count, 'error') %> prohibited your posts form being saved. </h3>
+          <ul>
+            <% @post.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
     <div class="form-group">
       <%= form.label :title %>
       <%= form.text_field :title, class: "form-control mt-2 mb-2" %>

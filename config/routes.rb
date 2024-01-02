@@ -47,7 +47,8 @@ Rails.application.routes.draw do
 
   resources :events do
     collection do
-      get 'calendar_events'
+      get 'calendar', to: 'events#calendar'
+      post 'calendar_events', to: 'events#create_calendar_event'
     end
   end
 
@@ -78,7 +79,7 @@ Rails.application.routes.draw do
   resources :skills
   resources :messages, only: [:index]
   resources :shares, only: [:new, :create,:index]
-  resources :articles 
+  resources :articles
 
 
   resources :groups do
@@ -94,7 +95,7 @@ Rails.application.routes.draw do
     resources :jobs
     resources :my_jobs, only: [:index]
     resources :my_events, only: [:index]
-    resources :my_article, only: [:index]
+    resources :my_articles, only: [:index]
   end
 
   resources :members, controllers: 'members' do

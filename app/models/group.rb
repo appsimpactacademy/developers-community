@@ -1,11 +1,11 @@
-# frozen_string_literal: true
-
 class Group < ApplicationRecord
   belongs_to :user
 
   has_and_belongs_to_many :users
   has_many :posts
   has_one_attached :image
+
+  validates :name, :description, :industry, :location, :group_type, presence: true
 
   INDUSTRY = ['Software Development',
               'Data Security Software Products',

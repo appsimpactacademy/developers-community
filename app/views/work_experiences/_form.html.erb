@@ -3,7 +3,7 @@
     <div class="row">
       <% if @work_experience.errors.any? %>
         <div class="error-area" style="color:red;">
-          <h3><%= pluralize(@work_experience.errors.count, 'error') %> prohibited your work experience frm being saved.</h3>
+          <h3><%= pluralize(@work_experience.errors.count, 'error') %> prohibited your work experience form being saved.</h3>
           <ul>
             <% @work_experience.errors.each do |error| %>
               <li><%= error.full_message %></li>

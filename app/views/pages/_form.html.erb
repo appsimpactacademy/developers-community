@@ -1,4 +1,16 @@
 <%= form_with model: @page do |form| %>
+  <div class="row">
+    <% if @page.errors.any? %>
+      <div class="error-area" style="color: red;">
+        <h3><%= pluralize(@page.errors.count, 'error') %> prohibited your pages form being saved. </h3>
+        <ul>
+          <% @page.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
   <div class="form-group row">
     <div class="col-lg-6">
        <%= form.hidden_field :user_id, value:current_user.id %>

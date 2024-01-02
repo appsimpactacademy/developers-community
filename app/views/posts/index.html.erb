@@ -1,4 +1,4 @@
-<div class="col-lg-10 mx-auto mt-3">
+<div class="col-lg-10 mx-auto mt-3" id="posts-container">
   <div class="row">
     <% if @posts.present? %>
       <% @posts.each do |post| %>
@@ -47,8 +47,8 @@
         </div>
       <% end %>
     <% else %>
-      <div class="col-lg-12 mt-3">
-        <p class="h3">No posts available.</p>
+      <div class="col-lg-12">
+        <p class="border border-1 rounded p-2 text-danger fw-bold">No posts available.</p>
       </div>
     <% end %>
   </div>
@@ -61,10 +61,4 @@
     max-width: 100%;
     overflow: hidden;
   }
-
-/*  .post_images img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }*/
 </style>

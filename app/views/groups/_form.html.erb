@@ -1,5 +1,17 @@
 <%= form_with model: @group do |form| %>
   <div class="modal-body">
+    <div class="row">
+      <% if @group.errors.any? %>
+        <div class="error-area" style="color: red;">
+          <h3><%= pluralize(@group.errors.count, 'error') %> prohibited your groups form being saved. </h3>
+          <ul>
+            <% @group.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
     <div class="form-group">
        <%= form.hidden_field :user_id, value:current_user.id %>
     </div>

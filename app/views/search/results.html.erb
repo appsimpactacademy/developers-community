@@ -18,7 +18,7 @@
           <div class="col-lg-2">
             <% if @user.image.attached? %>
               <%= image_tag @user.image, style: "width: 200px; max-width:100%; max-height:100%; height:auto", class: 'border border-1 rounded-circle mt-2 mx-3' %>
-            <% else %>
+            <% else %> 
               <%= image_tag 'human.avif', style: "width: 200px; max-width:100%; max-height:100%; height:auto", class: 'border border-2 rounded-circle mt-2 mx-3' %>
             <% end %>
           </div>
@@ -32,9 +32,7 @@
                   <% end %>
                 </small>
                 <br>
-                <div data-controller="profile-view">
-                  <%= link_to 'View Profile', member_path(@user), class: 'btn btn-outline-primary btn-sm mt-2 rounded-pill', data: { action: "click->profile-view#viewProfile", user_id: @user.id } %>
-                </div>
+                <%= link_to 'View Profile', member_path(@user), class: 'btn btn-outline-primary btn-sm mt-2 rounded-pill' %>
             </div>
           </div>
         </div>
@@ -52,7 +50,7 @@
                           <%= image_tag post.user.image, class: "border border-2 rounded-circle user-image" %>
                         <% else %> 
                           <%= image_tag 'human.avif', class: "border border-2 rounded-circle user-image" %>
-                        <% end %>  
+                          <% end %>
                       <% end %>
                     </div>
                     <div class="col-md-10 col-12 mt-2 mb-3 d-grid">
@@ -205,46 +203,19 @@
   </div>
 </div>
 
-<style>
-  .image-container {
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-  }
-  .image-container img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  .user-image{
-    width: 70px;
-    overflow: hidden;
-    margin-top: 15px;
-  }
-
-  .hidden {
-    display: none;
-  }
-
-  .show-more, .show-less {
-    cursor: pointer;
-    color: blue;
-  }
-</style>
-
 <script>
   $(document).ready(function() {
-  $('.post_images').magnificPopup({
-    type: 'image',
-    gallery: {
-      enabled: true
-    },
-    mainClass: 'mfp-with-zoom',
+    $('.post_images').magnificPopup({
+      type: 'image',
+      gallery: {
+        enabled: true
+      },
+      mainClass: 'mfp-with-zoom',
       zoom: {
         enabled: true,
         duration: 300,
         easing: 'ease-in-out'
       }
+    });
   });
-});
 </script>

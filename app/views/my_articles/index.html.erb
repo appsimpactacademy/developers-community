@@ -1,0 +1,17 @@
+<div class="col-lg-10 mx-auto mt-3" id="user_article">
+  <div class="card shadow mb-3">
+    <div class="card-body">
+      <% if @articles.present? %>
+      <% @articles.each do |article| %>
+      <h4><%= article.title %></h4>
+      <p><%= article.content %></p>
+      <%= link_to 'Back', root_path, class: 'btn btn-primary mt-2' %>
+      <%= link_to 'Delete', article_path(article), id: "delete_article", data: { turbo_confirm: 'Are you sure?', turbo_method: :delete}, class: "btn btn-danger mt-2", title: "Delete this Article" %>
+      <%#= link_to 'Edit', edit_article_path(article), data: { controller: 'bs_modal_form' }, class: 'btn btn-warning mt-2' %>
+      <% end %>
+      <% else %>
+      <p class="h5">No article is present</p>
+      <% end %>
+    </div>
+  </div>
+</div>

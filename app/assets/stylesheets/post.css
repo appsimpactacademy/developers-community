@@ -1,0 +1,61 @@
+.image-container {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+.image-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.user-image{
+  width: 70px;
+  overflow: hidden;
+  margin-top: 15px;
+}
+.post-info {
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.post-user-image img {
+  width: 60px;
+}
+
+.post-user-details {
+  padding-left: 10px;
+}
+
+.post-user-name {
+  font-size: 18px;
+}
+
+.post-user-title {
+  font-size: 14px;
+}
+
+.post-time-ago {
+  font-size: 12px;
+}
+
+.post-follow-button {
+  display: flex;
+  align-items: center;
+}
+
+.post-more-options {
+  display: flex;
+  align-items: center;
+}
+
+.hide-post {
+  display: flex;
+  align-items: center;
+}
+
+.hide-dialog {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px;
+}

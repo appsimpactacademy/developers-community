@@ -1,19 +1,17 @@
-# frozen_string_literal: true
-
 FactoryBot.define do
   factory :page do
-    title { 'Sample Page Title' }
-    content { 'Sample Page Content' }
-    industry { 'Sample Industry' }
-    website { 'http://example.com' }
-    organization_size { 'Sample Organization Size' }
-    organization_type { 'Sample Organization Type' }
-    about { 'About this page...' }
+    title { Faker::Lorem.sentence }
+    content { Faker::Lorem.paragraph }
+    industry { Faker::Company.industry }
+    website { Faker::Internet.url }
+    organization_size { %w[Small Medium Large].sample }
+    organization_type { %w[Public Private Nonprofit].sample }
+    association :user
 
-    # Assuming you have a User model and want to associate it with a user
-    user
+    about { Faker::Lorem.paragraph }
 
-    created_at { Time.now }
-    updated_at { Time.now }
+    trait :with_user do
+      association :user
+    end
   end
 end

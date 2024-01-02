@@ -13,6 +13,7 @@ FactoryBot.define do
     # Assuming you have a JobCategory and User model, and you want to associate them
     association :job_category, factory: :job_category
     association :user, factory: :user
+    association :page
 
     created_at { Time.now }
     updated_at { Time.now }

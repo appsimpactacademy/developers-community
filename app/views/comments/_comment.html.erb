@@ -4,7 +4,7 @@
     <p class="h6"><%= comment.user.name %></p>
   <% end %>
 
-   <% if (comment.updated_at - comment.created_at) > 1 %>
+  <% if (comment.updated_at - comment.created_at) > 1 %>
     <span>Edited <%= time_ago_in_words(comment.updated_at) %> ago</span>
   <% else %>
     <span>Posted <%= time_ago_in_words(comment.created_at) %> ago</span>
@@ -12,7 +12,7 @@
 
   <% if current_user == comment.user %>
     <div class="btn-group float-end">
-      <%= link_to "Edit", nil, remote: true, class:"btn btn-warning rounded me-1",
+      <%= link_to "Edit", nil, remote: true, class:"btn btn-warning rounded me-1", id: "edit-comment-button",
       data: {
         controller: "comments",
         action: "comments#toggleForm",
@@ -21,7 +21,7 @@
         comments_edit_param: "edit-button-#{comment.id}"
       },
       id: "edit-button-#{comment.id}" %>
-      <%= button_to "Delete", [@post, comment], class:"btn btn-danger me-1", method: :delete %>
+      <%= button_to "Delete", [@post, comment], class:"btn btn-danger me-1", id: "delete-comment-button", method: :delete %>
     </div>
     <div id="edit-form-<%= comment.id%>" class="d-none">
       <%= render 'comments/form',

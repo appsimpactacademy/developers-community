@@ -1,5 +1,17 @@
 <%= form_with model: @article do |form| %>
   <div class="modal-body">
+    <div class="row">
+      <% if @article.errors.any? %>
+        <div class="error-area" style="color: red;">
+          <h3><%= pluralize(@article.errors.count, 'error') %> prohibited your articles form being saved. </h3>
+          <ul>
+            <% @article.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
     <div class="form-group">
       <%= form.hidden_field :user_id, value:current_user.id %>
     </div>

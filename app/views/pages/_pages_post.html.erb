@@ -12,10 +12,8 @@
               <% end %>
             </div>
             <div class="col-lg-10">
-              <%= link_to member_path(post.user), style: "text-decoration:none;" do %>
-                <h5 class="text-dark mx-2"><%= @page.title %></h5>
-                <small class="text-muted mx-2">Posted <%= time_ago_in_words(post.created_at) %> ago</small>
-              <% end %>
+              <h5 class="text-dark mx-2"><%= @page.title %></h5>
+              <small class="text-muted mx-2">Posted <%= time_ago_in_words(post.created_at) %> ago</small>
             </div>
             <div class="col-lg-1 justify-content-end">
               <div class="dropdown">
@@ -259,6 +257,75 @@
                   <i class="fa-solid fa-repeat"></i>
                   <% end %>
                 <% end %>
+              <% end %>
+            </div>
+            <div class="col-lg-3 col-md-2 col-3 mt-2">
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-light btn-sm" id="repost_with_thought" data-bs-toggle="modal" data-bs-target="#exampleModal<%= post.id %>">
+                Repost with thought
+              </button>
+
+              <!-- Modal -->
+              <div class="modal fade" id="exampleModal<%= post.id %>" tabindex="-1" aria-labelledby="exampleModalLabel<%= post.id %>" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Repost with your thought</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="post mb-5">                      
+                        <!-- Form for reposting with thought -->
+                        <%= form_with(model: [post, Repost.new], url: repost_thought_post_path(post), method: :post) do |form| %>
+                          <%= form.text_area :thought, class: 'form-control', placeholder: 'Add your thought...' %>
+                      </div>
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row post-info">
+                            <div class="col-md-1 col-12 mb-2 d-grid post-user-image">
+                            <%= link_to member_path(post.user), style: "text-decoration:none;" do %>
+                              <% if post.user.image.attached? %>
+                                <%= image_tag post.user.image, class: "user-image border border-1 rounded-circle" %>
+                              <% else %> 
+                                <%= image_tag 'human.avif', class: "user-image border border-1 rounded-circle" %>
+                              <% end %>
+                            <% end %>
+                            </div>
+                            <div class="col-md-8 col-12 mt-2 mb-3 px-5 d-grid post-user-details">
+                              <%= link_to member_path(post.user), style: "text-decoration:none;" do %>
+                                <h5 class="text-dark post-user-name"><%= post.user.name %></h5>
+                                <small class="text-muted post-user-title"><%= post.user.profile_title %></small><br>
+                                <small class="text-muted post-time-ago">Posted <%= time_ago_in_words(post.created_at) %> ago</small>
+                              <% end %>
+                            </div>
+                          </div>
+                          <div>
+                            <%= link_to post_path(post), style: 'text-decoration:none; color: black;' do %>
+                              <h5><%= post.title %></h5>
+                              <p><%= simple_format(post.description) %></p>
+                            <% end %>
+                            <%= link_to post_path(post) do %>
+                              <% if post.images.attached? %>
+                                <%= image_tag post.images.first, class: 'border border-1' %>
+                              <% end %>
+                            <% end %>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <%= form.submit 'Repost', class: 'btn btn-primary mt-2' %>
+                      </div>
+                    <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>  
+            <div class="col-lg-5 col-md-2 col-3 mt-2 text-end">
+              <%#= render 'posts/show', post: post %>
+              <% if current_user.has_reposted?(post) %>
+                <% repost = current_user.reposts.find_by(post_id: post.id) %>
+                <%= link_to "View Repost", post_repost_path(post, repost), class: "btn btn-light btn-sm text-primary", id: "view_repost" %>
               <% end %>
             </div>
           </div>

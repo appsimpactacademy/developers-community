@@ -2,100 +2,91 @@
   <% if @group.posts.present? %>
     <% @group.posts.each do |post| %>
       <% if post.group_id.present? %>
-        <div class="card mb-2 shadow" style="min-height: 320px;">
+        <div class="card shadow mb-2">
           <div class="card-body">
-            <div class="container">
-              <div class="row post-info">
-                <div class="col-md-1 col-12 mb-2 d-grid post-user-image">
-                  <%= link_to member_path(post.user), style: "text-decoration:none;" do %>
-                    <% if post.user.image.attached? %>
-                      <%= image_tag post.user.image, class: "user-image border border-1 rounded-circle" %>
-                    <% else %> 
-                      <%= image_tag 'human.avif', class: "user-image border border-1 rounded-circle" %>
+            <div class="row post-info">
+              <div class="col-md-1 col-12 mb-2 d-grid post-user-image">
+                <%= link_to member_path(post.user), style: "text-decoration:none;" do %>
+                  <% if post.user.image.attached? %>
+                    <%= image_tag post.user.image, class: "user-image border border-1 rounded-circle" %>
+                  <% else %>
+                    <%= image_tag 'human.avif', class: "user-image border border-1 rounded-circle" %>
+                  <% end %>
+                <% end %>
+              </div>
+              <div class="col-md-8 col-12 mt-2 mb-3 px-5 d-grid post-user-details">
+                <%= link_to member_path(post.user), style: "text-decoration:none;" do %>
+                  <h5 class="text-dark post-user-name"><%= post.user.name %></h5>
+                  <small class="text-muted post-user-title"><%= truncate(post.user.profile_title, length: 25) %></small><br>
+                  <small class="text-muted post-time-ago">Posted <%= time_ago_in_words(post.created_at) %> ago</small>
+                <% end %>
+              </div>
+              <div class="col-md-1 col-12 mt-2 mb-3 px-3 justify-content-end post-follow-button">
+                <% if current_user != post.user %>
+                  <% if current_user.following?(post.user) %>
+                    <%= link_to 'Unfollow', unfollow_member_path(post.user), method: :delete, class: 'btn btn-outline-danger btn-sm fw-bold', style: "text-decoration:none;" %>
+                  <% else %>
+                    <%= link_to 'Follow', follow_member_path(post.user), method: :post, class: "btn btn-outline-primary btn-sm fw-bold", style: 'text-decoration:none;' %>
+                  <% end %>
+                <% end %>
+              </div>
+              <div class="col-md-1 col-12 mt-1 mb-3 px-3 d-grid justify-content-end post-more-options">
+                <div class="dropdown">
+                  <a href="#" class="text-decoration-none text-reset" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-ellipsis fa-xl mt-3"></i>
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <% if current_user == post.user %> 
+                      <li><%= link_to 'Delete', post_path(post), data: { turbo_method: :delete, turbo_confirm: "Are You Sure to delete ?" }, class: "dropdown-item", id: "delete_group_post_button_#{post.user.id}" %></li>
+                      <li><%= link_to 'Edit', edit_post_path(post), data: { controller: 'bs-modal-form' }, class: "dropdown-item", id: "edit_group_post_button_#{post.user.id}" %></li>
                     <% end %>
-                  <% end %>
-                </div>
-                <div class="col-md-8 col-12 mt-2 mb-3 px-5 d-grid post-user-details">
-                  <%= link_to member_path(post.user), style: "text-decoration:none;" do %>
-                    <h5 class="text-dark post-user-name"><%= post.user.name %></h5>
-                    <small class="text-muted post-user-title"><%= truncate(post.user.profile_title, length: 25) %></small><br>
-                    <small class="text-muted post-time-ago">Posted <%= time_ago_in_words(post.created_at) %> ago</small>
-                  <% end %>
-                </div>
-                <div class="col-md-1 col-12 mt-2 mb-3 px-3 justify-content-end post-follow-button">
-                  <% if current_user != post.user %>
-                    <% if current_user.following?(post.user) %>
-                      <%= link_to 'Unfollow', unfollow_member_path(post.user), method: :delete, class: 'btn btn-outline-danger btn-sm fw-bold', style: "text-decoration:none;" %>
-                    <% else %>
-                      <%= link_to 'Follow', follow_member_path(post.user), method: :post, class: "btn btn-outline-primary btn-sm fw-bold", style: 'text-decoration:none;' %>
-                    <% end %>
-                  <% end %>
-                </div>
-                <div class="col-md-1 col-12 mt-1 mb-3 px-3 d-grid justify-content-end post-more-options">
-                  <div class="dropdown">
-                    <a href="#" class="text-decoration-none text-reset" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="fa-solid fa-ellipsis fa-xl mt-3"></i>
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                      <% if current_user == post.user %> 
-                        <li><%= link_to 'Delete', post_path(post), data: { turbo_method: :delete, turbo_confirm: "Are You Sure to delete ?" }, class: "dropdown-item" %></li>
-                        <li><%= link_to 'Edit', edit_post_path(post), data: { controller: 'bs-modal-form' }, class: "dropdown-item" %></li>
-                      <% end %>
-                      <li><%= link_to 'View', post_path(post), class: 'dropdown-item' %></li>
-                      <li>
-                        <button
-                          data-controller="copy-url"
-                          data-copy-url-target="copyButton"
-                          data-copy-url-post-id="<%= post.id %>"
-                          data-action="click->copy-url#copyUrl"
-                          class="dropdown-item"
-                        >
-                          Copy URL
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="col-md-1 col-12 mt-2 mb-3 px-3 d-grid justify-content-end" data-controller="hide-post" data-hide-post-post-id="<%= post.id %>">
-                  <%= link_to hide_post_path(post), method: :post, class: 'hide-post', title: 'hide-post', data: { action: "click->hide-post#hidePost" } do  %>
-                    <i class="fa-solid fa-xmark"></i>
-                  <% end %>  
-                  <%# <div class="hide-dialog" data-hide-post-target="dialog">
-                    <p>Post removed from your feed</p>
-                    <p>Your feedback helps improve the feed.</p>
-                    <%#= link_to undo_hide_post_path(post), method: :post, class:"undo-hide-post", title: 'undo-post', data: { action: "click->hide-post#undoHidePost", hide_post_target: "undoButton" } do %>
-                      <%# <i class="fa-solid fa-rotate-left"></i> %>
-                    <%# end %>
-                  </div>                
+                    <li><%= link_to 'View', post_path(post), class: 'dropdown-item', id: "view_group_post_button_#{post.user.id}" %></li>
+                    <li>
+                      <button
+                        data-controller="copy-url"
+                        data-copy-url-target="copyButton"
+                        data-copy-url-post-id="<%= post.id %>"
+                        data-action="click->copy-url#copyUrl"
+                        class="dropdown-item"
+                      >
+                        Copy URL
+                      </button>
+                    </li>
+                  </ul>
                 </div>
               </div>
+              <div class="col-md-1 col-12 mt-2 mb-3 px-3 d-grid justify-content-end" data-controller="hide-post" data-hide-post-post-id="<%= post.id %>">
+                <%= link_to hide_post_path(post), method: :post, class: 'hide-post', title: 'hide-post', id: "hidden_group_post", data: { action: "click->hide-post#hidePost" } do  %>
+                  <i class="fa-solid fa-xmark"></i>
+                <% end %>    
+              </div>
             </div>
-            <div class="user-info mt-2 mx-3" data-controller="user-name">
+            <div class="user-info mt-2 mx-3" data-controller="user-name" id="group_post_view_link">
               <%= link_to post_path(post), style: 'text-decoration:none; color: black;' do %>
                 <h5 data-user-name-target='name'><%= post.title %> </h5>
-                <div data-controller="show-more">
-                  <div data-show-more-target="description">
-                    <p><%= simple_format(post.description) %></p>
-                  </div>
               <% end %>
-                  <div class="row">
-                     <div class="col-lg-12 d-flex justify-content-end">
-                        <button 
-                          data-action="click->show-more#toggleVisibility" 
-                          data-show-more-target="toggleButton" 
-                          class="btn btn-outline-light text-primary btn-sm mb-3 mt-3">
-                          Show More
-                        </button>
-                     </div>
-                  </div>
-                  <div class="col-lg-12 mb-1 d-flex justify-content-end">
-                    <% if (@post_comment_counts[post.id] || 0) > 0 %>
-                      <%= link_to post_path(post), style: "text-decoration:none;" do %>
-                        <%= pluralize(@post_comment_counts[post.id], "Comment") %>
-                      <% end %>
-                    <% end %>
-                  </div>
+              <div data-controller="show-more">
+                <div data-show-more-target="description">
+                  <p><%= simple_format(post.description) %></p>
                 </div>
+                <div class="row">
+                   <div class="col-lg-12 d-flex justify-content-end">
+                      <button 
+                        data-action="click->show-more#toggleVisibility" 
+                        data-show-more-target="toggleButton" 
+                        class="btn btn-outline-light text-primary btn-sm mb-3 mt-3">
+                        Show More
+                      </button>
+                   </div>
+                </div>
+                <div class="col-lg-12 mb-1 d-flex justify-content-end">
+                  <% if (@post_comment_counts[post.id] || 0) > 0 %>
+                    <%= link_to post_path(post), style: "text-decoration:none;" do %>
+                      <%= pluralize(@post_comment_counts[post.id], "Comment") %>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
             </div>
             <div>
               <%= link_to post_path(post) do %>
@@ -116,19 +107,19 @@
                 <% end %>
               <% end %>
             </div>
-            <!-- for display the names of users who liked & repost a post and show the count of remaining users into the modal popup -->
-            <%= render 'home/like_and_reposts', post: post %>
-
-            <div class="row mt-3 mb-3">
+            <div>
+              <%= render 'home/like_and_reposts', post: post %>
+            </div>
+            <div class="row mt-3">
               <div class="col-lg-1 col-md-2 col-3">
                 <% if user_signed_in? %>
                   <% like = post.likes.find { |like| like.user_id == current_user.id } %>
                   <% if like.nil? %>
-                    <%= button_to likes_path, params: { like: { post_id: post.id } }, method: :post, class: "btn btn-light position-absolute mt-2" do %>
+                    <%= button_to likes_path, params: { like: { post_id: post.id } }, method: :post, class: "btn btn-light position-absolute mt-2", id: "group_like_button" do %>
                       <i class="fa-solid fa-thumbs-up fa-xl" title="Like"></i>
                     <% end -%>
                   <% else %>
-                    <%= button_to like_path(like), params: { like: { post_id: post.id } }, method: :delete, class: "btn btn-light position-absolute mt-2" do %>
+                    <%= button_to like_path(like), params: { like: { post_id: post.id } }, method: :delete, class: "btn btn-light position-absolute mt-2", id: "group_dislike_button" do %>
                       <i class="fa-solid fa-thumbs-down fa-xl" title="Dislike"></i>
                     <% end -%>
                   <% end -%>
@@ -138,7 +129,7 @@
                 <% end %>
               </div>
               <div class="col-lg-1 col-md-2 col-3">
-                <%= link_to new_share_path(post_id: post.id), class: "btn btn-light mt-2", data: { controller: "bs-modal-form" } do %>
+                <%= link_to new_share_path(post_id: post.id), class: "btn btn-light mt-2", id: "share_group_post", data: { controller: "bs-modal-form" } do %>
                     <i class="fa-solid fa-paper-plane" title="Share"></i>
                 <% end %>
               </div>
@@ -149,10 +140,10 @@
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                     <li>
-                      <a href="https://www.facebook.com/sharer/sharer.php?u=<%= ENV['APP_URL']%><%= post_path(post)%>" target="_blank" class="dropdown-item">Share on Facebook</a>
+                      <a href="https://www.facebook.com/sharer/sharer.php?u=<%= ENV['APP_URL']%><%= post_path(post)%>" target="_blank" class="dropdown-item" id="group_facebook_share">Share on Facebook</a>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="https://twitter.com/intent/tweet?url=<%= ENV['APP_URL']%><%= post_path(post)%>&text=<%= post.title %>" target="_blank">Share on Twitter</a>
+                      <a class="dropdown-item" id="group_twitter_share" href="https://twitter.com/intent/tweet?url=<%= ENV['APP_URL']%><%= post_path(post)%>&text=<%= post.title %>" target="_blank">Share on Twitter</a>
                     </li>
                   </ul>
                 </div>
@@ -164,21 +155,86 @@
                       <i class="fa-solid fa-repeat"></i>
                     <% end %>
                   <% else %>
-                    <%= link_to post_reposts_path(post), method: :post, class: 'btn btn-light mt-2', title: "Repost" do %>
+                    <%= link_to post_reposts_path(post), method: :post, class: 'btn btn-light mt-2', id: "add_group_reposts", title: "Repost" do %>
                     <i class="fa-solid fa-repeat"></i>
                     <% end %>
                   <% end %>
                 <% end %>
               </div>
-              <div class="col-lg-7 col-md-2 col-3">
-                <%#= render 'posts/show', post: post %>
+              <div class="col-lg-3 col-md-2 col-3 mt-2">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-light btn-sm" id="repost_with_thought" data-bs-toggle="modal" data-bs-target="#exampleModal<%= post.id %>">
+                  Repost with thought
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal<%= post.id %>" tabindex="-1" aria-labelledby="exampleModalLabel<%= post.id %>" aria-hidden="true">
+                  <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Repost with your thought</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="post mb-5">                      
+                          <!-- Form for reposting with thought -->
+                          <%= form_with(model: [post, Repost.new], url: repost_thought_post_path(post), method: :post) do |form| %>
+                            <%= form.text_area :thought, class: 'form-control', placeholder: 'Add your thought...' %>
+                        </div>
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="row post-info">
+                              <div class="col-md-1 col-12 mb-2 d-grid post-user-image">
+                              <%= link_to member_path(post.user), style: "text-decoration:none;" do %>
+                                <% if post.user.image.attached? %>
+                                  <%= image_tag post.user.image, class: "user-image border border-1 rounded-circle" %>
+                                <% else %> 
+                                  <%= image_tag 'human.avif', class: "user-image border border-1 rounded-circle" %>
+                                <% end %>
+                              <% end %>
+                              </div>
+                              <div class="col-md-8 col-12 mt-2 mb-3 px-5 d-grid post-user-details">
+                                <%= link_to member_path(post.user), style: "text-decoration:none;" do %>
+                                  <h5 class="text-dark post-user-name"><%= post.user.name %></h5>
+                                  <small class="text-muted post-user-title"><%= post.user.profile_title %></small><br>
+                                  <small class="text-muted post-time-ago">Posted <%= time_ago_in_words(post.created_at) %> ago</small>
+                                <% end %>
+                              </div>
+                            </div>
+                            <div>
+                              <%= link_to post_path(post), style: 'text-decoration:none; color: black;' do %>
+                                <h5><%= post.title %></h5>
+                                <p><%= simple_format(post.description) %></p>
+                              <% end %>
+                              <%= link_to post_path(post) do %>
+                                <% if post.images.attached? %>
+                                  <%= image_tag post.images.first, class: 'border border-1' %>
+                                <% end %>
+                              <% end %>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <%= form.submit 'Repost', class: 'btn btn-primary mt-2' %>
+                        </div>
+                      <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-5 col-md-2 col-3 mt-2 text-end">
+                <% if current_user.has_reposted?(post) %>
+                  <% repost = current_user.reposts.find_by(post_id: post.id) %>
+                  <%= link_to "View Repost", post_repost_path(post, repost), class: "btn btn-light btn-sm text-primary", id: "view_repost" %>
+                <% end %>
               </div>
             </div>
           </div>
         </div>
       <% end %>
     <% end %>
-  <% else %>
+    <% else %>
     <p class="border border-1 rounded p-2">No group post is available</p>
   <% end %>
 </div>

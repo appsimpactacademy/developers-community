@@ -34,7 +34,6 @@ RSpec.feature 'Events', type: :feature do
       
       expect(page).to have_text('Add Event', wait: 10)
 
-      # fill_in 'event_event_type', with: 'Online'
       fill_in 'event_event_name', with: 'Tech Conference 2023'
       select 'Online', from: 'event_event_type'
       fill_in 'event_start_date', with: '15/12/2023' 

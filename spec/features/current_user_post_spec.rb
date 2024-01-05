@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Post', type: :feature do
-  describe 'Post' do
+RSpec.feature 'Current User Post', type: :feature do
+  describe 'Current User Post' do
     let(:user) { create(:user) }
 
     before :each do
@@ -94,3 +94,4 @@ RSpec.feature 'Post', type: :feature do
     end
   end
 end
+

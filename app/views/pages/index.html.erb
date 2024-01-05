@@ -1,5 +1,5 @@
 <div class="col-lg-10 mx-auto mt-3">
-  <%= link_to 'New Page', new_page_path, id: "add-page-link", class: 'btn btn-outline-primary mb-2' %>
+  <%= link_to 'New Page', new_page_path, id: "add-page-link", class: 'btn btn-outline-primary mb-2', data: { controller: "bs-modal-form" } %>
   <% @pages.each do |page| %>
     <div class="card shadow mt-2" style="min-height:-100px;">
       <div class="card-body">

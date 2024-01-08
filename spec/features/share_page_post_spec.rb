@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.feature 'Pages', type: :feature do
-  describe 'Pages' do
+RSpec.feature 'Share Page Post to other user', type: :feature do
+  describe 'Share Page Post to other user' do
     let(:user) { create(:user) }
 
     before :each do
@@ -33,7 +33,7 @@ RSpec.feature 'Pages', type: :feature do
       expect(page).to have_text("About can't be blank")
     end
 
-    it 'should open the job form and save to db if all validation passed' do
+    it 'should open the page post form and save to db if all validation passed ' do
 
       visit pages_path
       
@@ -58,6 +58,46 @@ RSpec.feature 'Pages', type: :feature do
       expect(page).to have_text('11-50 employees')
 
       click_link 'Awesome Page'
+
+      find('#pages_post_button', wait: 10).click
+
+      page_id = Page.last.id
+
+      visit page_path(page_id)
+
+      other_user = create(:user)
+
+      find('#pages_post_button', wait: 10).click
+
+      expect(page).to have_text('Uploade your post')
+
+      fill_in 'post_title', with: 'Sample Post for pages'
+      fill_in 'post_description', with: 'This is a sample post description for pages.'
+      click_button 'Save Changes'
+
+      page_id = Page.last.id
+
+      visit page_path(page_id)
+
+      expect(page).to have_text('Sample Post for pages')
+      expect(page).to have_text('This is a sample post description for pages.')
+
+      # share the group post
+      find('#share_page_post', wait: 10).click
+
+      expect(page).to have_text('Share your post')
+
+      find('#select_recipient', wait: 10).click
+
+      select_option('select_recipient', other_user.name)
+
+      click_button 'Share'
+
+      sign_in(other_user)
+      
+      visit shares_path
+
+      find('#post_title', wait: 10).click
     end
   end
 end

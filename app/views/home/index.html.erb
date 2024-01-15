@@ -19,24 +19,26 @@
             </div>
           </p>
           <hr>
-          <%= link_to 'My Job', user_my_jobs_path(current_user), id: 'my-job', style: 'text-decoration:none;'%> 
+          <%= link_to 'My Job', user_my_jobs_path(current_user), id: 'my-job', class:"text-decoration-none"%> 
           <hr>
-          <%= link_to 'My Post', user_posts_path(current_user), id: "add-user-post-link", style: 'text-decoration:none;'%> 
+            <%= link_to 'My Saved Jobs', saved_jobs_path, class:"text-decoration-none"%>  
           <hr>
-          <%= link_to "My Followers", followers_and_following_member_path(current_user), id: "add-my-followers-link", style: 'text-decoration:none;' %> 
+          <%= link_to 'My Post', user_posts_path(current_user), id: "add-user-post-link", class:"text-decoration-none"%> 
           <hr>
-          <%= link_to "My Article", user_my_articles_path(current_user), id: "my-article", style: 'text-decoration:none;' %> 
+          <%= link_to "My Followers", followers_and_following_member_path(current_user), id: "add-my-followers-link", class:"text-decoration-none" %> 
           <hr>
-          <%= link_to "My Events", user_my_events_path(current_user), id: "my_event", style: 'text-decoration:none;'  %>
+          <%= link_to "My Article", user_my_articles_path(current_user), id: "my-article", class:"text-decoration-none" %> 
           <hr>
-          <%= link_to 'View Calendar', calendar_events_path, id:"viewCalendarButton", style: 'text-decoration:none;' %>
+          <%= link_to "My Events", user_my_events_path(current_user), id: "my_event", class:"text-decoration-none"  %>
+          <hr>
+          <%= link_to 'View Calendar', calendar_events_path, id:"viewCalendarButton", class:"text-decoration-none" %>
         </div>
       </div>
       <div class="card mb-2 shadow">
         <div class="card-body">
-          <%= link_to 'Groups', groups_path, style: 'text-decoration:none;', id: "groups" %>
+          <%= link_to 'Groups', groups_path, class:"text-decoration-none", id: "groups" %>
             <% @groups.each do |group|%><br>
-              <%= link_to group_path(group), style: 'text-decoration:none;' do %>
+              <%= link_to group_path(group), class:"text-decoration-none" do %>
                <small class="text-dark"><%= group.name %></small>
             <% end %>
           <% end %>

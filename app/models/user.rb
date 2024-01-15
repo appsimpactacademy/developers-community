@@ -27,6 +27,7 @@ class User < ApplicationRecord
   has_many :posts, dependent: :destroy
   has_many :events, dependent: :destroy
   has_many :articles
+  has_many :saved_jobs
 
   # for repost the post
   has_many :reposts, dependent: :destroy

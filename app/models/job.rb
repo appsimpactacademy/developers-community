@@ -5,6 +5,8 @@ class Job < ApplicationRecord
   belongs_to :user
   belongs_to :page, optional: true
 
+  has_many :saved_jobs
+
   validates :title, :description, :employee_type, 
             :location, :salary, :job_category, 
             :qualification, :status, :page, 

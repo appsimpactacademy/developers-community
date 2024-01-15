@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_29_070836) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_08_091322) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -232,6 +232,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_29_070836) do
     t.index ["user_id"], name: "index_reposts_on_user_id"
   end
 
+  create_table "saved_jobs", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "job_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_saved_jobs_on_job_id"
+    t.index ["user_id"], name: "index_saved_jobs_on_user_id"
+  end
+
   create_table "shares", force: :cascade do |t|
     t.bigint "post_id", null: false
     t.bigint "sender_id", null: false
@@ -340,6 +349,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_29_070836) do
   add_foreign_key "profile_views", "users", column: "viewer_id"
   add_foreign_key "reposts", "posts"
   add_foreign_key "reposts", "users"
+  add_foreign_key "saved_jobs", "jobs"
+  add_foreign_key "saved_jobs", "users"
   add_foreign_key "shares", "posts"
   add_foreign_key "skills", "users"
   add_foreign_key "work_experiences", "users"

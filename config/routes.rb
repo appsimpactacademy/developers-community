@@ -22,6 +22,8 @@ Rails.application.routes.draw do
     post '/verify_otp', to: 'users/sessions#verify_otp', as: :verify_otp
   end
 
+  # for saves jobs
+  resources :saved_jobs, only: [:index, :create, :destroy]
 
   # for hide & unhide the posts
   resources :posts do

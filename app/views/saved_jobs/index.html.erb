@@ -1,0 +1,25 @@
+<div class="col-lg-10 mx-auto mt-3">
+  <% if @saved_jobs.present? %>
+    <h3 class="border border-1 rounded p-2 text-center">Saved Jobs</h3>
+    <% @saved_jobs.each do |saved_job| %>
+      <div class="card shadow mt-2 mb-2">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-10">
+              <p>Job Title : <%= link_to saved_job.job.title, saved_job.job, class:"text-decoration-none"%></p>
+              <p>Job Description : <%= link_to saved_job.job.description, saved_job.job, class:"text-decoration-none"%>
+              </p>
+            </div>
+            <div class="col-lg-2 text-center mt-4">
+              <%= link_to saved_job_path(saved_job), method: :delete, data: { confirm: 'Are you sure?' }, class: 'text-danger' do %>
+                <i class="fa-regular fa-trash-can fa-lg"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>    
+      </div>
+    <% end %>
+    <% else %>
+     <p class="border border-1 rounded p-2 fs-5">No Job is saved by you!</p> 
+    <% end %>     
+</div>

@@ -1,5 +1,5 @@
 <% if results.any? %>
-  <div class="position-absolute overflow-auto max-height: 200px; bg-white rounded shadow" id="search">
+  <div class="position-absolute overflow-auto max-height: 200px; bg-white rounded shadow" id="search_suggestions">
     <% results.each do |result| %>
       <div class="p-2 border-bottom">
         <% if result.is_a?(User) %>

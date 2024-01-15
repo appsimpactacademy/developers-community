@@ -29,7 +29,7 @@ RSpec.feature 'Calendar functionality', type: :feature, js: true do
     
     find('#viewCalendarButton', wait: 10).click
 
-    find('[data-date="2024-01-11"]').click
+    find('[data-date="2024-01-31"]').click
 
     find('#eventModal', wait: 10).click
 

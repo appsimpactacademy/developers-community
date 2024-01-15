@@ -61,8 +61,8 @@
                 <% end %>    
               </div>
             </div>
-            <div class="user-info mt-2 mx-3" data-controller="user-name" id="group_post_view_link">
-              <%= link_to post_path(post), style: 'text-decoration:none; color: black;' do %>
+            <div class="user-info mt-2 mx-3" data-controller="user-name">
+              <%= link_to post_path(post), id:"group_post_view_link", style: 'text-decoration:none; color: black;' do %>
                 <h5 data-user-name-target='name'><%= post.title %> </h5>
               <% end %>
               <div data-controller="show-more">

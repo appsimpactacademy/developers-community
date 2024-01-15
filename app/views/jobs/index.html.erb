@@ -63,7 +63,7 @@
               </div>
               <div class="col-lg-1">
                 <% if user_signed_in? %>
-                  <%= link_to saved_jobs_path(job_id: job.id), method: :post, title: 'Saved Jobs' do %>
+                  <%= link_to saved_jobs_path(job_id: job.id), method: :post, id: "saved_jobs", title: 'Saved Jobs' do %>
                     <i class="fa-regular fa-bookmark fa-lg"></i>
                   <% end %>
                 <% end %>

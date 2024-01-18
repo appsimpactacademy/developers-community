@@ -58,8 +58,8 @@
                           <%= link_to connection.status.titleize, "javascript:void(0)", class: "#{connection.status_btn} mt-2" %>
                         </div>
                       <% else %>
-                        <%= link_to "Accept", connection_path(connection), class: "btn btn-success mt-2", data: { controller: "update-connection-status", turbo_method: :patch } %>
-                        <%= link_to "Reject", connection_path(connection), class: "btn btn-danger mt-2", data: { controller: "update-connection-status", turbo_method: :patch } %>
+                        <%= link_to "Accept", connection_path(connection), class: "btn btn-success mt-2", id: "accept_button",data: { controller: "update-connection-status", turbo_method: :patch } %>
+                        <%= link_to "Reject", connection_path(connection), class: "btn btn-danger mt-2", id: "reject_button", data: { controller: "update-connection-status", turbo_method: :patch } %>
                         
                       <% end %> 
                     </div>

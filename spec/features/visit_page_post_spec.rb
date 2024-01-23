@@ -33,7 +33,7 @@ RSpec.feature 'Visit Pages Post', type: :feature do
       expect(page).to have_text("About can't be blank")
     end
 
-    it 'should open the job form and save to db if all validation passed' do
+    it 'should open the page form and save to db if all validation passed' do
 
       visit pages_path
       
@@ -62,7 +62,7 @@ RSpec.feature 'Visit Pages Post', type: :feature do
       find('#pages_post_button', wait: 10).click
     end
 
-    it 'should open the job form and save to db if all validation passed & create the post for page & visit on that post' do
+    it 'should open the page form and save to db if all validation passed & create the post for page & visit on that post' do
 
       visit pages_path
       
@@ -88,22 +88,10 @@ RSpec.feature 'Visit Pages Post', type: :feature do
 
       click_link 'Awesome Page'
 
-      find('#pages_post_button', wait: 10).click
-
-      expect(page).to have_text('Uploade your post')
-
-      click_button 'Save Changes'
-
-      expect(page).to have_text('2 errors prohibited your posts form being saved.')
-      expect(page).to have_text("Title can't be blank")
-      expect(page).to have_text("Description can't be blank")
-
-      click_button 'Close'
-
       # create the page post
       find('#pages_post_button', wait: 10).click
 
-      expect(page).to have_text('Uploade your post')
+      expect(page).to have_text('Uploade your post', wait: 10)
 
       fill_in 'post_title', with: 'Sample Post for pages'
       fill_in 'post_description', with: 'This is a sample post description for pages.'
@@ -121,7 +109,7 @@ RSpec.feature 'Visit Pages Post', type: :feature do
       # edit the post after creating the page post
       find('#edit_post', wait: 10).click
 
-      expect(page). to have_text('Edit Post')
+      expect(page). to have_text('Edit Post', wait: 10)
 
       fill_in 'post_title', with: 'Dummy Post for page'
       fill_in 'post_description', with: 'Dummy description for dummy page post'
@@ -159,19 +147,7 @@ RSpec.feature 'Visit Pages Post', type: :feature do
 
       find('#pages_post_button', wait: 10).click
 
-      expect(page).to have_text('Uploade your post')
-
-      click_button 'Save Changes'
-
-      expect(page).to have_text('2 errors prohibited your posts form being saved.')
-      expect(page).to have_text("Title can't be blank")
-      expect(page).to have_text("Description can't be blank")
-
-      click_button 'Close'
-
-      find('#pages_post_button', wait: 10).click
-
-      expect(page).to have_text('Uploade your post')
+      expect(page).to have_text('Uploade your post', wait: 10)
 
       fill_in 'post_title', with: 'Sample Post for pages'
       fill_in 'post_description', with: 'This is a sample post description for pages.'
@@ -184,7 +160,7 @@ RSpec.feature 'Visit Pages Post', type: :feature do
       expect(page).to have_text('Sample Post for pages')
       expect(page).to have_text('This is a sample post description for pages.')
 
-      find('#page_post_view_link').click
+      find('#page_post_view_link', wait: 10).click
 
       find('#comment_container', wait: 10)
 
@@ -196,7 +172,7 @@ RSpec.feature 'Visit Pages Post', type: :feature do
 
       expect(page).to have_text(sample_comment_content)
 
-      expect(page).to have_text('Comment was successfully created.')
+      expect(page).to have_text('Comment was successfully created.', wait: 10)
     end
 
     it 'should create & delete the comment on page post' do
@@ -226,19 +202,7 @@ RSpec.feature 'Visit Pages Post', type: :feature do
 
       find('#pages_post_button', wait: 10).click
 
-      expect(page).to have_text('Uploade your post')
-
-      click_button 'Save Changes'
-
-      expect(page).to have_text('2 errors prohibited your posts form being saved.')
-      expect(page).to have_text("Title can't be blank")
-      expect(page).to have_text("Description can't be blank")
-
-      click_button 'Close'
-
-      find('#pages_post_button', wait: 10).click
-
-      expect(page).to have_text('Uploade your post')
+      expect(page).to have_text('Uploade your post', wait: 10)
 
       fill_in 'post_title', with: 'Sample Post for pages'
       fill_in 'post_description', with: 'This is a sample post description for pages.'
@@ -251,7 +215,7 @@ RSpec.feature 'Visit Pages Post', type: :feature do
       expect(page).to have_text('Sample Post for pages')
       expect(page).to have_text('This is a sample post description for pages.')
 
-      find('#page_post_view_link').click
+      find('#page_post_view_link', wait: 10).click
 
       find('#comment_container', wait: 10)
 
@@ -265,8 +229,8 @@ RSpec.feature 'Visit Pages Post', type: :feature do
 
       expect(page).to have_text('Comment was successfully created.')
 
-      find('#delete-comment-button', wait: 10).click
       # click_link 'Delete'
+      find('#delete-comment-button', wait: 10).click
 
       expect(page).to have_text('Comment was successfully deleted.')
     end

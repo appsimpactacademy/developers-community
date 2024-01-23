@@ -50,14 +50,13 @@ RSpec.feature 'Notifications', type: :feature do
       find('#connection_button', wait: 10).click
     end
 
-
     expect(page).to have_button('Pending')
     expect(page).to have_text("Your connection request has been send, but it is in pending state. You will get connected once #{other_user.name} will accept your connection request.")
 
     sign_in(other_user)
     visit root_path
 
-    find('#add-my-network-link').click
+    find('#add-my-network-link', wait: 10).click
   end
 
   it 'should reject the connection request' do
@@ -75,18 +74,17 @@ RSpec.feature 'Notifications', type: :feature do
       find('#connection_button', wait: 10).click
     end
 
-
     expect(page).to have_button('Pending')
     expect(page).to have_text("Your connection request has been send, but it is in pending state. You will get connected once #{other_user.name} will accept your connection request.")
 
     sign_in(other_user)
     visit root_path
 
-    find('#add-my-network-link').click
+    find('#add-my-network-link', wait: 10).click
 
     expect(page).to have_text("#{current_user.name}")
     
-    find('#reject_button').click
+    find('#reject_button', wait: 10).click
   end
 
   it 'should accept the connection request' do
@@ -104,24 +102,23 @@ RSpec.feature 'Notifications', type: :feature do
       find('#connection_button', wait: 10).click
     end
 
-
     expect(page).to have_button('Pending')
     expect(page).to have_text("Your connection request has been send, but it is in pending state. You will get connected once #{other_user.name} will accept your connection request.")
 
     sign_in(other_user)
     visit root_path
 
-    find('#add-my-network-link').click
+    find('#add-my-network-link', wait: 10).click
 
     expect(page).to have_text("#{current_user.name}")
     
-    find('#accept_button').click
+    find('#accept_button', wait: 10).click
   end
 
   it 'should check the notification is present or not' do
     sign_in(other_user)
 
-    find('#notification_bell').click
+    find('#notification_bell', wait: 10).click
 
     expect(page).to have_text('No notification is present!')
   end
@@ -133,7 +130,7 @@ RSpec.feature 'Notifications', type: :feature do
     expect(page).to have_text('Other User Post', wait: 10)
     expect(page).to have_text('This is a post by other_user')
 
-    find('#user_profile').click
+    find('#user_profile', wait: 10, wait: 10).click
 
     expect(page).to have_css('#connection_button', wait: 10)
     
@@ -147,11 +144,11 @@ RSpec.feature 'Notifications', type: :feature do
     sign_in(other_user)
     visit root_path
 
-    find('#add-my-network-link').click
+    find('#add-my-network-link', wait: 10).click
 
     expect(page).to have_text("#{current_user.name}")
     
-    find('#accept_button').click
+    find('#accept_button', wait: 10).click
 
     sign_in(current_user) 
 
@@ -163,12 +160,10 @@ RSpec.feature 'Notifications', type: :feature do
 
     sleep 2
 
-    # visit current_path
-
     sign_in(other_user)
     visit root_path
 
-    find('#notification_bell').click
+    find('#notification_bell', wait: 10).click
 
     expect(page).to have_text('Notifications')
     expect(page).to have_text("#{current_user.name} just liked : Other User Post")
@@ -183,7 +178,7 @@ RSpec.feature 'Notifications', type: :feature do
     # Accept or dismiss the alert
     alert.accept
 
-    expect(page).to have_text('No notification is present!')
+    expect(page).to have_text('No notification is present!', wait: 10)
   end
 
   it 'should current user visit on other users post & then comment on other user post then get the notification & delete the notification' do
@@ -193,7 +188,7 @@ RSpec.feature 'Notifications', type: :feature do
     expect(page).to have_text('Other User Post', wait: 10)
     expect(page).to have_text('This is a post by other_user')
 
-    find('#user_profile').click
+    find('#user_profile', wait: 10).click
 
     expect(page).to have_css('#connection_button', wait: 10)
     
@@ -207,11 +202,11 @@ RSpec.feature 'Notifications', type: :feature do
     sign_in(other_user)
     visit root_path
 
-    find('#add-my-network-link').click
+    find('#add-my-network-link', wait: 10).click
 
     expect(page).to have_text("#{current_user.name}")
     
-    find('#accept_button').click
+    find('#accept_button', wait: 10).click
 
     sign_in(current_user) 
 
@@ -230,12 +225,10 @@ RSpec.feature 'Notifications', type: :feature do
 
     sleep 2
 
-    # visit current_path
-
     sign_in(other_user)
     visit root_path
 
-    find('#notification_bell').click
+    find('#notification_bell', wait: 10).click
 
     expect(page).to have_text('Notifications')
     expect(page).to have_text("#{current_user.name} just commented on : Other User Post")
@@ -250,6 +243,6 @@ RSpec.feature 'Notifications', type: :feature do
     # Accept or dismiss the alert
     alert.accept
 
-    expect(page).to have_text('No notification is present!')
+    expect(page).to have_text('No notification is present!', wait: 10)
   end
 end

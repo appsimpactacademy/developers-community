@@ -99,10 +99,13 @@ RSpec.feature 'My Event', type: :feature do
       find('#delete_event', wait: 10).click
 
       # Accept the confirmation alert
-      page.driver.browser.switch_to.alert.accept
+      alert = page.driver.browser.switch_to.alert
 
-      # Wait for the alert to be accepted
-      sleep 1
+      # Verify the alert text
+      expect(alert.text).to eq('Are You Sure?')
+
+      # Accept or dismiss the alert
+      alert.accept
 
       # Now you can continue with your expectations or other actions
       expect(page).to have_text('No event is present')

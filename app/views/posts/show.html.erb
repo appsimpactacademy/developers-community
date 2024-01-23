@@ -24,7 +24,7 @@
       </div>   
       
       <!-- for user reactions -->
-      <%= render 'posts/show', post: @post %>
+      <%#= render 'posts/show', post: @post %>
 
       <div class="container mt-3" id="comment_container">
         <%= render partial: "comments/form", locals: { comment: Comment.new(commentable: @post), submit_label: "Create Comment" } %>

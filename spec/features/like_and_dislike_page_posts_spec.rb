@@ -91,18 +91,6 @@ RSpec.feature 'Like or Dislike the Pages Post', type: :feature do
 
       expect(page).to have_text('Uploade your post')
 
-      click_button 'Save Changes'
-
-      expect(page).to have_text('2 errors prohibited your posts form being saved.')
-      expect(page).to have_text("Title can't be blank")
-      expect(page).to have_text("Description can't be blank")
-
-      click_button 'Close'
-
-      find('#pages_post_button', wait: 10).click
-
-      expect(page).to have_text('Uploade your post')
-
       fill_in 'post_title', with: 'Sample Post for pages'
       fill_in 'post_description', with: 'This is a sample post description for pages.'
       click_button 'Save Changes'

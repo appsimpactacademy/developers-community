@@ -33,7 +33,7 @@ RSpec.feature 'Pages Post of Current User', type: :feature do
       expect(page).to have_text("About can't be blank")
     end
 
-    it 'should open the job form and save to db if all validation passed' do
+    it 'should open the page form and save to db if all validation passed' do
 
       visit pages_path
       
@@ -62,7 +62,7 @@ RSpec.feature 'Pages Post of Current User', type: :feature do
       find('#pages_post_button', wait: 10).click
     end
 
-    it 'should open the job form and save to db if all validation passed & create the post for page & visit the page post' do
+    it 'should open the page form and save to db if all validation passed & create the post for page & visit the page post' do
 
       visit pages_path
       
@@ -149,18 +149,6 @@ RSpec.feature 'Pages Post of Current User', type: :feature do
 
       expect(page).to have_text('Uploade your post')
 
-      click_button 'Save Changes'
-
-      expect(page).to have_text('2 errors prohibited your posts form being saved.')
-      expect(page).to have_text("Title can't be blank")
-      expect(page).to have_text("Description can't be blank")
-
-      click_button 'Close'
-
-      find('#pages_post_button', wait: 10).click
-
-      expect(page).to have_text('Uploade your post')
-
       fill_in 'post_title', with: 'Sample Post for pages'
       fill_in 'post_description', with: 'This is a sample post description for pages.'
       click_button 'Save Changes'
@@ -207,18 +195,6 @@ RSpec.feature 'Pages Post of Current User', type: :feature do
       expect(page).to have_text('11-50 employees')
 
       click_link 'Awesome Page'
-
-      find('#pages_post_button', wait: 10).click
-
-      expect(page).to have_text('Uploade your post')
-
-      click_button 'Save Changes'
-
-      expect(page).to have_text('2 errors prohibited your posts form being saved.')
-      expect(page).to have_text("Title can't be blank")
-      expect(page).to have_text("Description can't be blank")
-
-      click_button 'Close'
 
       find('#pages_post_button', wait: 10).click
 

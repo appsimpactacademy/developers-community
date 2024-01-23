@@ -88,10 +88,13 @@ RSpec.feature 'Articles', type: :feature do
       find('#delete_article', wait: 10).click
 
       # Accept the confirmation alert
-      page.driver.browser.switch_to.alert.accept
+      alert = page.driver.browser.switch_to.alert
 
-      # Wait for the alert to be accepted
-      sleep 1
+      # Verify the alert text
+      expect(alert.text).to eq('Are you sure?')
+
+      # Accept or dismiss the alert
+      alert.accept
 
       visit articles_path
       expect(page).to have_text('No articles are present.')

@@ -1,5 +1,5 @@
 <div id="notifications-container"></div>
-<%= link_to "Change your password", edit_password_path, data: { controller: 'bs-modal-form' }, style: 'text-decoration:none;', class: 'btn btn-outline-primary mb-3' %>
+<%= link_to "Change your password", edit_password_path, id: "change-password-form", data: { controller: 'bs-modal-form' }, style: 'text-decoration:none;', class: 'btn btn-outline-primary mb-3' %>
 <div class="card mb-5" id="member-personal-details">
   <div class="row">
     <div class="col-lg-4">
@@ -28,7 +28,7 @@
 
         <div id="user-connection-status">
           <% if current_user.check_if_already_connected?(user) %>
-            <%= link_to "Connect", connections_path, class: "btn btn-primary", data: { controller: "connections", turbo_method: :post, connections_target: "connection", requester_id: current_user.id, connected_id: user.id } %>
+            <%= link_to "Connect", connections_path, class: "btn btn-primary", id: "connection_button", data: { controller: "connections", turbo_method: :post, connections_target: "connection", requester_id: current_user.id, connected_id: user.id } %>
           <% elsif get_connection_status(user) == "pending" %>
             <%= render "connections/create", connector: user %>
           <% elsif get_connection_status(user) == "accepted" %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_26_125210) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_08_091322) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_125210) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "articles", force: :cascade do |t|
+    t.string "title"
+    t.text "content"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_articles_on_user_id"
   end
 
   create_table "chatrooms", force: :cascade do |t|
@@ -95,6 +104,25 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_125210) do
     t.index ["user_id"], name: "index_follows_on_user_id"
   end
 
+  create_table "groups", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.string "industry"
+    t.string "location"
+    t.string "group_type"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_groups_on_user_id"
+  end
+
+  create_table "groups_users", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "group_id", null: false
+    t.index ["group_id", "user_id"], name: "index_groups_users_on_group_id_and_user_id"
+    t.index ["user_id", "group_id"], name: "index_groups_users_on_user_id_and_group_id"
+  end
+
   create_table "job_categories", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -113,7 +141,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_125210) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "page_id"
     t.index ["job_category_id"], name: "index_jobs_on_job_category_id"
+    t.index ["page_id"], name: "index_jobs_on_page_id"
     t.index ["user_id"], name: "index_jobs_on_user_id"
   end
 
@@ -161,15 +191,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_125210) do
     t.index ["user_id"], name: "index_pages_on_user_id"
   end
 
-  create_table "post_visits", force: :cascade do |t|
-    t.bigint "post_id", null: false
-    t.bigint "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["post_id"], name: "index_post_visits_on_post_id"
-    t.index ["user_id"], name: "index_post_visits_on_user_id"
-  end
-
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -178,8 +199,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_125210) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "page_id"
+    t.bigint "group_id"
+    t.index ["group_id"], name: "index_posts_on_group_id"
     t.index ["page_id"], name: "index_posts_on_page_id"
     t.index ["user_id"], name: "index_posts_on_user_id"
+  end
+
+  create_table "profile_views", force: :cascade do |t|
+    t.bigint "viewer_id", null: false
+    t.bigint "viewed_user_id", null: false
+    t.datetime "viewed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["viewed_user_id"], name: "index_profile_views_on_viewed_user_id"
+    t.index ["viewer_id"], name: "index_profile_views_on_viewer_id"
   end
 
   create_table "relationships", force: :cascade do |t|
@@ -194,8 +227,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_125210) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "thought"
     t.index ["post_id"], name: "index_reposts_on_post_id"
     t.index ["user_id"], name: "index_reposts_on_user_id"
+  end
+
+  create_table "saved_jobs", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "job_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_saved_jobs_on_job_id"
+    t.index ["user_id"], name: "index_saved_jobs_on_user_id"
   end
 
   create_table "shares", force: :cascade do |t|
@@ -215,6 +258,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_125210) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_skills_on_user_id"
+  end
+
+  create_table "user_reactions", force: :cascade do |t|
+    t.string "reaction_type"
+    t.string "reactable_id"
+    t.string "reactable_type"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -273,13 +325,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_125210) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "articles", "users"
   add_foreign_key "chatrooms", "users", column: "user1_id"
   add_foreign_key "chatrooms", "users", column: "user2_id"
   add_foreign_key "comments", "users"
   add_foreign_key "connections", "users"
   add_foreign_key "events", "users"
   add_foreign_key "follows", "users"
+  add_foreign_key "groups", "users"
   add_foreign_key "jobs", "job_categories"
+  add_foreign_key "jobs", "pages"
   add_foreign_key "jobs", "users"
   add_foreign_key "likes", "posts"
   add_foreign_key "likes", "users"
@@ -287,12 +342,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_125210) do
   add_foreign_key "messages", "users"
   add_foreign_key "notifications", "users"
   add_foreign_key "pages", "users"
-  add_foreign_key "post_visits", "posts"
-  add_foreign_key "post_visits", "users"
+  add_foreign_key "posts", "groups"
   add_foreign_key "posts", "pages"
   add_foreign_key "posts", "users"
+  add_foreign_key "profile_views", "users", column: "viewed_user_id"
+  add_foreign_key "profile_views", "users", column: "viewer_id"
   add_foreign_key "reposts", "posts"
   add_foreign_key "reposts", "users"
+  add_foreign_key "saved_jobs", "jobs"
+  add_foreign_key "saved_jobs", "users"
   add_foreign_key "shares", "posts"
   add_foreign_key "skills", "users"
   add_foreign_key "work_experiences", "users"

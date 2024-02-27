@@ -3,11 +3,11 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="hide-post"
 export default class extends Controller {
   
-  static targets = ["dialog", "undoButton"];
+  static targets = ["undoButton"];
 
   connect() {
     console.log('hidden_undo_post connected!!')
-    this.dialogTarget.style.display = "none";
+    // this.dialogTarget.style.display = "none";
   }
 
   hidePost(event) {

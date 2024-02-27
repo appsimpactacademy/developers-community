@@ -1,39 +1,60 @@
-<div class="col-lg-10 mx-auto mt-3">
-  <%= link_to 'Create Job', new_job_path, class: 'btn btn-primary mb-3', data: { controller: "bs-modal-form" } %>
+<div class="col-lg-10 mx-auto mt-3" id="user_jobs">
+  <%= link_to 'Create Job', new_job_path, class: 'btn btn-primary mb-3', id: 'add-job-link', data: { controller: "bs-modal-form" } %>
   <% if @jobs.present? %>
     <% @jobs.each do |job| %>
-      <div class="card shadow mb-2">
-        <div class="card-body">
-          <div class="row">
-            <div class="col-lg-10">
-              <strong>Job Title : </strong> <%= job.title %><br>
-              <strong>Description : </strong> <%= truncate(job.description, length: 30) %><br>
-              <strong>Location : </strong> <%= job.location %><br>
-              <strong>Job Category : </strong> <%= job.job_category.name %><br>
+      <div class="job-box bg-white overflow-hidden border rounded mt-3 position-relative overflow-hidden">
+        <div class="p-4">
+          <div class="row align-items-center">
+            <div class="col-md-4">
+              <div>
+                <h5 class="f-18">
+                  <%= job.title %>
+                </h5>
+                <p class="text-muted mb-0">
+                  <%= truncate(job.description, length: 30) %>
+                </p>
+              </div>
             </div>
-            <div class="col-lg-2">
-              <div class="dropdown float-end">
-                <button class="btn btn-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="fa-solid fa-ellipsis-vertical fa-xl"></i>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                   <% if current_user && current_user.id == job.user_id %>
-                  <li><%= link_to 'View Job', job, class:"dropdown-item" %></li>
-                  <li><%= link_to 'Edit', edit_job_path(job), class:"dropdown-item" %></li>
-                  <li><%= link_to 'Delete', job_path(job), class:"dropdown-item", data: { turbo_confirm: 'Are You Sure?', turbo_method: :delete } %></li>
-                  <% else %>
-                  <li>
-                    <%= link_to 'View Job', job, class:"dropdown-item" %>
-                  </li>
-                  <% end %>
-                </ul>
+            <div class="col-md-3">
+              <div>
+                <p class="text-muted mb-0"><i class="fa-solid fa-location-dot"></i> <%= job.location %></p>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div>
+                <p class="text-muted mb-0 mo-mb-2">
+                  <span class="text-primary"></span><%= job.salary %>
+                </p>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div>
+                <p class="text-muted mb-0"><%= job.employee_type %></p>
               </div>
             </div>
           </div>
         </div>
+        <div class="p-2 bg-light">
+          <div class="row">
+            <div class="col-md-9">
+              <div>
+                <p class="text-muted mb-0 mo-mb-2"><span class="text-dark">Job Category :</span> <%= job.job_category.name %></p>
+              </div>
+            </div>
+            <div class="col-lg-3 justify-content-end">
+              <% if current_user && current_user.id == job.user_id %>
+                <%= link_to 'View Job', job, class:"btn btn-primary btn-sm", id: "view_job" %>
+                <%= link_to 'Edit', edit_job_path(job), class:"btn btn-primary btn-sm", id: 'edit_job', data: { controller: "bs-modal-form" } %>
+                <%= link_to 'Delete', job_path(job), class:"btn btn-primary btn-sm", data: { turbo_confirm: 'Are You Sure?', turbo_method: :delete } %>
+              <% else %>
+                <%= link_to 'View Job', job, class:"btn btn-primary btn-sm" %>
+              <% end %> 
+            </div>
+          </div>
+        </div>
       </div>
-    <% end -%>
+    <% end %>
   <% else %>
-    <p class="lead fs-4 fw-bold">No job is created by you! So create the job first.</p>
+    <p class="border border-1 rounded p-2">No job is created by you! So create the job first.</p>
   <% end %>
 </div>

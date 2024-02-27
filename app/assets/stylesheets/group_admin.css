@@ -1,0 +1,22 @@
+.admin-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
+
+  .admin-heading {
+    font-size: 20px;
+  }
+
+  .admin-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  .admin-name {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  .admin-title {
+    font-size: 12px;
+  }

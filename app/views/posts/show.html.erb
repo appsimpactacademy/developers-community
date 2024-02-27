@@ -24,9 +24,9 @@
       </div>   
       
       <!-- for user reactions -->
-      <%= render 'posts/show', post: @post %>
+      <%#= render 'posts/show', post: @post %>
 
-      <div class="container mt-3">
+      <div class="container mt-3" id="comment_container">
         <%= render partial: "comments/form", locals: { comment: Comment.new(commentable: @post), submit_label: "Create Comment" } %>
         
         <% @comments.each do |comment| %>
@@ -36,8 +36,8 @@
     </div>
   </div> 
 
-  <%= link_to 'Back', root_path, class: 'btn btn-warning mt-3 mb-3' %>
+  <%= link_to 'Back', root_path, class: 'btn btn-warning mt-3 mb-3', id: "back_to_home" %>
   <% if @post.user == current_user %>
-  <%= link_to 'Edit Post', edit_post_path(@post),data: { controller: 'bs-modal-form' }, class: "btn btn-primary mt-3 mb-3" %>
+  <%= link_to 'Edit Post', edit_post_path(@post), id: "edit_post", data: { controller: 'bs-modal-form' }, class: "btn btn-primary mt-3 mb-3" %>
   <% end %>
 </div>

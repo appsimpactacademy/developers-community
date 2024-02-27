@@ -11,3 +11,6 @@ Rails.start()
 import 'bootstrap';
 import { Application } from "@hotwired/stimulus";
 import "./channels"
+
+import ("trix")
+import ("@rails/actiontext")

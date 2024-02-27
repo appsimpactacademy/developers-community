@@ -1,6 +1,5 @@
 <div class="col-lg-10 mx-auto mt-5">
   <%= render 'member_personal_details', user: @user %>
-
   <div class="card mb-5">
     <div class="card-body">
       <div class="row">
@@ -10,16 +9,15 @@
           </div>
         </div>
         <% if @user == current_user %>
-          <div class="col-lg-6">
-            <div class="d-flex justify-content-end">
-              <%= link_to edit_member_description_path, class: "edit-about", data: { controller: "bs-modal-form" } do %>
-                <i class="bi bi-pencil-fill"></i>
-              <% end %>
-            </div>
+        <div class="col-lg-6">
+          <div class="d-flex justify-content-end">
+            <%= link_to edit_member_description_path, class: "edit-about", data: { controller: "bs-modal-form" } do %>
+            <i class="fa-solid fa-pencil"></i>
+            <% end %>
           </div>
+        </div>
         <% end %>
       </div>
-
       <%= render 'member_description', user: @user %>
     </div>
   </div>
@@ -35,19 +33,21 @@
           </div>
           <div class="col-lg-4">
             <div class="d-flex justify-content-end">
-              <%= link_to new_work_experience_path, data: { controller: "bs-modal-form" } do %>
-                <i class="bi bi-plus"></i> Add Experience
+              <%= link_to new_work_experience_path, id: 'add-work-experience-link', data: { controller: 'bs-modal-form' } do %>
+                <i class="fa-solid fa-plus"></i>
+                Add Experience
               <% end %>
             </div>
           </div>
           <% if @user.work_experiences.present? %>
-            <div class="col-lg-4">
-              <div class="d-flex justify-content-end">
-                <%= link_to "javascript:void(0)" do %>
-                  <i class="bi bi-pencil-fill"></i> Edit Experiences
-                <% end %>
-              </div>
+          <div class="col-lg-4">
+            <div class="d-flex justify-content-end">
+              <%= link_to "javascript:void(0)" do %>
+                <i class="fa-solid fa-pencil"></i>
+                Edit Experiences
+              <% end %>
             </div>
+          </div>
           <% end %>
         </div>
       <% end %>
@@ -58,6 +58,8 @@
             <%= render 'work_experiences/work_experience', work_experience: work_experience %>
           <% end %>
         </ul>
+      <% else %>
+        <p class="h5 mt-3 border border-1 rounded p-2">No work experience is present</p>
       <% end %>
     </div>
   </div>
@@ -73,13 +75,13 @@
           </div>
           <div class="col-lg-4">
             <div class="d-flex justify-content-end">
-              <%= link_to new_skill_path, data: { controller: 'bs-modal-form' } do %>
+              <%= link_to new_skill_path, id:'add-skill-link', data: { controller: 'bs-modal-form' } do %>
                 <i class="fa-solid fa-plus"></i>
                 Add Skills
               <% end %>
             </div>
           </div>
-            <% if @user.skills.present? %>
+          <% if @user.skills.present? %>
             <div class="col-lg-4">
               <div class="d-flex justify-content-end">
                 <%= link_to "javascript:void(0)" do %>
@@ -88,7 +90,9 @@
                 <% end %>
               </div>
             </div>
-            <% end %>
+          <% else %>
+            <p class="h5 mt-3 border border-1 rounded p-2">No skill is present</p>
+          <% end %>
         </div>
       <% end %>
 
@@ -101,5 +105,4 @@
       <% end %>
     </div>
   </div>
-
 </div>

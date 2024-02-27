@@ -28,7 +28,7 @@
           <div class="card-body">
               <h5>Jobs</h5>
               <% @jobs.each do |job| %>
-                <%= link_to job_path(job), style: 'text-decoration:none;' do %>
+                <%= link_to job_path(job), style: 'text-decoration:none;', id: "pages_job" do %>
                   <%= job.title %>
                 <% end %>
               <% end %>
@@ -46,7 +46,7 @@
               <button 
                 data-action="click->show-more#toggleVisibility" 
                 data-show-more-target="toggleButton" 
-                class="btn btn-light fw-bold w-100 btn-sm mt-3">
+                class="show_more_about btn btn-light fw-bold w-100 btn-sm mt-3">
                 Show More
               </button>
             </div>
@@ -77,8 +77,8 @@
               <% end %>
             </div>
             <div class="col-md-11 col-12 mt-1 mb-3 d-grid">
-              <%= link_to new_post_path(page_id: @page.id), class: "d-flex btn btn-outline-light text-dark border py-2 rounded-pill mr-1 pr-5 mt-2", data: { controller: "bs-modal-form" } do %>
-              Start a Post
+              <%= link_to new_post_path(page_id: @page.id), class: "page_post_button d-flex btn btn-outline-light text-dark border py-2 rounded-pill mr-1 pr-5 mt-2", id: "pages_post_button", data: { controller: "bs-modal-form" } do %>
+                Start a Post
               <% end %>
             </div>
           </div>
